@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "map": "Map",
+    "post": "Post a listing",
+    "mine": "My listings",
+    "admin": "Moderation",
+    "language": "Language",
+    "menuOpen": "Menu",
+    "menuClose": "Close menu"
+  },
+  "filters": {
+    "found": "Found",
+    "lost": "Lost",
+    "species": "Species",
+    "city": "City",
+    "type": "Found, lost or adoption",
+    "adoption": "Adoption"
+  },
+  "species": {
+    "DOG": "Dog",
+    "CAT": "Cat",
+    "OTHER": "Other"
+  },
+  "errors": {
+    "UNKNOWN": "Something went wrong. Try again.",
+    "VALIDATION_FAILED": "Check the highlighted fields.",
+    "INVALID_CREDENTIALS": "Wrong email or password.",
+    "EMAIL_TAKEN": "That email is already registered.",
+    "REFRESH_TOKEN_INVALID": "Your session expired. Sign in again.",
+    "LISTING_NOT_FOUND": "This listing no longer exists.",
+    "FORBIDDEN": "You can't do that.",
+    "CONTENT_REJECTED": "That text is not allowed here. Please describe the animal.",
+    "VERIFICATION_CODE_INVALID": "That code is wrong or has expired."
+  },
+  "feed": {
+    "count_one": "{{count}} listing here",
+    "count_other": "{{count}} listings here",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{lastPage}}",
+    "pagination": "Feed pages",
+    "title": "Animals near you",
+    "mapHint": "Pins follow the map. Zoom in to split a cluster, out to see the world.",
+    "emptyTitle": "Nothing in this view",
+    "emptyBody": "Zoom out, move the map, or clear a filter."
+  },
+  "listing": {
+    "source": "Source",
+    "original": "original listing",
+    "photos": "Photos",
+    "removePhoto": "Remove photo",
+    "type": "Why you're posting",
+    "description": "Description",
+    "whereFound": "Where on the map",
+    "pickSpot": "Pick a spot on the map",
+    "photoRequired": "At least one photo, please",
+    "submit": "Publish",
+    "moderationNote": "Listings are checked by a moderator before they appear.",
+    "pending": "Waiting for review",
+    "approved": "Live",
+    "rejected": "Rejected",
+    "view": "View",
+    "delete": "Delete",
+    "noneYet": "Nothing here yet.",
+    "edit": "Edit",
+    "save": "Save changes",
+    "editResetsReview": "Editing a live listing sends it back for review.",
+    "fromShelter": "From a shelter"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Your name",
+    "needAccount": "No account yet? Create one",
+    "haveAccount": "Already have an account? Sign in",
+    "signOut": "Sign out"
+  },
+  "admin": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "empty": "Nothing in this bucket.",
+    "flagged": "Flagged",
+    "viewPhotos": "View photos",
+    "closePhotos": "Close",
+    "photoOf": "Photo {{index}} of {{total}}",
+    "rejectReason": "Why is it being rejected? (optional, the poster sees this)",
+    "rejectConfirm": "Confirm rejection",
+    "rejectCancel": "Cancel",
+    "waiting": "Waiting {{days}}d"
+  },
+  "notFound": {
+    "title": "Nothing here",
+    "body": "That page does not exist, or it never did.",
+    "back": "Back to the map"
+  },
+  "routeError": {
+    "title": "That broke",
+    "body": "Something went wrong rendering this page."
+  },
+  "footer": {
+    "note": "A hobby project. Listings from shelters link back to the original."
+  },
+  "common": {
+    "confirm": "Delete for good",
+    "cancel": "Cancel"
+  },
+  "report": {
+    "open": "Report this listing",
+    "blurb": "Tell us what is wrong and a moderator will look.",
+    "reason": "What is wrong",
+    "note": "Anything else (optional)",
+    "submit": "Send report",
+    "thanks": "Thank you. A moderator will look at this.",
+    "tab": "Reported",
+    "noneOpen": "No open reports.",
+    "count_one": "{{count}} report",
+    "count_other": "{{count}} reports",
+    "keep": "Keep published",
+    "takeDown": "Take down",
+    "reasons": {
+      "INAPPROPRIATE": "Inappropriate or offensive",
+      "SPAM": "Spam or advertising",
+      "WRONG_INFO": "Wrong or misleading",
+      "ALREADY_RESOLVED": "Animal already home",
+      "OTHER": "Something else"
+    }
+  },
+  "profile": {
+    "title": "Your account",
+    "details": "Details",
+    "save": "Save",
+    "saved": "Saved.",
+    "password": "Password",
+    "passwordNote": "Changing it signs out every device, including this one.",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "repeatPassword": "Repeat new password",
+    "changePassword": "Change password"
+  },
+  "hero": {
+    "eyebrow": "Anywhere in the world",
+    "lineOne": "Found, lost,",
+    "lineTwo": "looking for a home.",
+    "lineThree": "One map.",
+    "lead": "Someone recognises the cat on your street faster than any shelter database will. This is a board for that, and for the shelters rehoming the animals nobody came back for. Moderated before anything goes public.",
+    "browse": "Browse the map",
+    "post": "Post one yourself",
+    "statListings": "listings",
+    "statFound": "found",
+    "photoCredit": "Photo: Unsplash",
+    "statLost": "lost",
+    "statAdoption": "adoption"
+  },
+  "sections": {
+    "map": "On the map",
+    "how": "How it works",
+    "howLead": "Three steps, and a moderator between every listing and the public page.",
+    "stepOneTitle": "Post what you saw",
+    "stepOneBody": "A photo and a spot on the map. No name and no number: whoever recognises the animal writes to you through the site.",
+    "stepTwoTitle": "A moderator reads it",
+    "stepTwoBody": "Every listing waits in a queue. Nothing reaches the public map before somebody has looked at the photo.",
+    "stepThreeTitle": "Someone recognises it",
+    "stepThreeBody": "The listing shows on the map for the neighbourhood it belongs to, and a message reaches you by email."
+  }
+}

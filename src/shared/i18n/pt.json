@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "map": "Mapa",
+    "post": "Publicar anúncio",
+    "mine": "Os meus anúncios",
+    "admin": "Moderação",
+    "language": "Idioma",
+    "menuOpen": "Menu",
+    "menuClose": "Fechar menu"
+  },
+  "filters": {
+    "found": "Encontrados",
+    "lost": "Perdidos",
+    "species": "Espécie",
+    "city": "Cidade",
+    "type": "Achado, perdido ou adoção",
+    "adoption": "Adoção"
+  },
+  "species": {
+    "DOG": "Cão",
+    "CAT": "Gato",
+    "OTHER": "Outro"
+  },
+  "errors": {
+    "UNKNOWN": "Algo correu mal. Tente novamente.",
+    "VALIDATION_FAILED": "Verifique os campos assinalados.",
+    "INVALID_CREDENTIALS": "Email ou palavra-passe incorretos.",
+    "EMAIL_TAKEN": "Esse email já está registado.",
+    "REFRESH_TOKEN_INVALID": "A sessão expirou. Inicie sessão novamente.",
+    "LISTING_NOT_FOUND": "Este anúncio já não existe.",
+    "FORBIDDEN": "Não tem permissão para isso.",
+    "CONTENT_REJECTED": "Esse texto nao e permitido. Descreva o animal.",
+    "VERIFICATION_CODE_INVALID": "Esse codigo esta errado ou expirou."
+  },
+  "feed": {
+    "count_one": "{{count}} anúncio aqui",
+    "count_other": "{{count}} anúncios aqui",
+    "previous": "Anterior",
+    "next": "Seguinte",
+    "pageOf": "Pagina {{page}} de {{lastPage}}",
+    "pagination": "Paginas",
+    "title": "Animais perto de si",
+    "mapHint": "Os pinos seguem o mapa. Aproxime para separar um grupo, afaste para ver o mundo.",
+    "emptyTitle": "Nada nesta zona",
+    "emptyBody": "Afaste o mapa, mova-o, ou limpe um filtro."
+  },
+  "listing": {
+    "source": "Fonte",
+    "original": "anuncio original",
+    "photos": "Fotografias",
+    "removePhoto": "Remover fotografia",
+    "type": "Porque está a publicar",
+    "description": "Descricao",
+    "whereFound": "Onde no mapa",
+    "pickSpot": "Escolha um ponto no mapa",
+    "photoRequired": "Pelo menos uma fotografia",
+    "submit": "Publicar",
+    "moderationNote": "Os anuncios sao verificados antes de aparecerem.",
+    "pending": "Em revisao",
+    "approved": "Publicado",
+    "rejected": "Rejeitado",
+    "view": "Ver",
+    "delete": "Apagar",
+    "noneYet": "Ainda nada por aqui.",
+    "edit": "Editar",
+    "save": "Guardar",
+    "editResetsReview": "Editar um anuncio publicado envia-o de novo para revisao.",
+    "fromShelter": "De um abrigo"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "email": "Email",
+    "password": "Palavra-passe",
+    "name": "O seu nome",
+    "needAccount": "Ainda nao tem conta? Criar",
+    "haveAccount": "Ja tem conta? Entrar",
+    "signOut": "Sair"
+  },
+  "admin": {
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "empty": "Nada nesta lista.",
+    "flagged": "Assinalado",
+    "viewPhotos": "Ver fotos",
+    "closePhotos": "Fechar",
+    "photoOf": "Foto {{index}} de {{total}}",
+    "rejectReason": "Porque esta a ser rejeitado? (opcional, o autor ve isto)",
+    "rejectConfirm": "Confirmar rejeicao",
+    "rejectCancel": "Cancelar",
+    "waiting": "A aguardar {{days}}d"
+  },
+  "notFound": {
+    "title": "Nada por aqui",
+    "body": "Esta pagina nao existe.",
+    "back": "Voltar ao mapa"
+  },
+  "routeError": {
+    "title": "Algo falhou",
+    "body": "Ocorreu um erro ao mostrar esta pagina."
+  },
+  "footer": {
+    "note": "Um projeto pessoal. Os anuncios de abrigos ligam ao original."
+  },
+  "common": {
+    "confirm": "Apagar mesmo",
+    "cancel": "Cancelar"
+  },
+  "report": {
+    "open": "Denunciar este anuncio",
+    "blurb": "Diga o que esta errado e um moderador vai ver.",
+    "reason": "O que esta errado",
+    "note": "Mais alguma coisa (opcional)",
+    "submit": "Enviar denuncia",
+    "thanks": "Obrigado. Um moderador vai analisar.",
+    "tab": "Denunciados",
+    "noneOpen": "Sem denuncias abertas.",
+    "count_one": "{{count}} denuncia",
+    "count_other": "{{count}} denuncias",
+    "keep": "Manter publicado",
+    "takeDown": "Remover",
+    "reasons": {
+      "INAPPROPRIATE": "Impróprio ou ofensivo",
+      "SPAM": "Spam ou publicidade",
+      "WRONG_INFO": "Errado ou enganador",
+      "ALREADY_RESOLVED": "Animal ja em casa",
+      "OTHER": "Outra coisa"
+    }
+  },
+  "profile": {
+    "title": "A sua conta",
+    "details": "Dados",
+    "save": "Guardar",
+    "saved": "Guardado.",
+    "password": "Palavra-passe",
+    "passwordNote": "Alterar termina a sessao em todos os dispositivos, incluindo este.",
+    "currentPassword": "Palavra-passe atual",
+    "newPassword": "Nova palavra-passe",
+    "repeatPassword": "Repetir a nova",
+    "changePassword": "Alterar palavra-passe"
+  },
+  "hero": {
+    "eyebrow": "Em qualquer parte do mundo",
+    "lineOne": "Achados, perdidos,",
+    "lineTwo": "à procura de casa.",
+    "lineThree": "Um mapa.",
+    "lead": "Alguém reconhece o gato da sua rua mais depressa do que qualquer base de dados. Este quadro serve para isso, e para os abrigos que procuram casa para os animais que ninguém veio buscar. Com moderação antes de tudo o que fica público.",
+    "browse": "Ver o mapa",
+    "post": "Publicar o seu",
+    "statListings": "anúncios",
+    "statFound": "achados",
+    "photoCredit": "Foto: Unsplash",
+    "statLost": "perdidos",
+    "statAdoption": "adoção"
+  },
+  "sections": {
+    "map": "No mapa",
+    "how": "Como funciona",
+    "howLead": "Tres passos, e um moderador entre cada anuncio e a pagina publica.",
+    "stepOneTitle": "Publique o que viu",
+    "stepOneBody": "Uma foto e um ponto no mapa. Sem nome nem número: quem reconhecer o animal escreve-lhe através do site.",
+    "stepTwoTitle": "Um moderador le",
+    "stepTwoBody": "Cada anúncio espera numa fila. Nada chega ao mapa público antes de alguém ver a foto.",
+    "stepThreeTitle": "Alguem reconhece",
+    "stepThreeBody": "O anúncio aparece no mapa do bairro a que pertence, e uma mensagem chega-lhe por email."
+  }
+}
