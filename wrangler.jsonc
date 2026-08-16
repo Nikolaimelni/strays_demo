@@ -1,0 +1,11 @@
+{
+  "name": "strays-demo",
+  "compatibility_date": "2026-08-16",
+  // static files only, no worker script. A catch-all rewrite in _redirects would run before
+  // the asset lookup and hand index.html out for /assets/*.js as well, so the fallback to
+  // index.html for client-side routes is this setting instead
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
