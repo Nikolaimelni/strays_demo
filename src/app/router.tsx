@@ -15,6 +15,12 @@ export const router = createBrowserRouter([
     errorElement: <RouteError />,
     children: [
       {
+        index: true,
+        lazy: async () => ({
+          Component: (await import('../features/listings/home-page.tsx')).HomePage,
+        }),
+      },
+      {
         path: 'login',
         element: (
           <RedirectSignedIn>
