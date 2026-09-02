@@ -21,6 +21,12 @@ export const router = createBrowserRouter([
         }),
       },
       {
+        path: 'listings/:id',
+        lazy: async () => ({
+          Component: (await import('../features/listings/listing-page.tsx')).ListingPage,
+        }),
+      },
+      {
         path: 'login',
         element: (
           <RedirectSignedIn>
