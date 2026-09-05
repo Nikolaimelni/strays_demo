@@ -63,6 +63,12 @@ export const router = createBrowserRouter([
                 .EditListingPage,
             }),
           },
+          {
+            path: 'mine',
+            lazy: async () => ({
+              Component: (await import('../features/listings/my-listings-page.tsx')).MyListingsPage,
+            }),
+          },
         ],
       },
 
