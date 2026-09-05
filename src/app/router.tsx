@@ -1,7 +1,8 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Outlet } from 'react-router';
 import { LoginPage } from '../features/auth/login-page.tsx';
 import { RedirectSignedIn } from '../features/auth/redirect-signed-in.tsx';
 import { RegisterPage } from '../features/auth/register-page.tsx';
+import { RequireAuth } from '../features/auth/require-auth.tsx';
 import { Layout } from './layout.tsx';
 import { NotFound } from './not-found.tsx';
 import { RouteError } from './route-error.tsx';
@@ -41,6 +42,28 @@ export const router = createBrowserRouter([
             <RegisterPage />
           </RedirectSignedIn>
         ),
+      },
+      {
+        element: (
+          <RequireAuth>
+            <Outlet />
+          </RequireAuth>
+        ),
+        children: [
+          {
+            path: 'new',
+            lazy: async () => ({
+              Component: (await import('../features/listings/new-listing-page.tsx')).NewListingPage,
+            }),
+          },
+          {
+            path: 'listings/:id/edit',
+            lazy: async () => ({
+              Component: (await import('../features/listings/edit-listing-page.tsx'))
+                .EditListingPage,
+            }),
+          },
+        ],
       },
 
       { path: '*', element: <NotFound /> },
