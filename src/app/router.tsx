@@ -72,6 +72,22 @@ export const router = createBrowserRouter([
         ],
       },
 
+      {
+        element: (
+          <RequireAuth adminOnly>
+            <Outlet />
+          </RequireAuth>
+        ),
+        children: [
+          {
+            path: 'admin',
+            lazy: async () => ({
+              Component: (await import('../features/admin/moderation-page.tsx')).ModerationPage,
+            }),
+          },
+        ],
+      },
+
       { path: '*', element: <NotFound /> },
     ],
   },
