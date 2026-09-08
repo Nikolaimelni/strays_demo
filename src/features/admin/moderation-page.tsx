@@ -13,6 +13,7 @@ import { PhotoLightbox } from '../../shared/ui/photo-lightbox.tsx';
 import { ListingCardSkeleton } from '../../shared/ui/skeleton.tsx';
 import { Pagination } from '../listings/pagination.tsx';
 import { ShelterBadge, StatusBadge, TypeBadge } from '../listings/status-badge.tsx';
+import { ReportsPanel } from './reports-panel.tsx';
 
 type Status = 'PENDING' | 'APPROVED' | 'REJECTED';
 type Tab = Status | 'REPORTED';
@@ -130,6 +131,8 @@ export const ModerationPage = () => {
             {t('report.tab')}
           </button>
         </div>
+
+        {tab === 'REPORTED' ? <ReportsPanel /> : null}
 
         {showList && listings.isError ? <Alert>{t('errors.UNKNOWN')}</Alert> : null}
         {showList && listings.isPending ? (

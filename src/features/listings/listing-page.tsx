@@ -8,6 +8,7 @@ import { PhotoLightbox } from '../../shared/ui/photo-lightbox.tsx';
 import { Reveal } from '../../shared/ui/reveal.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
 import { SinglePinMap } from '../map/single-pin-map.tsx';
+import { ReportDialog } from '../reports/report-dialog.tsx';
 import { useShelters } from '../shelters/queries.ts';
 import { useListing } from './queries.ts';
 import { ShelterBadge, TypeBadge } from './status-badge.tsx';
@@ -110,6 +111,8 @@ export const ListingPage = () => {
             ) : null}
           </Card>
         ) : null}
+
+        <ReportDialog listingId={item.id} />
       </aside>
 
       {lightbox !== null ? (
