@@ -64,6 +64,12 @@ export const router = createBrowserRouter([
             }),
           },
           {
+            path: 'profile',
+            lazy: async () => ({
+              Component: (await import('../features/auth/profile-page.tsx')).ProfilePage,
+            }),
+          },
+          {
             path: 'mine',
             lazy: async () => ({
               Component: (await import('../features/listings/my-listings-page.tsx')).MyListingsPage,
