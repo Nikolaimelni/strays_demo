@@ -1,0 +1,10 @@
+# LF in the repository and in the working tree, on every platform. without
+# this, git on Windows checks files out with CRLF, and biome then reports the
+# whole tree as misformatted after any checkout, stash or rebase.
+* text=auto eol=lf
+
+# binaries git must not touch
+*.webp binary
+*.woff2 binary
+*.png binary
+*.jpg binary
