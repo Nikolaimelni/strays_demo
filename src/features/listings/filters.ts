@@ -4,10 +4,14 @@ import { z } from 'zod';
 
 // the URL is the only place filters live. no zustand, no context: a filtered
 // view is shareable, survives a reload, and gets back/forward for free.
+//
+// each field catches its own mistakes rather than the object failing whole. a
+// hand-edited `?city=&type=LOST` used to fail on the empty city and drop the
+// type with it, which looked like the bar ignoring a click.
 const filtersSchema = z.object({
-  type: z.enum(['FOUND', 'LOST', 'ADOPTION']).optional(),
-  species: z.enum(['DOG', 'CAT', 'OTHER']).optional(),
-  city: z.string().trim().min(1).optional(),
+  type: z.enum(['FOUND', 'LOST', 'ADOPTION']).optional().catch(undefined),
+  species: z.enum(['DOG', 'CAT', 'OTHER']).optional().catch(undefined),
+  city: z.string().trim().min(1).optional().catch(undefined),
   page: z.coerce.number().int().positive().catch(1).default(1),
 });
 
@@ -26,12 +30,7 @@ const readParams = (params: URLSearchParams) => Object.fromEntries(params.entrie
 export const useListingFilters = () => {
   const [params, setParams] = useSearchParams();
 
-  const filters = useMemo(() => {
-    const parsed = filtersSchema.safeParse(readParams(params));
-    // a hand-edited or stale URL should fall back to no filters rather than
-    // blanking the page
-    return parsed.success ? parsed.data : { page: 1 };
-  }, [params]);
+  const filters = useMemo(() => filtersSchema.parse(readParams(params)), [params]);
 
   const view = useMemo(() => viewSchema.parse(readParams(params)), [params]);
 

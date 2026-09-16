@@ -32,6 +32,16 @@
     "CONTENT_REJECTED": "That text is not allowed here. Please describe the animal.",
     "VERIFICATION_CODE_INVALID": "That code is wrong or has expired."
   },
+  "validation": {
+    "required": "Required.",
+    "invalid": "Pick one of the options.",
+    "email": "That does not look like an email address.",
+    "tooShort": "At least {{min}} characters.",
+    "tooLong": "At most {{max}} characters.",
+    "tooFew": "Add at least {{min}}.",
+    "tooMany": "No more than {{max}}.",
+    "passwordsDiffer": "The two passwords are different."
+  },
   "feed": {
     "count_one": "{{count}} listing here",
     "count_other": "{{count}} listings here",

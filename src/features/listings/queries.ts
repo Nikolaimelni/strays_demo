@@ -41,6 +41,9 @@ export const useListings = (filters: ListingFilters, bbox: Bbox | null) =>
       return data;
     },
     placeholderData: (previous) => previous,
+    // the map reports its bounds a tick after it mounts. without this the feed
+    // fires once for the whole world and again for the viewport.
+    enabled: bbox !== null,
   });
 
 export const usePins = (filters: ListingFilters, bbox: Bbox | null) =>

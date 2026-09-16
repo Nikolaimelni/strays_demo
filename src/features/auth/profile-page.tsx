@@ -29,10 +29,8 @@ const passwordSchema = z
     repeatPassword: z.string(),
   })
   .refine((values) => values.newPassword === values.repeatPassword, {
-    // the server never sees this field: it exists to catch a typo before it
-    // becomes a password nobody knows
     path: ['repeatPassword'],
-    message: 'passwords do not match',
+    params: { key: 'validation.passwordsDiffer' },
   });
 
 type ProfileValues = z.infer<typeof profileSchema>;

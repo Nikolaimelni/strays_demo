@@ -32,6 +32,16 @@
     "CONTENT_REJECTED": "Esse texto nao e permitido. Descreva o animal.",
     "VERIFICATION_CODE_INVALID": "Esse codigo esta errado ou expirou."
   },
+  "validation": {
+    "required": "Obrigatório.",
+    "invalid": "Escolha uma das opções.",
+    "email": "Isto não parece um endereço de email.",
+    "tooShort": "Pelo menos {{min}} caracteres.",
+    "tooLong": "No máximo {{max}} caracteres.",
+    "tooFew": "Adicione pelo menos {{min}}.",
+    "tooMany": "No máximo {{max}}.",
+    "passwordsDiffer": "As duas palavras-passe são diferentes."
+  },
   "feed": {
     "count_one": "{{count}} anúncio aqui",
     "count_other": "{{count}} anúncios aqui",

@@ -246,7 +246,10 @@ export const ModerationPage = () => {
                         <Button
                           variant="secondary"
                           size="sm"
-                          onClick={() => setRejecting(listing.id)}
+                          onClick={() => {
+                            setRejecting(listing.id);
+                            setReason('');
+                          }}
                         >
                           {t('admin.reject')}
                         </Button>
@@ -268,7 +271,7 @@ export const ModerationPage = () => {
           />
         ) : null}
 
-        {showList && rows.length === 0 && !listings.isPending ? (
+        {showList && listings.isSuccess && rows.length === 0 ? (
           <EmptyState title={t('admin.empty')} />
         ) : null}
 
