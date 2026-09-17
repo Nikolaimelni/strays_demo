@@ -20,6 +20,7 @@ export const HomePage = () => {
   const { t } = useTranslation();
   const { filters, view, setFilters, setView } = useListingFilters();
   const [bbox, setBbox] = useState<Bbox | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const pins = usePins(filters, bbox);
   const listings = useListings(filters, bbox);
@@ -46,8 +47,10 @@ export const HomePage = () => {
             <ListingsMap
               view={view}
               pins={pins.data ?? []}
+              activeId={activeId}
               onViewChange={setView}
               onBboxChange={setBbox}
+              onActivate={setActiveId}
             />
             <p className="mt-2 text-xs text-muted">{t('feed.mapHint')}</p>
           </Reveal>
@@ -86,9 +89,13 @@ export const HomePage = () => {
                       as="li"
                       key={listing.id}
                       delay={Math.min(index, 5) * 60}
-                      className="py-4 first:pt-5"
+                      className="py-2 first:pt-3"
                     >
-                      <ListingCard listing={listing} />
+                      <ListingCard
+                        listing={listing}
+                        active={activeId === listing.id}
+                        onActivate={setActiveId}
+                      />
                     </Reveal>
                   ))}
                 </ul>
@@ -117,7 +124,16 @@ export const HomePage = () => {
 
         <ol className="mt-8 grid gap-x-8 gap-y-9 sm:grid-cols-3">
           {STEPS.map((step, index) => (
-            <Reveal as="li" key={step} delay={index * 90} className="border-t border-rule/25 pt-4">
+            <Reveal
+              as="li"
+              key={step}
+              delay={index * 90}
+              className="group relative border-t border-rule/25 pt-4"
+            >
+              <span
+                aria-hidden
+                className="absolute -top-px left-0 h-px w-0 bg-brand transition-[width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:w-full"
+              />
               <p className="section-index text-xs font-medium text-brand">
                 {String(index + 1).padStart(2, '0')}
               </p>

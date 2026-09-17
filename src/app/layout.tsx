@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { useLogout } from '../features/auth/mutations.ts';
@@ -34,6 +34,17 @@ export const Layout = () => {
     setLastPath(location.pathname);
     setMenuOpen(false);
   }
+
+  // the document is the outside thing here: escape has to close the panel from
+  // wherever focus happens to be
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
 
   const signOut = async () => {
     setMenuOpen(false);
@@ -137,7 +148,7 @@ export const Layout = () => {
         </nav>
 
         {menuOpen ? (
-          <div id="mobile-nav" className="border-t border-rule/10 px-4 pb-5 md:hidden">
+          <div id="mobile-nav" className="menu-panel border-t border-rule/10 px-4 pb-5 md:hidden">
             <div className="flex flex-col">{links(panelLink)}</div>
             {user ? (
               <NavLink to="/profile" className={panelLink}>
@@ -162,16 +173,31 @@ export const Layout = () => {
             </div>
           </div>
         ) : null}
+
+        {/* reading position on the hairline the header already has. a scroll
+            timeline, so no listener and no state. */}
+        <span
+          aria-hidden
+          className="scroll-progress absolute inset-x-0 -bottom-px h-px origin-left bg-brand"
+        />
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-14">
         <Outlet />
       </main>
 
-      <footer className="border-t border-rule/15">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-4 px-4 py-8 sm:px-6">
-          <p className="max-w-prose text-xs leading-relaxed text-muted">{t('footer.note')}</p>
-          <p className="section-index text-xs text-muted">strays</p>
+      <footer className="mt-10 overflow-hidden border-t border-rule/15">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <p className="max-w-prose text-xs leading-relaxed text-muted">{t('footer.note')}</p>
+            <p className="section-index text-xs text-muted">{new Date().getFullYear()} · Lisboa</p>
+          </div>
+          <p
+            aria-hidden
+            className="mt-6 select-none font-display text-[18vw] leading-[0.78] font-semibold tracking-tight text-rule/8 sm:text-[13vw]"
+          >
+            strays
+          </p>
         </div>
       </footer>
     </div>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import hero from '../../assets/hero.webp';
@@ -17,16 +18,24 @@ interface HeroProps {
 const Stat = ({ value, label }: { value: number | undefined; label: string }) => (
   <div className="flex flex-col-reverse">
     <dt className="mt-0.5 text-xs uppercase tracking-[0.14em] text-muted">{label}</dt>
-    <dd className="font-display text-3xl font-semibold tabular-nums sm:text-4xl">
-      {/* an em dash while the count loads, not a zero: zero is a fact and this
-          is the absence of one */}
-      {value === undefined ? '—' : value}
+    <dd className="font-display text-3xl font-semibold sm:text-4xl">
+      {value === undefined ? (
+        // an em dash while the count loads, not a zero: zero is a fact and
+        // this is the absence of one
+        <span className="text-muted">—</span>
+      ) : (
+        <>
+          <span aria-hidden className="tally" style={{ '--to': value } as CSSProperties} />
+          <span className="sr-only">{value}</span>
+        </>
+      )}
     </dd>
   </div>
 );
 
 export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
   const { t } = useTranslation();
+  const lines = [t('hero.lineOne'), t('hero.lineTwo'), t('hero.lineThree')];
 
   return (
     <header className="border-t border-rule/15 pt-5 sm:pt-7">
@@ -35,16 +44,19 @@ export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
 
         <div className="min-w-0">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.18em] text-brand">{t('hero.eyebrow')}</p>
+            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-brand">
+              <span aria-hidden className="inline-block size-1.5 rounded-full bg-brand" />
+              {t('hero.eyebrow')}
+            </p>
           </Reveal>
 
-          {/* one Reveal per line, staggered: the headline arrives as three
-              beats rather than one block sliding in */}
+          {/* one mask per line: the headline arrives as three beats of type
+              rising out of the page rather than one block fading in */}
           <h1 className="mt-3 font-display text-display font-semibold text-balance sm:mt-4">
-            {[t('hero.lineOne'), t('hero.lineTwo'), t('hero.lineThree')].map((line, index) => (
-              <Reveal key={line} delay={index * 90}>
-                <span className="block">{line}</span>
-              </Reveal>
+            {lines.map((line, index) => (
+              <span key={line} className="line-mask">
+                <span style={{ animationDelay: `${index * 110}ms` }}>{line}</span>
+              </span>
             ))}
           </h1>
 
@@ -79,20 +91,24 @@ export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
             </Reveal>
 
             <Reveal delay={220}>
-              <figure className="group relative overflow-hidden rounded-sm">
-                <img
-                  src={hero}
-                  srcSet={`${heroSmall} 900w, ${hero} 1800w`}
-                  sizes="(min-width: 1024px) 56vw, 100vw"
-                  alt=""
-                  width={1800}
-                  height={1000}
-                  /* the only image above the fold, so it is the one worth
-                     fetching eagerly and decoding off the main thread */
-                  decoding="async"
-                  fetchPriority="high"
-                  className="aspect-[16/10] w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[1.03]"
-                />
+              <figure>
+                {/* the drift overflows its box by design, so the clip has to
+                    be the wrapper and not the figure, or it eats the credit */}
+                <div className="overflow-hidden rounded-sm">
+                  <img
+                    src={hero}
+                    srcSet={`${heroSmall} 900w, ${hero} 1800w`}
+                    sizes="(min-width: 1024px) 56vw, 100vw"
+                    alt=""
+                    width={1800}
+                    height={1000}
+                    /* the only image above the fold, so it is the one worth
+                       fetching eagerly and decoding off the main thread */
+                    decoding="async"
+                    fetchPriority="high"
+                    className="drift aspect-[16/10] w-full object-cover"
+                  />
+                </div>
                 <figcaption className="mt-2 text-[0.7rem] uppercase tracking-[0.14em] text-muted">
                   {t('hero.photoCredit')}
                 </figcaption>

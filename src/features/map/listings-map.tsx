@@ -10,11 +10,20 @@ import { ViewportSync } from './viewport-sync.tsx';
 interface ListingsMapProps {
   view: MapView;
   pins: ListingPin[];
+  activeId: string | null;
   onViewChange: (view: MapView) => void;
   onBboxChange: (bbox: Bbox) => void;
+  onActivate: (id: string | null) => void;
 }
 
-export const ListingsMap = ({ view, pins, onViewChange, onBboxChange }: ListingsMapProps) => {
+export const ListingsMap = ({
+  view,
+  pins,
+  activeId,
+  onViewChange,
+  onBboxChange,
+  onActivate,
+}: ListingsMapProps) => {
   const navigate = useNavigate();
 
   return (
@@ -32,8 +41,12 @@ export const ListingsMap = ({ view, pins, onViewChange, onBboxChange }: Listings
           <Marker
             key={pin.id}
             position={[pin.lat, pin.lng]}
-            icon={pinIcon(pin)}
-            eventHandlers={{ click: () => void navigate(`/listings/${pin.id}`) }}
+            icon={pinIcon(pin, pin.id === activeId)}
+            eventHandlers={{
+              click: () => void navigate(`/listings/${pin.id}`, { viewTransition: true }),
+              mouseover: () => onActivate(pin.id),
+              mouseout: () => onActivate(null),
+            }}
           />
         ))}
       </MarkerClusterGroup>

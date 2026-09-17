@@ -14,7 +14,10 @@ interface SectionProps {
 export const Section = ({ index, title, aside, children, className = '' }: SectionProps) => (
   <section className={`border-t border-rule/15 pt-5 sm:pt-7 ${className}`}>
     <div className="grid gap-x-6 gap-y-2 sm:grid-cols-[3.5rem_1fr] sm:gap-y-4">
-      <p className="section-index text-xs font-medium text-muted sm:pt-1">{index}</p>
+      {/* sticky, so the number stays beside its own section */}
+      <p className="section-index text-xs font-medium text-muted sm:sticky sm:top-24 sm:self-start sm:pt-1">
+        {index}
+      </p>
 
       <div className="min-w-0">
         {title || aside ? (

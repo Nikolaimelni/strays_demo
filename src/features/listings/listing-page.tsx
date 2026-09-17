@@ -78,8 +78,9 @@ export const ListingPage = () => {
                   <img
                     src={url}
                     alt=""
+                    style={index === 0 ? { viewTransitionName: 'listing-photo' } : undefined}
                     className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:scale-105"
-                    loading="lazy"
+                    loading={index === 0 ? 'eager' : 'lazy'}
                   />
                 </button>
               </li>

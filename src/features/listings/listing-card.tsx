@@ -1,25 +1,46 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useViewTransitionState } from 'react-router';
 import type { ListingSummary } from './queries.ts';
 import { ShelterBadge, TypeBadge } from './status-badge.tsx';
 
-export const ListingCard = ({ listing }: { listing: ListingSummary }) => {
+interface ListingCardProps {
+  listing: ListingSummary;
+  active?: boolean;
+  onActivate?: (id: string | null) => void;
+}
+
+export const ListingCard = ({ listing, active = false, onActivate }: ListingCardProps) => {
   const { t, i18n } = useTranslation();
+  const to = `/listings/${listing.id}`;
+  // true only while the router is animating into this listing, which is the
+  // only moment the photo needs a name to be matched on
+  const morphing = useViewTransitionState(to);
   const photo = listing.photoUrls[0];
 
   return (
-    <Link to={`/listings/${listing.id}`} className="group flex items-start gap-4 outline-offset-4">
+    <Link
+      to={to}
+      viewTransition
+      onMouseEnter={() => onActivate?.(listing.id)}
+      onMouseLeave={() => onActivate?.(null)}
+      onFocus={() => onActivate?.(listing.id)}
+      onBlur={() => onActivate?.(null)}
+      className={`group @container -mx-3 flex items-start gap-4 rounded-sm px-3 py-2 outline-offset-2 transition-colors duration-300 ${
+        active ? 'bg-sunken' : ''
+      }`}
+    >
       {photo ? (
-        <div className="w-28 shrink-0 overflow-hidden rounded-sm sm:w-32">
+        <div className="w-28 shrink-0 overflow-hidden rounded-sm @md:w-40">
           <img
             src={photo}
             alt=""
+            style={morphing ? { viewTransitionName: 'listing-photo' } : undefined}
             className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
             loading="lazy"
           />
         </div>
       ) : (
-        <div className="grid aspect-[4/3] w-28 shrink-0 place-items-center rounded-sm bg-sunken text-muted sm:w-32">
+        <div className="grid aspect-[4/3] w-28 shrink-0 place-items-center rounded-sm bg-sunken text-muted @md:w-40">
           <svg viewBox="0 0 24 24" className="size-6" fill="currentColor" aria-hidden>
             <title>no photo</title>
             <ellipse cx="7" cy="9" rx="2.1" ry="2.7" />
@@ -31,19 +52,19 @@ export const ListingCard = ({ listing }: { listing: ListingSummary }) => {
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <TypeBadge type={listing.type} />
           {listing.shelterId ? <ShelterBadge /> : null}
           <span className="text-xs uppercase tracking-[0.12em] text-muted">
             {[listing.city, relativeDate(listing.createdAt, i18n.language)]
               .filter(Boolean)
-              .join(' \u00b7 ')}
+              .join(' · ')}
           </span>
         </div>
-        <h3 className="mt-2 font-display text-lg font-semibold leading-tight">
+        <h3 className="mt-2 font-display text-lg font-semibold leading-tight @md:text-xl">
           <span className="link-underline">{t(`species.${listing.species}`)}</span>
         </h3>
-        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">
+        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted @md:line-clamp-3">
           {listing.description}
         </p>
       </div>

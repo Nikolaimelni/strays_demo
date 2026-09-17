@@ -1,25 +1,36 @@
 import L from 'leaflet';
 import type { ListingPin } from '../listings/queries.ts';
 
-const COLORS: Record<ListingPin['species'], string> = {
-  DOG: '#b45309',
-  CAT: '#7c3aed',
-  OTHER: '#0f766e',
+const SPECIES: Record<ListingPin['species'], string> = {
+  DOG: 'pin-dog',
+  CAT: 'pin-cat',
+  OTHER: 'pin-other',
 };
 
-export const pinIcon = (pin: ListingPin) =>
-  L.divIcon({
-    className: '',
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
-    html: `<span style="display:block;width:18px;height:18px;border-radius:9999px;border:2px solid white;box-shadow:0 1px 3px rgb(0 0 0 / 0.4);background:${COLORS[pin.species]};opacity:${pin.type === 'LOST' ? 0.55 : 1}"></span>`,
-  });
+// leaflet calls createIcon() per marker, so one icon object can back any
+// number of them. without the cache every pointer move rebuilds an icon for
+// every pin on screen.
+const cache = new Map<string, L.DivIcon>();
 
-// same reasoning, without a species to colour by
-export const plainPinIcon = () =>
-  L.divIcon({
+const icon = (classes: string) => {
+  const existing = cache.get(classes);
+  if (existing) return existing;
+
+  const made = L.divIcon({
     className: '',
     iconSize: [18, 18],
     iconAnchor: [9, 9],
-    html: '<span style="display:block;width:18px;height:18px;border-radius:9999px;border:2px solid white;box-shadow:0 1px 3px rgb(0 0 0 / 0.4);background:#171717"></span>',
+    html: `<span class="${classes}"></span>`,
   });
+  cache.set(classes, made);
+  return made;
+};
+
+export const pinIcon = (pin: ListingPin, active = false) =>
+  icon(
+    ['pin', SPECIES[pin.species], pin.type === 'LOST' && 'pin-lost', active && 'pin-active']
+      .filter(Boolean)
+      .join(' '),
+  );
+
+export const plainPinIcon = () => icon('pin pin-plain');
