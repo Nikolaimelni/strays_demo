@@ -15,8 +15,6 @@ const AUTHED = [
   { name: 'admin', path: '/admin' },
 ];
 
-// a fixed pause races the images: a full-page shot taken before a hero photo
-// decodes shows an empty column, which is what these shots exist to catch.
 const settle = async (page: import('@playwright/test').Page) => {
   await page.waitForLoadState('networkidle').catch(() => {});
   await page
@@ -26,6 +24,10 @@ const settle = async (page: import('@playwright/test').Page) => {
       { timeout: 8000 },
     )
     .catch(() => {});
+  await page.addStyleTag({
+    content:
+      '.reveal,.line-mask>span,.drift{animation:none!important;opacity:1!important;transform:none!important}',
+  });
 };
 
 const signIn = async (page: import('@playwright/test').Page) => {
@@ -38,8 +40,6 @@ const signIn = async (page: import('@playwright/test').Page) => {
 
 for (const scheme of ['light', 'dark'] as const) {
   test.describe(`${scheme} theme @shots`, () => {
-    // a full-page shot captures past the viewport without scrolling, so
-    // anything waiting for a scroll to reveal itself is blank in it
     test.use({ colorScheme: scheme, reducedMotion: 'reduce' });
 
     test(`public pages, ${scheme}`, async ({ page }) => {

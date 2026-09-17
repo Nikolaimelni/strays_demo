@@ -41,24 +41,34 @@ export const FiltersBar = ({ filters, onChange }: FiltersBarProps) => {
         clearable
       />
 
-      <select
-        aria-label={t('filters.species')}
-        value={filters.species ?? ''}
-        // matched against the list rather than cast to it, so an unknown
-        // value clears the filter instead of being waved through as a
-        // species the API has never heard of
-        onChange={(event) =>
-          onChange({ species: SPECIES.find((option) => option === event.target.value) })
-        }
-        className={control}
-      >
-        <option value="">{t('filters.species')}</option>
-        {SPECIES.map((species) => (
-          <option key={species} value={species}>
-            {t(`species.${species}`)}
-          </option>
-        ))}
-      </select>
+      <span className="relative inline-flex items-center">
+        <select
+          aria-label={t('filters.species')}
+          value={filters.species ?? ''}
+          // matched against the list rather than cast to it, so an unknown
+          // value clears the filter instead of being waved through as a
+          // species the API has never heard of
+          onChange={(event) =>
+            onChange({ species: SPECIES.find((option) => option === event.target.value) })
+          }
+          className={`${control} appearance-none pr-9`}
+        >
+          <option value="">{t('filters.species')}</option>
+          {SPECIES.map((species) => (
+            <option key={species} value={species}>
+              {t(`species.${species}`)}
+            </option>
+          ))}
+        </select>
+        <svg
+          aria-hidden
+          viewBox="0 0 10 6"
+          className="pointer-events-none absolute right-3.5 size-2.5 fill-none stroke-current stroke-[1.5] text-muted"
+        >
+          <title>open</title>
+          <path d="M1 1l4 4 4-4" />
+        </svg>
+      </span>
 
       <input
         aria-label={t('filters.city')}

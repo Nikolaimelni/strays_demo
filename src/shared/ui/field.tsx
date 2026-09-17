@@ -41,3 +41,7 @@ export const Field = ({ label, error, children }: FieldProps) => {
 
 export const inputClass =
   'min-h-11 w-full rounded-none border-0 border-b border-rule/25 bg-transparent px-0 py-2 text-base text-ink transition-colors placeholder:text-muted focus:border-brand focus:outline-none aria-[invalid=true]:border-danger sm:text-sm';
+
+// field-sizing grows the box with what is typed. the alternative is a resize
+// handle nobody drags or a hidden clone of the text being measured on input.
+export const textareaClass = `${inputClass} field-sizing-content min-h-24 resize-none`;

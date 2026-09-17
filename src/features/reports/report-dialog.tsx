@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { api } from '../../shared/api/client.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { Button } from '../../shared/ui/button.tsx';
-import { inputClass } from '../../shared/ui/field.tsx';
+import { inputClass, textareaClass } from '../../shared/ui/field.tsx';
 
 const REASONS = ['INAPPROPRIATE', 'SPAM', 'WRONG_INFO', 'ALREADY_RESOLVED', 'OTHER'] as const;
 type Reason = (typeof REASONS)[number];
@@ -62,11 +62,11 @@ export const ReportDialog = ({ listingId }: { listingId: string }) => {
         </label>
         <textarea
           id={noteId}
-          rows={3}
+          rows={2}
           maxLength={500}
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          className={inputClass}
+          className={textareaClass}
         />
 
         {report.isError ? <Alert>{t('errors.UNKNOWN')}</Alert> : null}

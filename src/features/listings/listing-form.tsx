@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { errorTranslationKey } from '../../shared/api/errors.ts';
 import { applyServerErrors } from '../../shared/api/server-errors.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { buttonClass } from '../../shared/ui/button.tsx';
-import { Field, inputClass } from '../../shared/ui/field.tsx';
+import { ChoiceGroup } from '../../shared/ui/choice-group.tsx';
+import { Field, inputClass, textareaClass } from '../../shared/ui/field.tsx';
 import { LocationPicker } from '../map/location-picker.tsx';
 import { PhotoUpload } from './photo-upload.tsx';
 
@@ -46,11 +47,17 @@ export const ListingForm = ({
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ListingFormValues>({
     resolver: zodResolver(listingFormSchema),
     defaultValues: { type: 'FOUND', species: 'DOG', photoKeys: [], ...defaultValues },
   });
+
+  // useWatch rather than watch(): the React Compiler refuses to memoize any
+  // component that calls watch(), and it says so at build time
+  const lat = useWatch({ control, name: 'lat' });
+  const lng = useWatch({ control, name: 'lng' });
 
   const submit = handleSubmit(async (values) => {
     setFormError(null);
@@ -62,30 +69,52 @@ export const ListingForm = ({
   });
 
   return (
-    <form onSubmit={submit} className="space-y-6" noValidate>
-      <Field label={t('listing.type')} error={errors.type}>
-        {(control_) => (
-          <select className={inputClass} {...control_} {...register('type')}>
-            <option value="FOUND">{t('filters.found')}</option>
-            <option value="LOST">{t('filters.lost')}</option>
-            <option value="ADOPTION">{t('filters.adoption')}</option>
-          </select>
+    <form onSubmit={submit} className="space-y-7" noValidate>
+      <Controller
+        control={control}
+        name="type"
+        render={({ field }) => (
+          <ChoiceGroup
+            legend={t('listing.type')}
+            name={field.name}
+            choices={[
+              { value: 'FOUND', label: t('filters.found') },
+              { value: 'LOST', label: t('filters.lost') },
+              { value: 'ADOPTION', label: t('filters.adoption') },
+            ]}
+            value={field.value}
+            onChange={field.onChange}
+          />
         )}
-      </Field>
+      />
 
-      <Field label={t('filters.species')} error={errors.species}>
-        {(control_) => (
-          <select className={inputClass} {...control_} {...register('species')}>
-            <option value="DOG">{t('species.DOG')}</option>
-            <option value="CAT">{t('species.CAT')}</option>
-            <option value="OTHER">{t('species.OTHER')}</option>
-          </select>
+      <Controller
+        control={control}
+        name="species"
+        render={({ field }) => (
+          <ChoiceGroup
+            legend={t('filters.species')}
+            name={field.name}
+            choices={[
+              { value: 'DOG', label: t('species.DOG') },
+              { value: 'CAT', label: t('species.CAT') },
+              { value: 'OTHER', label: t('species.OTHER') },
+            ]}
+            value={field.value}
+            onChange={field.onChange}
+          />
         )}
-      </Field>
+      />
 
       <Field label={t('listing.description')} error={errors.description}>
         {(control_) => (
-          <textarea rows={4} className={inputClass} {...control_} {...register('description')} />
+          <textarea
+            rows={3}
+            maxLength={2000}
+            className={textareaClass}
+            {...control_}
+            {...register('description')}
+          />
         )}
       </Field>
 
@@ -110,30 +139,14 @@ export const ListingForm = ({
         </p>
       ) : null}
 
-      <div className="space-y-1">
-        <p className="text-sm font-medium">{t('listing.whereFound')}</p>
-        <Controller
-          control={control}
-          name="lat"
-          render={({ field: latField }) => (
-            <Controller
-              control={control}
-              name="lng"
-              render={({ field: lngField }) => (
-                <LocationPicker
-                  value={
-                    typeof latField.value === 'number' && typeof lngField.value === 'number'
-                      ? { lat: latField.value, lng: lngField.value }
-                      : null
-                  }
-                  onChange={(position) => {
-                    latField.onChange(position.lat);
-                    lngField.onChange(position.lng);
-                  }}
-                />
-              )}
-            />
-          )}
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[0.12em] text-muted">{t('listing.whereFound')}</p>
+        <LocationPicker
+          value={Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null}
+          onChange={(position) => {
+            setValue('lat', position.lat, { shouldValidate: true });
+            setValue('lng', position.lng, { shouldValidate: true });
+          }}
         />
         {errors.lat || errors.lng ? (
           <p role="alert" className="text-sm text-danger">
