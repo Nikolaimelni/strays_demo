@@ -24,10 +24,21 @@ const settle = async (page: import('@playwright/test').Page) => {
       { timeout: 8000 },
     )
     .catch(() => {});
+  // complete is not the same as painted, and a hero photo that has loaded but
+  // not decoded comes out as an empty column
+  await page.evaluate(() =>
+    Promise.all([...document.images].map((image) => image.decode().catch(() => {}))),
+  );
   await page.addStyleTag({
     content:
-      '.reveal,.line-mask>span,.drift{animation:none!important;opacity:1!important;transform:none!important}',
+      '.reveal,.line-mask>span,.drift{animation:none!important;opacity:1!important;transform:none!important}' +
+      '.tally{transition:none!important}' +
+      // the grain is fixed, so a full-page shot paints it over the first
+      // screen only and leaves a seam where the viewport used to end
+      '.body-grain,body::after{display:none!important}',
   });
+  // one frame, so the styles above are the ones the capture sees
+  await page.evaluate(() => new Promise(requestAnimationFrame));
 };
 
 const signIn = async (page: import('@playwright/test').Page) => {

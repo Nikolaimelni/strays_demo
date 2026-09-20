@@ -192,12 +192,18 @@ export const Layout = () => {
             <p className="max-w-prose text-xs leading-relaxed text-muted">{t('footer.note')}</p>
             <p className="section-index text-xs text-muted">{new Date().getFullYear()} · Lisboa</p>
           </div>
-          <p
+          {/* the wordmark is decoration at a contrast no text should have, so
+              it is a graphic and not a paragraph. axe is right about that. */}
+          <svg
             aria-hidden
-            className="mt-6 select-none font-display text-[18vw] leading-[0.78] font-semibold tracking-tight text-rule/8 sm:text-[13vw]"
+            viewBox="0 0 246 86"
+            preserveAspectRatio="xMinYMid meet"
+            className="mt-6 w-full select-none fill-rule/10"
           >
-            strays
-          </p>
+            <text x="0" y="66" className="font-display text-[80px] font-semibold tracking-tight">
+              strays
+            </text>
+          </svg>
         </div>
       </footer>
     </div>
