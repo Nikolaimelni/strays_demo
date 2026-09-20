@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { api } from '../../shared/api/client.ts';
-import { PageHeading } from '../../shared/ui/page-heading.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
+import { PageHeading } from '../../shared/ui/section.tsx';
 import { ListingForm, type ListingFormValues } from './listing-form.tsx';
 
 export const NewListingPage = () => {

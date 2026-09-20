@@ -1,5 +1,52 @@
 import { expect, test } from '@playwright/test';
 
+test('the shell and the map render', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByRole('link', { name: 'strays' })).toBeVisible();
+  await expect(page.locator('.leaflet-container')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'OpenStreetMap' })).toBeVisible();
+});
+
+test('panning the map writes the viewport to the url', async ({ page }) => {
+  await page.goto('/');
+  const map = page.locator('.leaflet-container');
+  await expect(map).toBeVisible();
+
+  const box = await map.boundingBox();
+  if (!box) throw new Error('map has no layout box');
+
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 - 120, box.y + box.height / 2 - 80, { steps: 10 });
+  await page.mouse.up();
+
+  await expect(page).toHaveURL(/lat=.*lng=.*z=/);
+});
+
+test('a filter survives a reload because it lives in the url', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('radio', { name: 'Lost' }).check();
+  await expect(page).toHaveURL(/type=LOST/);
+
+  await page.reload();
+  await expect(page.getByRole('radio', { name: 'Lost' })).toBeChecked();
+});
+
+test('a route change starts at the top of the page', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('heading', { name: 'How it works' }).scrollIntoViewIfNeeded();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+
+  await page.getByRole('link', { name: 'Sign in' }).click();
+
+  await expect(page).toHaveURL(/\/login/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  await page.getByRole('link', { name: 'Map', exact: true }).click();
+  await expect(page.locator('.leaflet-container')).toBeVisible();
+});
+
 test('an unknown url gets the 404 screen, not a blank page', async ({ page }) => {
   await page.goto('/no-such-page');
 
@@ -10,14 +57,37 @@ test('an unknown url gets the 404 screen, not a blank page', async ({ page }) =>
   await expect(page.locator('.leaflet-container')).toBeVisible();
 });
 
-test('switching language translates the shell and survives a reload', async ({ page }) => {
+test('language, titles and the html lang follow the switcher', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: 'Post a listing' })).toBeVisible();
+  await expect(page).toHaveTitle(/Animals near you · strays/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
-  await page.getByRole('button', { name: 'Português' }).click();
+  await page.getByRole('radio', { name: 'Português' }).check();
   await expect(page.getByRole('link', { name: 'Publicar anúncio' })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
+  await expect(page).toHaveTitle(/Animais perto de si · strays/);
 
-  // the detector persists the choice, so a reload must not snap back to English
   await page.reload();
   await expect(page.getByRole('link', { name: 'Publicar anúncio' })).toBeVisible();
+});
+
+test.describe('dark theme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  // leaflet's stylesheet is unlayered, so an override placed inside a @layer
+  // silently loses to it. this is that regression.
+  test('the tokens resolve, leaflet included', async ({ page }) => {
+    const read = (selector: string, property: string) =>
+      page
+        .locator(selector)
+        .first()
+        .evaluate((node, prop) => getComputedStyle(node).getPropertyValue(prop), property);
+
+    await page.goto('/login');
+    expect(await read('body', 'background-color')).toBe('rgb(20, 18, 15)');
+    expect(await read('h1', 'color')).toBe('rgb(244, 241, 236)');
+
+    await page.goto('/');
+    expect(await read('.leaflet-container', 'background-color')).toBe('rgb(38, 35, 30)');
+  });
 });

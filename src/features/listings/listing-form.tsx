@@ -76,6 +76,7 @@ export const ListingForm = ({
         render={({ field }) => (
           <ChoiceGroup
             legend={t('listing.type')}
+            showLegend
             name={field.name}
             choices={[
               { value: 'FOUND', label: t('filters.found') },
@@ -94,6 +95,7 @@ export const ListingForm = ({
         render={({ field }) => (
           <ChoiceGroup
             legend={t('filters.species')}
+            showLegend
             name={field.name}
             choices={[
               { value: 'DOG', label: t('species.DOG') },

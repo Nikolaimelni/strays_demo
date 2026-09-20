@@ -5,14 +5,15 @@ import { api } from '../../shared/api/client.ts';
 import type { components } from '../../shared/api/schema';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { Button } from '../../shared/ui/button.tsx';
+import { ChoiceGroup } from '../../shared/ui/choice-group.tsx';
 import { EmptyState } from '../../shared/ui/empty-state.tsx';
 import { inputClass } from '../../shared/ui/field.tsx';
-import { PageHeading } from '../../shared/ui/page-heading.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { PhotoLightbox } from '../../shared/ui/photo-lightbox.tsx';
+import { PageHeading } from '../../shared/ui/section.tsx';
 import { ListingCardSkeleton } from '../../shared/ui/skeleton.tsx';
 import { Pagination } from '../listings/pagination.tsx';
-import { ShelterBadge, StatusBadge, TypeBadge } from '../listings/status-badge.tsx';
+import { ShelterBadge, TypeBadge } from '../listings/status-badge.tsx';
 import { ReportsPanel } from './reports-panel.tsx';
 
 type Status = 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -104,33 +105,19 @@ export const ModerationPage = () => {
       <PageHeading index="01" title={t('nav.admin')} />
 
       <div className="space-y-5 sm:pl-[4.625rem]">
-        <div className="inline-flex flex-wrap rounded-full border border-rule/15 p-0.5">
-          {(['PENDING', 'APPROVED', 'REJECTED'] as const).map((option) => (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={tab === option}
-              onClick={() => switchTab(option)}
-              // no opacity on the inactive tabs: it blends the badge colour
-              // into the background and drops it under 4.5:1
-              className={`rounded-full px-3 py-2 transition-colors ${
-                tab === option ? 'bg-sunken' : 'hover:bg-sunken'
-              }`}
-            >
-              <StatusBadge status={option} />
-            </button>
-          ))}
-          <button
-            type="button"
-            aria-pressed={tab === 'REPORTED'}
-            onClick={() => switchTab('REPORTED')}
-            className={`rounded-full px-3 py-2 text-sm font-medium transition-colors ${
-              tab === 'REPORTED' ? 'bg-sunken' : 'hover:bg-sunken'
-            }`}
-          >
-            {t('report.tab')}
-          </button>
-        </div>
+        <ChoiceGroup
+          legend={t('nav.admin')}
+          name="bucket"
+          size="sm"
+          value={tab}
+          onChange={switchTab}
+          choices={[
+            { value: 'PENDING', label: t('listing.pending') },
+            { value: 'APPROVED', label: t('listing.approved') },
+            { value: 'REJECTED', label: t('listing.rejected') },
+            { value: 'REPORTED', label: t('report.tab') },
+          ]}
+        />
 
         {tab === 'REPORTED' ? <ReportsPanel /> : null}
 

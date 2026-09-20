@@ -46,7 +46,8 @@ export const useListingFilters = () => {
           if (!('page' in next)) updated.delete('page');
           return updated;
         },
-        { replace: false },
+        // ScrollRestoration treats every write as a new page and jumps to the top
+        { replace: false, preventScrollReset: true },
       );
     },
     [setParams],
@@ -62,7 +63,7 @@ export const useListingFilters = () => {
           updated.set('z', String(next.z));
           return updated;
         },
-        { replace: true },
+        { replace: true, preventScrollReset: true },
       );
     },
     [setParams],

@@ -9,6 +9,7 @@
     "menuClose": "Fechar menu"
   },
   "filters": {
+    "all": "Todos",
     "found": "Encontrados",
     "lost": "Perdidos",
     "species": "Espécie",

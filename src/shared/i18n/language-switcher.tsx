@@ -1,20 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { SegmentedControl } from '../ui/segmented-control.tsx';
+import { ChoiceGroup } from '../ui/choice-group.tsx';
 
 export const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
-  const current = (i18n.resolvedLanguage ?? 'en') as 'en' | 'pt';
 
   return (
-    <SegmentedControl
+    <ChoiceGroup
       legend={t('nav.language')}
+      name="lang"
       size="sm"
-      segments={[
-        { value: 'en', label: 'EN', lang: 'en', name: 'English' },
-        { value: 'pt', label: 'PT', lang: 'pt', name: 'Português' },
+      value={i18n.resolvedLanguage === 'pt' ? 'pt' : 'en'}
+      onChange={(code) => void i18n.changeLanguage(code)}
+      choices={[
+        { value: 'en', label: 'EN', name: 'English', lang: 'en' },
+        { value: 'pt', label: 'PT', name: 'Português', lang: 'pt' },
       ]}
-      value={current}
-      onChange={(code) => code && void i18n.changeLanguage(code)}
     />
   );
 };

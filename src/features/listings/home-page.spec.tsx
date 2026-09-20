@@ -65,7 +65,7 @@ describe('home page', () => {
     const { router } = renderWithProviders(<HomePage />);
     await screen.findByText(/friendly brown dog/);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Lost' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Lost' }));
 
     await waitFor(() => expect(feedRequests.at(-1)?.get('type')).toBe('LOST'));
     expect(router.state.location.search).toContain('type=LOST');
@@ -75,17 +75,17 @@ describe('home page', () => {
     const { router } = renderWithProviders(<HomePage />);
     await screen.findByText(/friendly brown dog/);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Adoption' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Adoption' }));
 
     await waitFor(() => expect(feedRequests.at(-1)?.get('type')).toBe('ADOPTION'));
     expect(router.state.location.search).toContain('type=ADOPTION');
   });
 
-  it('clears the type when the chosen segment is pressed again', async () => {
+  it('clears the type through the All chip', async () => {
     const { router } = renderWithProviders(<HomePage />, '/?type=ADOPTION');
     await screen.findByText(/friendly brown dog/);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Adoption' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'All' }));
 
     await waitFor(() => expect(feedRequests.at(-1)?.has('type')).toBe(false));
     expect(router.state.location.search).not.toContain('type=');
@@ -96,7 +96,7 @@ describe('home page', () => {
     await screen.findByText(/friendly brown dog/);
     expect(feedRequests.at(-1)?.get('page')).toBe('3');
 
-    await userEvent.click(screen.getByRole('button', { name: 'Found' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Found' }));
 
     await waitFor(() => expect(feedRequests.at(-1)?.get('page')).toBe('1'));
     expect(router.state.location.search).not.toContain('page=3');

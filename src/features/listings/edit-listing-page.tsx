@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { api } from '../../shared/api/client.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
-import { PageHeading } from '../../shared/ui/page-heading.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
+import { PageHeading } from '../../shared/ui/section.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
 import { ListingForm, type ListingFormValues } from './listing-form.tsx';
 

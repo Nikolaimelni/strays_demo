@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SegmentedControl } from '../../shared/ui/segmented-control.tsx';
+import { ChoiceGroup } from '../../shared/ui/choice-group.tsx';
 import type { ListingFilters } from './filters.ts';
 
 interface FiltersBarProps {
@@ -8,18 +8,19 @@ interface FiltersBarProps {
   onChange: (next: Partial<ListingFilters>) => void;
 }
 
+type TypeChoice = NonNullable<ListingFilters['type']> | 'ALL';
+
 const SPECIES = ['DOG', 'CAT', 'OTHER'] as const;
 
 const control =
-  'min-h-9 rounded-full border border-rule/15 bg-transparent px-3.5 text-sm text-ink transition-colors hover:border-rule/40';
+  'min-h-9 rounded-full border border-rule/15 bg-transparent px-3.5 text-sm text-ink transition-colors hover:border-rule/45';
 
 export const FiltersBar = ({ filters, onChange }: FiltersBarProps) => {
   const { t } = useTranslation();
 
-  // typed rather than picked, so it cannot write to the url on every
-  // keystroke: a draft, committed on blur. which means it also has to notice a
-  // url it did not write itself, because back, forward and a pasted link all
-  // change the filter under it.
+  // typed rather than picked, so it cannot write to the url on every keystroke:
+  // a draft, committed on blur. which means it also has to notice a url it did
+  // not write itself, because back and a pasted link change it underneath.
   const [draftCity, setDraftCity] = useState(filters.city ?? '');
   const [lastCity, setLastCity] = useState(filters.city);
   if (filters.city !== lastCity) {
@@ -29,25 +30,24 @@ export const FiltersBar = ({ filters, onChange }: FiltersBarProps) => {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <SegmentedControl
+      <ChoiceGroup
         legend={t('filters.type')}
-        segments={[
+        name="type"
+        size="sm"
+        value={filters.type ?? 'ALL'}
+        onChange={(type: TypeChoice) => onChange({ type: type === 'ALL' ? undefined : type })}
+        choices={[
+          { value: 'ALL', label: t('filters.all') },
           { value: 'FOUND', label: t('filters.found') },
           { value: 'LOST', label: t('filters.lost') },
           { value: 'ADOPTION', label: t('filters.adoption') },
         ]}
-        value={filters.type}
-        onChange={(type) => onChange({ type })}
-        clearable
       />
 
       <span className="relative inline-flex items-center">
         <select
           aria-label={t('filters.species')}
           value={filters.species ?? ''}
-          // matched against the list rather than cast to it, so an unknown
-          // value clears the filter instead of being waved through as a
-          // species the API has never heard of
           onChange={(event) =>
             onChange({ species: SPECIES.find((option) => option === event.target.value) })
           }
@@ -76,7 +76,6 @@ export const FiltersBar = ({ filters, onChange }: FiltersBarProps) => {
         value={draftCity}
         onChange={(event) => setDraftCity(event.target.value)}
         onBlur={(event) => onChange({ city: event.target.value.trim() || undefined })}
-        // enter commits without hunting for somewhere else to click
         onKeyDown={(event) => {
           if (event.key === 'Enter') event.currentTarget.blur();
         }}

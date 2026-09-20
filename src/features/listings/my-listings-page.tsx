@@ -6,9 +6,9 @@ import { Alert } from '../../shared/ui/alert.tsx';
 import { ButtonLink } from '../../shared/ui/button.tsx';
 import { ConfirmButton } from '../../shared/ui/confirm-button.tsx';
 import { EmptyState } from '../../shared/ui/empty-state.tsx';
-import { PageHeading } from '../../shared/ui/page-heading.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { Reveal } from '../../shared/ui/reveal.tsx';
+import { PageHeading } from '../../shared/ui/section.tsx';
 import { ListingCardSkeleton } from '../../shared/ui/skeleton.tsx';
 import { StatusBadge, TypeBadge } from './status-badge.tsx';
 

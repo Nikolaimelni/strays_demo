@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
+import { NavLink, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router';
 import { useLogout } from '../features/auth/mutations.ts';
 import { useSession } from '../features/auth/session.ts';
 import { LanguageSwitcher } from '../shared/i18n/language-switcher.tsx';
@@ -74,6 +74,9 @@ export const Layout = () => {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      {/* without this a route change keeps the scroll position, so the map
+          link from a scrolled page lands you in the footer */}
+      <ScrollRestoration />
       {/* sticky because the map is tall and the nav is the only way out of it.
           z-index above 1000: leaflet puts its own control corners there, and
           the zoom buttons would otherwise slide over the header */}
