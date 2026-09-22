@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { errorTranslationKey } from '../../shared/api/errors.ts';
-import { applyServerErrors } from '../../shared/api/server-errors.ts';
+import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
 import { AuthPage } from './auth-page.tsx';
 import { useLogin } from './mutations.ts';
@@ -31,8 +30,6 @@ export const LoginPage = () => {
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null);
     try {
-      // no redirect here: RedirectSignedIn sends them on, back to whatever
-      // RequireAuth bounced them off rather than always home
       await login.mutateAsync(values);
     } catch (error) {
       setFormError(t(errorTranslationKey(applyServerErrors(error, setError))));

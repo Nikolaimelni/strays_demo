@@ -3,14 +3,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { errorTranslationKey } from '../../shared/api/errors.ts';
-import { applyServerErrors } from '../../shared/api/server-errors.ts';
+import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
 import { AuthPage } from './auth-page.tsx';
 import { useRegister } from './mutations.ts';
 
-// mirrors the backend registerSchema. duplicated on purpose: the server still
-// validates, this only saves a round trip and gives instant feedback.
 const schema = z.object({
   name: z.string().trim().min(1).max(80),
   email: z.email(),

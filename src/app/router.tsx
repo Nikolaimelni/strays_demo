@@ -6,6 +6,7 @@ import { RequireAuth } from '../features/auth/require-auth.tsx';
 import { Layout } from './layout.tsx';
 import { NotFound } from './not-found.tsx';
 import { RouteError } from './route-error.tsx';
+
 // leaflet and markercluster are most of the bundle, so every route that draws
 // a map loads on demand. login, register and the 404 stay eager: small, and
 // where a cold cache usually lands.
@@ -77,7 +78,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
       {
         element: (
           <RequireAuth adminOnly>
