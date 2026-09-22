@@ -12,7 +12,6 @@ const navLink = ({ isActive }: { isActive: boolean }) =>
     isActive ? 'text-ink' : 'text-muted hover:text-ink'
   }`;
 
-// 44px is the smallest target that does not need a second attempt on a phone
 const panelLink = ({ isActive }: { isActive: boolean }) =>
   `flex min-h-11 items-center border-b border-rule/10 text-sm uppercase tracking-[0.14em] transition-colors ${
     isActive ? 'text-ink' : 'text-muted'
@@ -28,15 +27,11 @@ export const Layout = () => {
   const [lastPath, setLastPath] = useState(location.pathname);
   useDocumentLanguage();
 
-  // A menu that survives navigation covers the page it just opened. During
-  // render rather than in an effect, which would paint the old state first.
   if (location.pathname !== lastPath) {
     setLastPath(location.pathname);
     setMenuOpen(false);
   }
 
-  // the document is the outside thing here: escape has to close the panel from
-  // wherever focus happens to be
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (event: KeyboardEvent) => {
@@ -48,8 +43,6 @@ export const Layout = () => {
 
   const signOut = async () => {
     setMenuOpen(false);
-    // the cache clears either way and the cookie expires on its own. without
-    // the catch the rejection escapes an onClick with nowhere to go.
     await logout.mutateAsync().catch(() => {});
     await navigate('/', { replace: true });
   };
@@ -101,8 +94,6 @@ export const Layout = () => {
             strays
           </NavLink>
 
-          {/* one row, never wrapping: at 360px the wrapped version was three
-              rows and 125px of sticky header, a third of the viewport */}
           <div className="ml-6 hidden items-center gap-x-5 md:flex">{links(navLink)}</div>
 
           <div className="ml-auto hidden items-center gap-x-5 md:flex">
@@ -134,7 +125,6 @@ export const Layout = () => {
             className="ml-auto -mr-2 grid size-11 place-items-center md:hidden"
           >
             <span className="sr-only">{menuOpen ? t('nav.menuClose') : t('nav.menuOpen')}</span>
-            {/* two lines that become an X, cheaper than swapping icons */}
             <span aria-hidden className="relative block h-3 w-5">
               <span
                 className={`absolute left-0 block h-px w-5 bg-ink transition-transform duration-300 ${
@@ -177,8 +167,6 @@ export const Layout = () => {
           </div>
         ) : null}
 
-        {/* reading position on the hairline the header already has. a scroll
-            timeline, so no listener and no state. */}
         <span
           aria-hidden
           className="scroll-progress absolute inset-x-0 -bottom-px h-px origin-left bg-brand"
@@ -201,7 +189,7 @@ export const Layout = () => {
             aria-hidden
             viewBox="0 0 246 86"
             preserveAspectRatio="xMinYMid meet"
-            className="mt-6 w-full select-none fill-rule/10"
+            className="mt-6 h-24 w-full select-none fill-rule/10 sm:h-36"
           >
             <text x="0" y="66" className="font-display text-[80px] font-semibold tracking-tight">
               strays
