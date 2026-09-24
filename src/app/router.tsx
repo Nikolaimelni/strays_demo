@@ -3,6 +3,7 @@ import { LoginPage } from '../features/auth/login-page.tsx';
 import { RedirectSignedIn } from '../features/auth/redirect-signed-in.tsx';
 import { RegisterPage } from '../features/auth/register-page.tsx';
 import { RequireAuth } from '../features/auth/require-auth.tsx';
+import { VerifyEmailPage } from '../features/auth/verify-email-page.tsx';
 import { Layout } from './layout.tsx';
 import { NotFound } from './not-found.tsx';
 import { RouteError } from './route-error.tsx';
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
           </RedirectSignedIn>
         ),
       },
+      { path: 'verify-email', element: <VerifyEmailPage /> },
       {
         path: 'register',
         element: (

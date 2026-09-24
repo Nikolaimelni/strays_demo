@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test --grep-invert @shots",
-    "api:types": "openapi-typescript ../strays_be/openapi.json -o src/shared/api/schema.d.ts",
+    "api:types": "openapi-typescript http://localhost:3000/docs-json -o src/shared/api/schema.d.ts",
     "shots": "playwright test e2e/screenshots.spec.ts"
   },
   "dependencies": {

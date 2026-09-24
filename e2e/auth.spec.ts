@@ -14,7 +14,6 @@ test('signing in swaps the nav and opens the guarded routes', async ({ page }) =
   await page.getByRole('link', { name: 'Moderation' }).click();
   await expect(page).toHaveURL(/\/admin/);
   await expect(page.getByRole('button', { name: 'Approve' }).first()).toBeVisible();
-  await expect(page.getByText('Flagged: telegram, price')).toBeVisible();
 });
 
 test('a wrong password shows the translated code, not the api message', async ({ page }) => {

@@ -22,6 +22,7 @@ const PUBLIC_PAGES = [
   '/listings/22222222-2222-2222-2222-222222222222',
   '/login',
   '/register',
+  '/verify-email?token=whatever',
   '/nope',
 ];
 const PRIVATE_PAGES = ['/new', '/mine', '/admin', '/profile'];

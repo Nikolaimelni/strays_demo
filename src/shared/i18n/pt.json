@@ -6,7 +6,8 @@
     "admin": "Moderação",
     "language": "Idioma",
     "menuOpen": "Menu",
-    "menuClose": "Fechar menu"
+    "menuClose": "Fechar menu",
+    "account": "Conta"
   },
   "filters": {
     "all": "Todos",
@@ -28,10 +29,11 @@
     "INVALID_CREDENTIALS": "Email ou palavra-passe incorretos.",
     "EMAIL_TAKEN": "Esse email já está registado.",
     "REFRESH_TOKEN_INVALID": "A sessão expirou. Inicie sessão novamente.",
-    "LISTING_NOT_FOUND": "Este anúncio já não existe.",
     "FORBIDDEN": "Não tem permissão para isso.",
-    "CONTENT_REJECTED": "Esse texto nao e permitido. Descreva o animal.",
-    "VERIFICATION_CODE_INVALID": "Esse codigo esta errado ou expirou."
+    "NOT_FOUND": "Este anúncio já não existe.",
+    "EMAIL_NOT_VERIFIED": "Confirme o seu email antes de publicar.",
+    "VERIFICATION_FAILED": "Esse código está errado ou expirou.",
+    "INTERNAL_ERROR": "Algo correu mal do nosso lado. Tente outra vez."
   },
   "validation": {
     "required": "Obrigatório.",
@@ -40,8 +42,7 @@
     "tooShort": "Pelo menos {{min}} caracteres.",
     "tooLong": "No máximo {{max}} caracteres.",
     "tooFew": "Adicione pelo menos {{min}}.",
-    "tooMany": "No máximo {{max}}.",
-    "passwordsDiffer": "As duas palavras-passe são diferentes."
+    "tooMany": "No máximo {{max}}."
   },
   "feed": {
     "count_one": "{{count}} anúncio aqui",
@@ -56,8 +57,6 @@
     "emptyBody": "Afaste o mapa, mova-o, ou limpe um filtro."
   },
   "listing": {
-    "source": "Fonte",
-    "original": "anuncio original",
     "photos": "Fotografias",
     "removePhoto": "Remover fotografia",
     "type": "Porque está a publicar",
@@ -76,14 +75,14 @@
     "edit": "Editar",
     "save": "Guardar",
     "editResetsReview": "Editar um anuncio publicado envia-o de novo para revisao.",
-    "fromShelter": "De um abrigo"
+    "fromShelter": "De um abrigo",
+    "shelterSite": "o site da associação"
   },
   "auth": {
     "signIn": "Entrar",
     "signUp": "Criar conta",
     "email": "Email",
     "password": "Palavra-passe",
-    "name": "O seu nome",
     "needAccount": "Ainda nao tem conta? Criar",
     "haveAccount": "Ja tem conta? Entrar",
     "signOut": "Sair"
@@ -92,7 +91,6 @@
     "approve": "Aprovar",
     "reject": "Rejeitar",
     "empty": "Nada nesta lista.",
-    "flagged": "Assinalado",
     "viewPhotos": "Ver fotos",
     "closePhotos": "Fechar",
     "photoOf": "Foto {{index}} de {{total}}",
@@ -111,44 +109,19 @@
     "body": "Ocorreu um erro ao mostrar esta pagina."
   },
   "footer": {
-    "note": "Um projeto pessoal. Os anuncios de abrigos ligam ao original."
+    "note": "Um projeto pessoal. Os anúncios de associações remetem para o site da associação."
   },
   "common": {
     "confirm": "Apagar mesmo",
     "cancel": "Cancelar"
   },
-  "report": {
-    "open": "Denunciar este anuncio",
-    "blurb": "Diga o que esta errado e um moderador vai ver.",
-    "reason": "O que esta errado",
-    "note": "Mais alguma coisa (opcional)",
-    "submit": "Enviar denuncia",
-    "thanks": "Obrigado. Um moderador vai analisar.",
-    "tab": "Denunciados",
-    "noneOpen": "Sem denuncias abertas.",
-    "count_one": "{{count}} denuncia",
-    "count_other": "{{count}} denuncias",
-    "keep": "Manter publicado",
-    "takeDown": "Remover",
-    "reasons": {
-      "INAPPROPRIATE": "Impróprio ou ofensivo",
-      "SPAM": "Spam ou publicidade",
-      "WRONG_INFO": "Errado ou enganador",
-      "ALREADY_RESOLVED": "Animal ja em casa",
-      "OTHER": "Outra coisa"
-    }
-  },
   "profile": {
-    "title": "A sua conta",
-    "details": "Dados",
-    "save": "Guardar",
-    "saved": "Guardado.",
-    "password": "Palavra-passe",
-    "passwordNote": "Alterar termina a sessao em todos os dispositivos, incluindo este.",
-    "currentPassword": "Palavra-passe atual",
-    "newPassword": "Nova palavra-passe",
-    "repeatPassword": "Repetir a nova",
-    "changePassword": "Alterar palavra-passe"
+    "email": "Email",
+    "emailConfirmed": "Confirmado",
+    "emailPending": "Ainda não confirmado. Não pode publicar até confirmar.",
+    "emailResend": "Enviar o link outra vez",
+    "emailResent": "Enviado. Veja a sua caixa de entrada.",
+    "title": "A sua conta"
   },
   "hero": {
     "eyebrow": "Em qualquer parte do mundo",
@@ -174,5 +147,11 @@
     "stepTwoBody": "Cada anúncio espera numa fila. Nada chega ao mapa público antes de alguém ver a foto.",
     "stepThreeTitle": "Alguem reconhece",
     "stepThreeBody": "O anúncio aparece no mapa do bairro a que pertence, e uma mensagem chega-lhe por email."
+  },
+  "verifyEmail": {
+    "title": "A confirmar o seu email",
+    "ok": "Confirmado. Já pode publicar.",
+    "failed": "Este link já não é válido. Peça outro na sua conta.",
+    "toAccount": "Ir para a conta"
   }
 }

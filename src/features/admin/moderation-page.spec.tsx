@@ -22,7 +22,6 @@ const row = (id: string, description: string) => ({
   sourceRef: null,
   shelterId: null,
   createdAt: '2026-08-01T00:00:00.000Z',
-  flaggedTerms: [] as string[],
   rejectionReason: null,
 });
 
@@ -91,21 +90,5 @@ describe('moderation queue', () => {
     await waitFor(() =>
       expect(screen.queryByText('second pending listing')).not.toBeInTheDocument(),
     );
-  });
-
-  it('shows the terms that flagged a listing, so the queue can be read first', async () => {
-    server.use(
-      http.get(`${API}/admin/listings`, () =>
-        HttpResponse.json({
-          items: [{ ...pending[0], flaggedTerms: ['telegram', 'price'] }],
-          total: 1,
-          page: 1,
-          limit: 20,
-        }),
-      ),
-    );
-
-    renderWithProviders(<ModerationPage />);
-    expect(await screen.findByText(/telegram, price/)).toBeInTheDocument();
   });
 });

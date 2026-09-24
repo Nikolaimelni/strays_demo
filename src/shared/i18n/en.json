@@ -6,7 +6,8 @@
     "admin": "Moderation",
     "language": "Language",
     "menuOpen": "Menu",
-    "menuClose": "Close menu"
+    "menuClose": "Close menu",
+    "account": "Account"
   },
   "filters": {
     "all": "All",
@@ -28,10 +29,11 @@
     "INVALID_CREDENTIALS": "Wrong email or password.",
     "EMAIL_TAKEN": "That email is already registered.",
     "REFRESH_TOKEN_INVALID": "Your session expired. Sign in again.",
-    "LISTING_NOT_FOUND": "This listing no longer exists.",
     "FORBIDDEN": "You can't do that.",
-    "CONTENT_REJECTED": "That text is not allowed here. Please describe the animal.",
-    "VERIFICATION_CODE_INVALID": "That code is wrong or has expired."
+    "NOT_FOUND": "This listing no longer exists.",
+    "EMAIL_NOT_VERIFIED": "Confirm your email address before posting.",
+    "VERIFICATION_FAILED": "That code is wrong or has expired.",
+    "INTERNAL_ERROR": "Something went wrong on our side. Try again."
   },
   "validation": {
     "required": "Required.",
@@ -40,8 +42,7 @@
     "tooShort": "At least {{min}} characters.",
     "tooLong": "At most {{max}} characters.",
     "tooFew": "Add at least {{min}}.",
-    "tooMany": "No more than {{max}}.",
-    "passwordsDiffer": "The two passwords are different."
+    "tooMany": "No more than {{max}}."
   },
   "feed": {
     "count_one": "{{count}} listing here",
@@ -56,8 +57,6 @@
     "emptyBody": "Zoom out, move the map, or clear a filter."
   },
   "listing": {
-    "source": "Source",
-    "original": "original listing",
     "photos": "Photos",
     "removePhoto": "Remove photo",
     "type": "Why you're posting",
@@ -76,14 +75,14 @@
     "edit": "Edit",
     "save": "Save changes",
     "editResetsReview": "Editing a live listing sends it back for review.",
-    "fromShelter": "From a shelter"
+    "fromShelter": "From a shelter",
+    "shelterSite": "the shelter's site"
   },
   "auth": {
     "signIn": "Sign in",
     "signUp": "Create account",
     "email": "Email",
     "password": "Password",
-    "name": "Your name",
     "needAccount": "No account yet? Create one",
     "haveAccount": "Already have an account? Sign in",
     "signOut": "Sign out"
@@ -92,7 +91,6 @@
     "approve": "Approve",
     "reject": "Reject",
     "empty": "Nothing in this bucket.",
-    "flagged": "Flagged",
     "viewPhotos": "View photos",
     "closePhotos": "Close",
     "photoOf": "Photo {{index}} of {{total}}",
@@ -111,44 +109,19 @@
     "body": "Something went wrong rendering this page."
   },
   "footer": {
-    "note": "A hobby project. Listings from shelters link back to the original."
+    "note": "A hobby project. Listings from shelters link back to the shelter."
   },
   "common": {
     "confirm": "Delete for good",
     "cancel": "Cancel"
   },
-  "report": {
-    "open": "Report this listing",
-    "blurb": "Tell us what is wrong and a moderator will look.",
-    "reason": "What is wrong",
-    "note": "Anything else (optional)",
-    "submit": "Send report",
-    "thanks": "Thank you. A moderator will look at this.",
-    "tab": "Reported",
-    "noneOpen": "No open reports.",
-    "count_one": "{{count}} report",
-    "count_other": "{{count}} reports",
-    "keep": "Keep published",
-    "takeDown": "Take down",
-    "reasons": {
-      "INAPPROPRIATE": "Inappropriate or offensive",
-      "SPAM": "Spam or advertising",
-      "WRONG_INFO": "Wrong or misleading",
-      "ALREADY_RESOLVED": "Animal already home",
-      "OTHER": "Something else"
-    }
-  },
   "profile": {
-    "title": "Your account",
-    "details": "Details",
-    "save": "Save",
-    "saved": "Saved.",
-    "password": "Password",
-    "passwordNote": "Changing it signs out every device, including this one.",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "repeatPassword": "Repeat new password",
-    "changePassword": "Change password"
+    "email": "Email",
+    "emailConfirmed": "Confirmed",
+    "emailPending": "Not confirmed yet. You cannot post a listing until it is.",
+    "emailResend": "Send the link again",
+    "emailResent": "Sent. Check your inbox.",
+    "title": "Your account"
   },
   "hero": {
     "eyebrow": "Anywhere in the world",
@@ -174,5 +147,11 @@
     "stepTwoBody": "Every listing waits in a queue. Nothing reaches the public map before somebody has looked at the photo.",
     "stepThreeTitle": "Someone recognises it",
     "stepThreeBody": "The listing shows on the map for the neighbourhood it belongs to, and a message reaches you by email."
+  },
+  "verifyEmail": {
+    "title": "Confirming your email",
+    "ok": "Confirmed. You can post now.",
+    "failed": "That link is no longer valid. Ask for a new one from your account.",
+    "toAccount": "Go to your account"
   }
 }

@@ -26,7 +26,7 @@ export const useLogin = () => {
 export const useRegister = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (body: Credentials & { name: string }) => {
+    mutationFn: async (body: Credentials) => {
       const { data, error } = await api.POST('/auth/register', { body });
       if (error) throw error;
       return data.user;

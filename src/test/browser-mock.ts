@@ -21,14 +21,13 @@ const setSignedIn = (value: boolean) => {
 const user: components['schemas']['UserResponseDto']['user'] = {
   id: '11111111-1111-1111-1111-111111111111',
   email: 'moderator@example.com',
-  name: 'Ana',
   role: 'ADMIN',
+  emailVerified: true,
   createdAt: '2026-01-01T00:00:00.000Z',
 };
 
 const listing: components['schemas']['MyListingsResponseDto']['items'][number] = {
   photoKeys: [],
-  flaggedTerms: [],
   rejectionReason: null,
   id: '22222222-2222-2222-2222-222222222222',
   type: 'FOUND',
@@ -40,7 +39,6 @@ const listing: components['schemas']['MyListingsResponseDto']['items'][number] =
   lat: 38.7223,
   lng: -9.1393,
   source: 'WEB',
-  sourceRef: null,
   shelterId: null,
   createdAt: '2026-08-01T00:00:00.000Z',
 };
@@ -84,8 +82,10 @@ export const startMockApi = async () => {
       return HttpResponse.json({ user });
     }),
 
-    http.patch(`${API}/users/me`, () => HttpResponse.json({ user })),
-    http.post(`${API}/users/me/password`, () => HttpResponse.json({ ok: true })),
+    http.post(`${API}/auth/verify-email`, () => HttpResponse.json({ ok: true })),
+    http.post(`${API}/auth/verify-email/resend`, () =>
+      HttpResponse.json({ ok: true }, { status: 202 }),
+    ),
     http.post(`${API}/auth/logout`, () => {
       setSignedIn(false);
       return HttpResponse.json({ ok: true });
@@ -133,28 +133,6 @@ export const startMockApi = async () => {
     ),
     http.get(`${API}/listings/:id`, () => HttpResponse.json({ item: { ...listing } })),
     http.get(`${API}/shelters`, () => HttpResponse.json({ items: [] })),
-    http.post(`${API}/listings/:id/reports`, () =>
-      HttpResponse.json({ ok: true }, { status: 202 }),
-    ),
-    http.get(`${API}/admin/reports`, () =>
-      isSignedIn()
-        ? HttpResponse.json({
-            items: [
-              {
-                listing: { ...listing },
-                reports: [
-                  {
-                    id: '55555555-5555-5555-5555-555555555555',
-                    reason: 'INAPPROPRIATE',
-                    note: 'Photo has nothing to do with an animal.',
-                    createdAt: '2026-08-20T10:00:00.000Z',
-                  },
-                ],
-              },
-            ],
-          })
-        : unauthorized(),
-    ),
     http.get(`${API}/admin/listings`, () =>
       HttpResponse.json({
         items: [
@@ -164,7 +142,6 @@ export const startMockApi = async () => {
             id: '66666666-6666-6666-6666-666666666666',
             status: 'PENDING',
             description: 'Found a dog, write me on telegram, price 50 euro.',
-            flaggedTerms: ['telegram', 'price'],
           },
         ],
         total: 2,

@@ -84,6 +84,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_verifyEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/verify-email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_resendEmailVerification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me": {
         parameters: {
             query?: never;
@@ -94,70 +126,6 @@ export interface paths {
         get: operations["UsersController_me"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["UsersController_updateMe"];
-        trace?: never;
-    };
-    "/users/me/password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["UsersController_changePassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminUsersController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/users/{id}/ban": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminUsersController_ban"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/users/{id}/unban": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminUsersController_unban"];
         delete?: never;
         options?: never;
         head?: never;
@@ -178,22 +146,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/shelters/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["SheltersController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["SheltersController_update"];
         trace?: never;
     };
     "/listings": {
@@ -324,67 +276,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/listings/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminListingsController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminListingsController_update"];
-        trace?: never;
-    };
-    "/listings/{id}/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ReportsController_report"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminReportsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        HealthResponseDto: {
-            db: boolean;
-            redis: boolean;
+        OkResponseDto: {
+            ok: boolean;
         };
         RegisterDto: {
             /** Format: email */
             email: string;
             password: string;
-            name: string;
         };
         AuthResponseDto: {
             user: {
@@ -392,9 +294,9 @@ export interface components {
                 id: string;
                 /** Format: email */
                 email: string;
-                name: string;
                 /** @enum {string} */
                 role: "USER" | "ADMIN";
+                emailVerified: boolean;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -404,8 +306,8 @@ export interface components {
             email: string;
             password: string;
         };
-        OkResponseDto: {
-            ok: boolean;
+        VerifyEmailDto: {
+            token: string;
         };
         UserResponseDto: {
             user: {
@@ -413,54 +315,9 @@ export interface components {
                 id: string;
                 /** Format: email */
                 email: string;
-                name: string;
                 /** @enum {string} */
                 role: "USER" | "ADMIN";
-                /** Format: date-time */
-                createdAt: string;
-            };
-        };
-        UpdateProfileDto: {
-            name?: string;
-        };
-        ChangePasswordDto: {
-            currentPassword: string;
-            newPassword: string;
-        };
-        AdminUserListResponseDto: {
-            items: {
-                /** Format: uuid */
-                id: string;
-                /** Format: email */
-                email: string;
-                name: string;
-                /** @enum {string} */
-                role: "USER" | "ADMIN";
-                /** Format: date-time */
-                bannedUntil: string | null;
-                listingCount: number;
-                /** Format: date-time */
-                createdAt: string;
-            }[];
-            total: number;
-            page: number;
-            limit: number;
-        };
-        BanUserDto: {
-            days: number;
-        };
-        AdminUserResponseDto: {
-            user: {
-                /** Format: uuid */
-                id: string;
-                /** Format: email */
-                email: string;
-                name: string;
-                /** @enum {string} */
-                role: "USER" | "ADMIN";
-                /** Format: date-time */
-                bannedUntil: string | null;
-                listingCount: number;
+                emailVerified: boolean;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -471,8 +328,6 @@ export interface components {
                 id: string;
                 name: string;
                 city: string;
-                /** @enum {string} */
-                sourceType: "WEBSITE" | "FACEBOOK" | "MANUAL";
                 sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
@@ -481,8 +336,6 @@ export interface components {
         CreateShelterDto: {
             name: string;
             city: string;
-            /** @enum {string} */
-            sourceType: "WEBSITE" | "FACEBOOK" | "MANUAL";
             /** Format: uri */
             sourceUrl?: string;
         };
@@ -492,20 +345,10 @@ export interface components {
                 id: string;
                 name: string;
                 city: string;
-                /** @enum {string} */
-                sourceType: "WEBSITE" | "FACEBOOK" | "MANUAL";
                 sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
             };
-        };
-        UpdateShelterDto: {
-            name?: string;
-            city?: string;
-            /** @enum {string} */
-            sourceType?: "WEBSITE" | "FACEBOOK" | "MANUAL";
-            /** Format: uri */
-            sourceUrl?: string;
         };
         ListingListResponseDto: {
             items: {
@@ -523,8 +366,7 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "SCRAPER" | "MANUAL" | "WEB" | "BOT";
-                sourceRef: string | null;
+                source: "WEB" | "MANUAL" | "SCRAPER";
                 /** Format: uuid */
                 shelterId: string | null;
                 /** Format: date-time */
@@ -562,14 +404,12 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "SCRAPER" | "MANUAL" | "WEB" | "BOT";
-                sourceRef: string | null;
+                source: "WEB" | "MANUAL" | "SCRAPER";
                 /** Format: uuid */
                 shelterId: string | null;
                 /** Format: date-time */
                 createdAt: string;
                 photoKeys: string[];
-                flaggedTerms: string[];
                 rejectionReason: string | null;
             }[];
         };
@@ -592,12 +432,13 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "SCRAPER" | "MANUAL" | "WEB" | "BOT";
-                sourceRef: string | null;
+                source: "WEB" | "MANUAL" | "SCRAPER";
                 /** Format: uuid */
                 shelterId: string | null;
                 /** Format: date-time */
                 createdAt: string;
+                photoKeys: string[];
+                rejectionReason: string | null;
             };
         };
         CreateListingDto: {
@@ -638,14 +479,12 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "SCRAPER" | "MANUAL" | "WEB" | "BOT";
-                sourceRef: string | null;
+                source: "WEB" | "MANUAL" | "SCRAPER";
                 /** Format: uuid */
                 shelterId: string | null;
                 /** Format: date-time */
                 createdAt: string;
                 photoKeys: string[];
-                flaggedTerms: string[];
                 rejectionReason: string | null;
             }[];
             total: number;
@@ -665,54 +504,9 @@ export interface components {
             lng: number;
             /** Format: uuid */
             shelterId?: string;
-            /** Format: uri */
-            sourceRef?: string;
         };
         RejectListingDto: {
             reason?: string;
-        };
-        CreateReportDto: {
-            /** @enum {string} */
-            reason: "INAPPROPRIATE" | "SPAM" | "WRONG_INFO" | "ALREADY_RESOLVED" | "OTHER";
-            note?: string;
-        };
-        ReportAcceptedDto: {
-            ok: boolean;
-        };
-        ReportedListingsResponseDto: {
-            items: {
-                listing: {
-                    /** Format: uuid */
-                    id: string;
-                    /** @enum {string} */
-                    type: "FOUND" | "LOST" | "ADOPTION";
-                    /** @enum {string} */
-                    status: "PENDING" | "APPROVED" | "REJECTED";
-                    /** @enum {string} */
-                    species: "DOG" | "CAT" | "OTHER";
-                    description: string;
-                    photoUrls: string[];
-                    city: string;
-                    lat: number;
-                    lng: number;
-                    /** @enum {string} */
-                    source: "SCRAPER" | "MANUAL" | "WEB" | "BOT";
-                    sourceRef: string | null;
-                    /** Format: uuid */
-                    shelterId: string | null;
-                    /** Format: date-time */
-                    createdAt: string;
-                };
-                reports: {
-                    /** Format: uuid */
-                    id: string;
-                    /** @enum {string} */
-                    reason: "INAPPROPRIATE" | "SPAM" | "WRONG_INFO" | "ALREADY_RESOLVED" | "OTHER";
-                    note: string | null;
-                    /** Format: date-time */
-                    createdAt: string;
-                }[];
-            }[];
         };
     };
     responses: never;
@@ -737,7 +531,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HealthResponseDto"];
+                    "application/json": components["schemas"]["OkResponseDto"];
                 };
             };
         };
@@ -826,6 +620,48 @@ export interface operations {
             };
         };
     };
+    AuthController_verifyEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_resendEmailVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
     UsersController_me: {
         parameters: {
             query?: never;
@@ -841,122 +677,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_updateMe: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateProfileDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_changePassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangePasswordDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OkResponseDto"];
-                };
-            };
-        };
-    };
-    AdminUsersController_list: {
-        parameters: {
-            query?: {
-                q?: string;
-                banned?: "true" | "false";
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminUserListResponseDto"];
-                };
-            };
-        };
-    };
-    AdminUsersController_ban: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BanUserDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminUserResponseDto"];
-                };
-            };
-        };
-    };
-    AdminUsersController_unban: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminUserResponseDto"];
                 };
             };
         };
@@ -1003,52 +723,6 @@ export interface operations {
             };
         };
     };
-    SheltersController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OkResponseDto"];
-                };
-            };
-        };
-    };
-    SheltersController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateShelterDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShelterResponseDto"];
-                };
-            };
-        };
-    };
     ListingsController_list: {
         parameters: {
             query?: {
@@ -1059,9 +733,6 @@ export interface operations {
                 minLng?: unknown;
                 maxLat?: unknown;
                 maxLng?: unknown;
-                lat?: unknown;
-                lng?: unknown;
-                radiusKm?: number;
                 page?: number;
                 limit?: number;
             };
@@ -1114,9 +785,6 @@ export interface operations {
                 minLng?: unknown;
                 maxLat?: unknown;
                 maxLng?: unknown;
-                lat?: unknown;
-                lng?: unknown;
-                radiusKm?: number;
             };
             header?: never;
             path?: never;
@@ -1256,12 +924,9 @@ export interface operations {
                 minLng?: unknown;
                 maxLat?: unknown;
                 maxLng?: unknown;
-                lat?: unknown;
-                lng?: unknown;
-                radiusKm?: number;
-                status?: "PENDING" | "APPROVED" | "REJECTED";
                 page?: number;
                 limit?: number;
+                status?: "PENDING" | "APPROVED" | "REJECTED";
             };
             header?: never;
             path?: never;
@@ -1344,96 +1009,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListingDetailResponseDto"];
-                };
-            };
-        };
-    };
-    AdminListingsController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OkResponseDto"];
-                };
-            };
-        };
-    };
-    AdminListingsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateListingDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListingDetailResponseDto"];
-                };
-            };
-        };
-    };
-    ReportsController_report: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateReportDto"];
-            };
-        };
-        responses: {
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReportAcceptedDto"];
-                };
-            };
-        };
-    };
-    AdminReportsController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReportedListingsResponseDto"];
                 };
             };
         };

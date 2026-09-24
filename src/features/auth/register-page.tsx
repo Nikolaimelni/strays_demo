@@ -9,7 +9,6 @@ import { AuthPage } from './auth-page.tsx';
 import { useRegister } from './mutations.ts';
 
 const schema = z.object({
-  name: z.string().trim().min(1).max(80),
   email: z.email(),
   password: z.string().min(8).max(72),
 });
@@ -47,12 +46,6 @@ export const RegisterPage = () => {
       footerTo="/login"
       footerLabel={t('auth.haveAccount')}
     >
-      <Field label={t('auth.name')} error={errors.name}>
-        {(control) => (
-          <input autoComplete="name" className={inputClass} {...control} {...register('name')} />
-        )}
-      </Field>
-
       <Field label={t('auth.email')} error={errors.email}>
         {(control) => (
           <input

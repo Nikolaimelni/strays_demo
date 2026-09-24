@@ -101,7 +101,7 @@ export const Layout = () => {
             {user ? (
               <>
                 <NavLink to="/profile" className={navLink}>
-                  {user.name}
+                  {t('nav.account')}
                 </NavLink>
                 <Button variant="ghost" size="sm" onClick={() => void signOut()}>
                   {t('auth.signOut')}
@@ -145,7 +145,7 @@ export const Layout = () => {
             <div className="flex flex-col">{links(panelLink)}</div>
             {user ? (
               <NavLink to="/profile" className={panelLink}>
-                {user.name}
+                {t('nav.account')}
               </NavLink>
             ) : null}
 

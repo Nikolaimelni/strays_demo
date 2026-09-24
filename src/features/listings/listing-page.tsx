@@ -8,7 +8,6 @@ import { PhotoLightbox } from '../../shared/ui/photo-lightbox.tsx';
 import { Reveal } from '../../shared/ui/reveal.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
 import { SinglePinMap } from '../map/single-pin-map.tsx';
-import { ReportDialog } from '../reports/report-dialog.tsx';
 import { useShelters } from '../shelters/queries.ts';
 import { useListing } from './queries.ts';
 import { ShelterBadge, TypeBadge } from './status-badge.tsx';
@@ -35,7 +34,7 @@ export const ListingPage = () => {
   }
 
   if (listing.isError || !listing.data) {
-    return <Alert>{t('errors.LISTING_NOT_FOUND')}</Alert>;
+    return <Alert>{t('errors.NOT_FOUND')}</Alert>;
   }
 
   const item = listing.data;
@@ -98,22 +97,20 @@ export const ListingPage = () => {
 
         {shelter ? (
           <Card className="pt-4">
-            <CardTitle>{t('listing.source')}</CardTitle>
+            <CardTitle>{t('listing.fromShelter')}</CardTitle>
             <p className="mt-3 text-sm">{shelter.name}</p>
-            {item.sourceRef ? (
+            {shelter.sourceUrl ? (
               <a
                 className="link-underline mt-1 inline-block text-sm text-brand"
-                href={item.sourceRef}
+                href={shelter.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
               >
-                {t('listing.original')}
+                {t('listing.shelterSite')}
               </a>
             ) : null}
           </Card>
         ) : null}
-
-        <ReportDialog listingId={item.id} />
       </aside>
 
       {lightbox !== null ? (

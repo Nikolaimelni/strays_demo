@@ -38,11 +38,6 @@ export const installValidationMessages = () => {
         case 'invalid_value':
           return i18next.t('validation.invalid');
 
-        case 'custom': {
-          const key = issue.params?.key;
-          return typeof key === 'string' ? i18next.t(key) : undefined;
-        }
-
         default:
           return undefined;
       }

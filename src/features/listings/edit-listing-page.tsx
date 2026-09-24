@@ -39,7 +39,7 @@ export const EditListingPage = () => {
   if (mine.isError) return <Alert>{t('errors.UNKNOWN')}</Alert>;
 
   const listing = mine.data.find((candidate) => candidate.id === id);
-  if (!listing) return <Alert>{t('errors.LISTING_NOT_FOUND')}</Alert>;
+  if (!listing) return <Alert>{t('errors.NOT_FOUND')}</Alert>;
 
   const photoUrlByKey: Record<string, string> = {};
   listing.photoKeys.forEach((key, index) => {
