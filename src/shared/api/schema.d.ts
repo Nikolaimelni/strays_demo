@@ -100,6 +100,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/forgot-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_forgotPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_resetPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/verify-email/resend": {
         parameters: {
             query?: never;
@@ -124,6 +156,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["UsersController_me"];
+        put?: never;
+        post?: never;
+        delete: operations["UsersController_deleteAccount"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/me/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_exportAccount"];
         put?: never;
         post?: never;
         delete?: never;
@@ -276,6 +324,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuditController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/listings/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReportsController_report"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/listings/{id}/message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ListingsController_message"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -309,6 +421,14 @@ export interface components {
         VerifyEmailDto: {
             token: string;
         };
+        ForgotPasswordDto: {
+            /** Format: email */
+            email: string;
+        };
+        ResetPasswordDto: {
+            token: string;
+            password: string;
+        };
         UserResponseDto: {
             user: {
                 /** Format: uuid */
@@ -321,6 +441,35 @@ export interface components {
                 /** Format: date-time */
                 createdAt: string;
             };
+        };
+        AccountExportDto: {
+            /** Format: date-time */
+            exportedAt: string;
+            user: {
+                /** Format: uuid */
+                id: string;
+                /** Format: email */
+                email: string;
+                /** @enum {string} */
+                role: "USER" | "ADMIN";
+                emailVerified: boolean;
+                /** Format: date-time */
+                createdAt: string;
+            };
+            listings: {
+                /** Format: uuid */
+                id: string;
+                type: string;
+                status: string;
+                species: string;
+                description: string;
+                city: string;
+                lat: number;
+                lng: number;
+                photoKeys: string[];
+                /** Format: date-time */
+                createdAt: string;
+            }[];
         };
         ShelterListResponseDto: {
             items: {
@@ -416,6 +565,40 @@ export interface components {
         PhotoUploadResponseDto: {
             key: string;
         };
+        ListingSummaryResponseDto: {
+            item: {
+                /** Format: uuid */
+                id: string;
+                /** @enum {string} */
+                type: "FOUND" | "LOST" | "ADOPTION";
+                /** @enum {string} */
+                status: "PENDING" | "APPROVED" | "REJECTED";
+                /** @enum {string} */
+                species: "DOG" | "CAT" | "OTHER";
+                description: string;
+                photoUrls: string[];
+                city: string;
+                lat: number;
+                lng: number;
+                /** @enum {string} */
+                source: "WEB" | "MANUAL" | "SCRAPER";
+                /** Format: uuid */
+                shelterId: string | null;
+                /** Format: date-time */
+                createdAt: string;
+            };
+        };
+        CreateListingDto: {
+            /** @enum {string} */
+            type: "FOUND" | "LOST" | "ADOPTION";
+            /** @enum {string} */
+            species: "DOG" | "CAT" | "OTHER";
+            description: string;
+            photoKeys: string[];
+            city: string;
+            lat: number;
+            lng: number;
+        };
         ListingDetailResponseDto: {
             item: {
                 /** Format: uuid */
@@ -440,17 +623,6 @@ export interface components {
                 photoKeys: string[];
                 rejectionReason: string | null;
             };
-        };
-        CreateListingDto: {
-            /** @enum {string} */
-            type: "FOUND" | "LOST" | "ADOPTION";
-            /** @enum {string} */
-            species: "DOG" | "CAT" | "OTHER";
-            description: string;
-            photoKeys: string[];
-            city: string;
-            lat: number;
-            lng: number;
         };
         UpdateListingDto: {
             /** @enum {string} */
@@ -507,6 +679,53 @@ export interface components {
         };
         RejectListingDto: {
             reason?: string;
+        };
+        AuditListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                actorId: string;
+                /** @enum {string} */
+                action: "LISTING_APPROVE" | "LISTING_REJECT" | "LISTING_UPDATE" | "LISTING_DELETE";
+                /** Format: uuid */
+                listingId: string;
+                reason: string | null;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        CreateReportDto: {
+            /** @enum {string} */
+            reason: "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
+            note?: string;
+        };
+        ReportListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                listingId: string;
+                /** @enum {string} */
+                listingStatus: "PENDING" | "APPROVED" | "REJECTED";
+                listingDescription: string;
+                /** @enum {string} */
+                reason: "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
+                note: string | null;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        ListingMessageDto: {
+            message: string;
+            /** Format: email */
+            email: string;
         };
     };
     responses: never;
@@ -643,6 +862,52 @@ export interface operations {
             };
         };
     };
+    AuthController_forgotPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_resetPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
     AuthController_resendEmailVerification: {
         parameters: {
             query?: never;
@@ -677,6 +942,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_deleteAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_exportAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountExportDto"];
                 };
             };
         };
@@ -863,7 +1166,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListingDetailResponseDto"];
+                    "application/json": components["schemas"]["ListingSummaryResponseDto"];
                 };
             };
         };
@@ -1009,6 +1312,101 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListingDetailResponseDto"];
+                };
+            };
+        };
+    };
+    AuditController_list: {
+        parameters: {
+            query?: {
+                listingId?: string;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditListResponseDto"];
+                };
+            };
+        };
+    };
+    ReportsController_report: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReportDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AdminReportsController_list: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportListResponseDto"];
+                };
+            };
+        };
+    };
+    ListingsController_message: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingMessageDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
                 };
             };
         };

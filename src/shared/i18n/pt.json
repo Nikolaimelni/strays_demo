@@ -76,7 +76,15 @@
     "save": "Guardar",
     "editResetsReview": "Editar um anuncio publicado envia-o de novo para revisao.",
     "fromShelter": "De um abrigo",
-    "shelterSite": "o site da associação"
+    "shelterSite": "o site da associação",
+    "messageTitle": "Escrever a quem publicou",
+    "messageSignedOut": "Escrever exige conta, para que ninguém consiga enviar mensagens a todos os autores do quadro com um script.",
+    "messageNeedsEmail": "Confirme o seu endereço de email para poder escrever a alguém.",
+    "messageBody": "A sua mensagem (pelo menos 10 caracteres)",
+    "messageEmail": "Onde lhe devem responder",
+    "messageNote": "Segue para essa pessoa por email, com este endereço para resposta. Mais ninguém a vê, e o texto não é guardado.",
+    "messageSend": "Enviar",
+    "messageSent": "Enviada. Se responderem, a resposta chega à sua caixa de correio."
   },
   "auth": {
     "signIn": "Entrar",

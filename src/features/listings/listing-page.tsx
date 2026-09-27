@@ -9,8 +9,23 @@ import { Reveal } from '../../shared/ui/reveal.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
 import { SinglePinMap } from '../map/single-pin-map.tsx';
 import { useShelters } from '../shelters/queries.ts';
+import { ListingMessage } from './listing-message.tsx';
 import { useListing } from './queries.ts';
+import { ReportListing } from './report-listing.tsx';
 import { ShelterBadge, TypeBadge } from './status-badge.tsx';
+
+// a shelter's sourceUrl is whatever the scraper found on somebody else's site.
+// React 19 puts an href through untouched, so `javascript:` in there runs on
+// click. the CSP blocks it in production; this blocks it everywhere else too.
+const safeHttpUrl = (value: string | null): string | null => {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : null;
+  } catch {
+    return null;
+  }
+};
 
 export const ListingPage = () => {
   const { t, i18n } = useTranslation();
@@ -39,6 +54,11 @@ export const ListingPage = () => {
 
   const item = listing.data;
   const shelter = shelters.data?.find((candidate) => candidate.id === item.shelterId);
+  const shelterSite = safeHttpUrl(shelter?.sourceUrl ?? null);
+  const photoAlt = t('listing.photoAlt', {
+    species: t(`species.${item.species}`),
+    city: item.city,
+  });
   const posted = new Intl.DateTimeFormat(i18n.language, { dateStyle: 'long' }).format(
     new Date(item.createdAt),
   );
@@ -76,7 +96,7 @@ export const ListingPage = () => {
                 >
                   <img
                     src={url}
-                    alt=""
+                    alt={photoAlt}
                     style={index === 0 ? { viewTransitionName: 'listing-photo' } : undefined}
                     className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:scale-105"
                     loading={index === 0 ? 'eager' : 'lazy'}
@@ -93,16 +113,23 @@ export const ListingPage = () => {
       </Reveal>
 
       <aside className="min-w-0 space-y-7 lg:sticky lg:top-24 lg:self-start">
-        <SinglePinMap lat={item.lat} lng={item.lng} />
+        <ListingMessage listingId={item.id} />
+
+        <div className="space-y-2">
+          <SinglePinMap lat={item.lat} lng={item.lng} />
+          <p className="text-xs text-muted">{t('listing.spotApprox')}</p>
+        </div>
+
+        <ReportListing listingId={item.id} />
 
         {shelter ? (
           <Card className="pt-4">
             <CardTitle>{t('listing.fromShelter')}</CardTitle>
             <p className="mt-3 text-sm">{shelter.name}</p>
-            {shelter.sourceUrl ? (
+            {shelterSite ? (
               <a
                 className="link-underline mt-1 inline-block text-sm text-brand"
-                href={shelter.sourceUrl}
+                href={shelterSite}
                 target="_blank"
                 rel="noreferrer"
               >

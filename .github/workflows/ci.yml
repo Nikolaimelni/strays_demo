@@ -5,8 +5,13 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 env:
   VITE_API_URL: http://localhost:3000
+  MEDIA_ORIGIN: https://pub-example.r2.dev
+  VITE_CONTACT_EMAIL: ci@example.test
 
 jobs:
   check:
@@ -23,6 +28,9 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # runtime deps only, and only the advisories worth stopping for. this is
+      # meant to go red and be acted on, so no continue-on-error.
+      - run: pnpm audit --prod --audit-level high
 
   e2e:
     runs-on: ubuntu-latest

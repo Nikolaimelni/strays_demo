@@ -76,7 +76,15 @@
     "save": "Save changes",
     "editResetsReview": "Editing a live listing sends it back for review.",
     "fromShelter": "From a shelter",
-    "shelterSite": "the shelter's site"
+    "shelterSite": "the shelter's site",
+    "messageTitle": "Write to whoever posted this",
+    "messageSignedOut": "Writing takes an account, so that nobody can mail every poster on the board from a script.",
+    "messageNeedsEmail": "Confirm your email address to write to anybody.",
+    "messageBody": "Your message (at least 10 characters)",
+    "messageEmail": "Where to answer you",
+    "messageNote": "It goes to them by email with this address to reply to. Nobody else sees it, and the text is not kept.",
+    "messageSend": "Send",
+    "messageSent": "Sent. If they answer, it comes to your inbox."
   },
   "auth": {
     "signIn": "Sign in",
