@@ -3,7 +3,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../shared/api/client.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
-import { resizeImage } from './resize-image.ts';
+import { ImageUnreadableError, PhotoTooLargeError, resizeImage } from './resize-image.ts';
 
 interface PhotoUploadProps {
   photoKeys: string[];
@@ -11,6 +11,8 @@ interface PhotoUploadProps {
   existingUrls?: Record<string, string>;
   max?: number;
 }
+
+const MAX_MB = 10;
 
 export const PhotoUpload = ({
   photoKeys,
@@ -22,6 +24,7 @@ export const PhotoUpload = ({
   const inputId = useId();
 
   const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
   // an object url is a browser resource, not react state: it holds the file
   // alive until it is handed back. the ref mirrors the map so the unmount
@@ -41,7 +44,7 @@ export const PhotoUpload = ({
   const upload = useMutation({
     mutationFn: async (original: File) => {
       const file = await resizeImage(original);
-      const { data, error } = await api.POST('/listings/photos', {
+      const { data, error: failed } = await api.POST('/listings/photos', {
         body: { file: file as unknown as string },
         // openapi-fetch JSON-encodes the body by default, which strips the
         // file. handing back FormData lets fetch set the boundary itself.
@@ -51,14 +54,56 @@ export const PhotoUpload = ({
           return form;
         },
       });
-      if (error) throw error;
+      if (failed) throw failed;
       return { key: data.key, preview: URL.createObjectURL(file) };
     },
-    onSuccess: ({ key, preview }) => {
-      setPreviews((current) => ({ ...current, [key]: preview }));
-      onChange([...photoKeys, key]);
-    },
   });
+
+  // TODO: send them together. one request per file is fine for two photos and
+  // obviously not fine for six over a phone connection.
+  //
+  // the keys accumulate in a local, not through photoKeys: that prop is the
+  // value from this render and the loop outruns it.
+  const add = async (chosen: File[]) => {
+    let keys = photoKeys;
+    const room = max - keys.length;
+
+    // said first, so a later per-file problem is the message left on screen
+    setError(chosen.length > room ? t('listing.photoTooMany', { max }) : null);
+
+    for (const file of chosen.slice(0, room)) {
+      if (!file.type.startsWith('image/')) {
+        setError(t('listing.photoWrongType'));
+        continue;
+      }
+      // accept= is a hint to the file dialog, not a rule, and a phone will
+      // happily offer a 40 MB burst frame
+      if (file.size > MAX_MB * 1024 * 1024) {
+        setError(t('listing.photoTooBig', { mb: MAX_MB }));
+        continue;
+      }
+
+      try {
+        const { key, preview } = await upload.mutateAsync(file);
+        keys = [...keys, key];
+        setPreviews((current) => ({ ...current, [key]: preview }));
+        onChange(keys);
+      } catch (failed) {
+        // one unreadable file says nothing about the next one. a failed
+        // request usually does, so that one stops the batch.
+        if (failed instanceof ImageUnreadableError) {
+          setError(t('listing.photoUnreadable'));
+          continue;
+        }
+        if (failed instanceof PhotoTooLargeError) {
+          setError(t('listing.photoStillTooBig'));
+          continue;
+        }
+        setError(t('listing.photoFailed'));
+        break;
+      }
+    }
+  };
 
   const remove = (key: string) => {
     const preview = previews[key];
@@ -73,14 +118,16 @@ export const PhotoUpload = ({
 
   const remaining = max - photoKeys.length;
 
-  // TODO: send them together. one request per file is fine for two photos and
-  // obviously not fine for six over a phone connection.
-
   return (
     <div className="space-y-2">
-      <label htmlFor={inputId} className="block text-sm font-medium">
+      {/* same shape as Field's label and the map's, so the four labels on this
+          form read as one set */}
+      <label htmlFor={inputId} className="block text-xs uppercase tracking-[0.12em] text-muted">
         {t('listing.photos')}
       </label>
+      <p id={`${inputId}-hint`} className="text-xs text-muted">
+        {t('listing.photoHint', { max, mb: MAX_MB })}
+      </p>
 
       {photoKeys.length > 0 ? (
         <ul className="flex flex-wrap gap-2">
@@ -110,17 +157,19 @@ export const PhotoUpload = ({
       <input
         id={inputId}
         type="file"
+        multiple
         accept="image/jpeg,image/png,image/webp,image/gif"
+        aria-describedby={`${inputId}-hint`}
         disabled={remaining <= 0 || upload.isPending}
         onChange={(event) => {
-          const file = event.target.files?.[0];
-          if (file) upload.mutate(file);
+          const chosen = Array.from(event.target.files ?? []);
           event.target.value = '';
+          if (chosen.length > 0) void add(chosen);
         }}
         className="block w-full text-sm text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-sunken file:px-3 file:py-1.5 file:text-sm file:text-ink"
       />
 
-      {upload.isError ? <Alert>{t('errors.UNKNOWN')}</Alert> : null}
+      {error ? <Alert>{error}</Alert> : null}
     </div>
   );
 };
