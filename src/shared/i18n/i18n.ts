@@ -13,6 +13,14 @@ void i18next
     fallbackLng: 'en',
     supportedLngs: ['en', 'pt'],
     interpolation: { escapeValue: false },
+    // the default detection order also reads a cookie, a session and the path.
+    // narrowed to what is actually used so the privacy page can list what this
+    // app puts in a browser and be exhaustive about it: one session cookie,
+    // one language key, nothing else.
+    detection: {
+      order: ['querystring', 'localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
   });
 
 installValidationMessages();
