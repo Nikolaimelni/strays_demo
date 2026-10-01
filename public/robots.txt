@@ -1,0 +1,13 @@
+# A listing carries the spot somebody picked on a map and what they wrote about it.
+# Keeping that out of a search index is worth more than the traffic.
+#
+# Disallow stops the fetch; the X-Robots-Tag in _headers covers the crawlers
+# that read a listing anyway. Between them one of the two always applies.
+
+User-agent: *
+Disallow: /listings/
+Disallow: /new
+Disallow: /mine
+Disallow: /profile
+Disallow: /admin
+Disallow: /verify-email

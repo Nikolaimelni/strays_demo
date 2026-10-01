@@ -27,6 +27,18 @@ const pagesArtifacts = (mode: string): Plugin => {
       const apiUrl = buildEnv.VITE_API_URL;
       if (!apiUrl) throw new Error('VITE_API_URL is baked into the bundle and is missing');
 
+      // no VITE_ prefix: nothing in the app reads it, it only names the bucket
+      // host for img-src. a wildcard over *.r2.cloudflarestorage.com would let
+      // every other tenant's bucket through.
+      const mediaUrl = buildEnv.MEDIA_ORIGIN;
+      if (!mediaUrl) throw new Error('MEDIA_ORIGIN names the photo host in the CSP and is missing');
+
+      // env.ts parses this too, but that runs in somebody's browser, by which point the
+      // deploy has happened and the privacy page points at nothing. fail here instead.
+      if (!buildEnv.VITE_CONTACT_EMAIL) {
+        throw new Error('VITE_CONTACT_EMAIL is printed on the privacy page and is missing');
+      }
+
       const csp = [
         "default-src 'self'",
         "base-uri 'none'",
@@ -34,8 +46,10 @@ const pagesArtifacts = (mode: string): Plugin => {
         "frame-ancestors 'none'",
         "form-action 'self'",
         "script-src 'self'",
+        // leaflet writes inline styles on every pane and marker it creates, so
+        // there is no version of this without unsafe-inline. scripts are clean.
         "style-src 'self' 'unsafe-inline'",
-        "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.r2.cloudflarestorage.com",
+        `img-src 'self' data: blob: https://*.tile.openstreetmap.org ${new URL(mediaUrl).origin}`,
         `connect-src 'self' ${new URL(apiUrl).origin}`,
         'upgrade-insecure-requests',
       ].join('; ');
@@ -47,7 +61,16 @@ const pagesArtifacts = (mode: string): Plugin => {
         '  X-Frame-Options: DENY',
         '  Permissions-Policy: geolocation=(), camera=(), microphone=()',
         '  Cross-Origin-Opener-Policy: same-origin',
+        '  Cross-Origin-Resource-Policy: same-origin',
+        '  Strict-Transport-Security: max-age=31536000; includeSubDomains',
         `  Content-Security-Policy: ${csp}`,
+        '',
+        // a listing is somebody else's photographs and somebody else's animal, and the
+        // contact behind it is rate limited per account precisely so the board cannot be
+        // harvested. an index of every listing page undoes half of that. see
+        // public/robots.txt for the other half of this.
+        '/listings/*',
+        '  X-Robots-Tag: noindex, nofollow',
         '',
       ].join('\n');
 
