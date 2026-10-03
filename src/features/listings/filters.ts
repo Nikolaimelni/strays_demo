@@ -17,10 +17,13 @@ const filtersSchema = z.object({
 
 export type ListingFilters = z.infer<typeof filtersSchema>;
 
+// no url, no view: land on Lisbon rather than on the whole globe at zoom 2.
+// every listing on the board is here, and an empty world map is a bad first
+// frame for a site whose whole content is pins.
 const viewSchema = z.object({
-  lat: z.coerce.number().min(-90).max(90).catch(20),
-  lng: z.coerce.number().min(-180).max(180).catch(0),
-  z: z.coerce.number().int().min(1).max(19).catch(2),
+  lat: z.coerce.number().min(-90).max(90).catch(38.7223),
+  lng: z.coerce.number().min(-180).max(180).catch(-9.1393),
+  z: z.coerce.number().int().min(1).max(19).catch(12),
 });
 
 export type MapView = z.infer<typeof viewSchema>;

@@ -33,7 +33,10 @@ export const ListingCard = ({ listing, active = false, onActivate }: ListingCard
         <div className="w-28 shrink-0 overflow-hidden rounded-sm @md:w-40">
           <img
             src={photo}
-            alt=""
+            alt={t('listing.photoAlt', {
+              species: t(`species.${listing.species}`),
+              city: listing.city,
+            })}
             style={morphing ? { viewTransitionName: 'listing-photo' } : undefined}
             className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
             loading="lazy"
