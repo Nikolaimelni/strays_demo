@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { api } from '../../shared/api/client.ts';
@@ -10,9 +11,11 @@ import { Skeleton } from '../../shared/ui/skeleton.tsx';
 
 export const VerifyEmailPage = () => {
   const { t } = useTranslation();
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const queryClient = useQueryClient();
-  const token = params.get('token') ?? '';
+  // read once into state: the query key is built from it, and the url is about
+  // to be cleared out from under it
+  const [token] = useState(() => params.get('token') ?? '');
 
   // a POST behind a query key on purpose: the token arrives in the url and the
   // call has to fire once for it, not again on a retry or a strict-mode
@@ -25,6 +28,9 @@ export const VerifyEmailPage = () => {
     queryFn: async () => {
       const { error } = await api.POST('/auth/verify-email', { body: { token } });
       if (error) throw error;
+      // spent. leaving it in the address bar only puts it in history and in
+      // every screenshot anybody takes of this page.
+      setParams({}, { replace: true });
       await queryClient.invalidateQueries({ queryKey: ['session'] });
       return true;
     },

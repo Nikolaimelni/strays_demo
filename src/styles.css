@@ -425,6 +425,16 @@
   background: var(--ink);
 }
 
+/* the one map that draws a shape rather than pins. leaflet writes its own fill
+   and stroke as presentation attributes, which any css rule beats. */
+.spot-map path {
+  fill: var(--brand);
+  fill-opacity: 0.14;
+  stroke: var(--brand);
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
+}
+
 .pin-lost {
   opacity: 0.55;
 }
