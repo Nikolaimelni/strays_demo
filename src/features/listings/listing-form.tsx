@@ -123,6 +123,12 @@ export const ListingForm = ({
         {(control_) => <input className={inputClass} {...control_} {...register('city')} />}
       </Field>
 
+      {/* the account screen says this too, but by the time somebody is filling
+          this in they have not been there for weeks */}
+      <p className="border-l-2 border-rule/25 py-1 pl-3 text-sm leading-relaxed text-muted">
+        {t('listing.publicNote')}
+      </p>
+
       <Controller
         control={control}
         name="photoKeys"

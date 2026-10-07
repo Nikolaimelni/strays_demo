@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    env: { VITE_API_URL: 'http://localhost:3000' },
+    env: { VITE_API_URL: 'http://localhost:3000', VITE_CONTACT_EMAIL: 'test@example.test' },
     include: ['src/**/*.spec.{ts,tsx}'],
   },
 });
