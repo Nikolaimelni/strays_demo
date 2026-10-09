@@ -14,6 +14,10 @@ interface AuthPageProps {
   error: string | null;
   footerTo: string;
   footerLabel: string;
+  note?: ReactNode;
+  // replaces the form once there is nothing left to submit: a reset link is on
+  // its way, a password has been changed
+  done?: ReactNode;
   children: ReactNode;
 }
 
@@ -25,6 +29,8 @@ export const AuthPage = ({
   error,
   footerTo,
   footerLabel,
+  note,
+  done,
   children,
 }: AuthPageProps) => (
   <div className="border-t border-rule/15 pt-5 sm:pt-7">
@@ -33,21 +39,27 @@ export const AuthPage = ({
       <Reveal className="max-w-sm">
         <h1 className="font-display text-title font-semibold">{title}</h1>
 
-        <form onSubmit={onSubmit} className="mt-8 space-y-6" noValidate>
-          {children}
+        {done ? (
+          <div className="mt-8">{done}</div>
+        ) : (
+          <form onSubmit={onSubmit} className="mt-8 space-y-6" noValidate>
+            {children}
 
-          {error ? <Alert>{error}</Alert> : null}
+            {error ? <Alert>{error}</Alert> : null}
 
-          <button type="submit" disabled={submitting} className={`${buttonClass()} w-full`}>
-            {submitLabel}
-          </button>
-        </form>
+            <button type="submit" disabled={submitting} className={`${buttonClass()} w-full`}>
+              {submitLabel}
+            </button>
+          </form>
+        )}
 
         <p className="mt-6">
           <Link to={footerTo} className="link-underline text-sm text-muted hover:text-ink">
             {footerLabel}
           </Link>
         </p>
+
+        {note}
       </Reveal>
     </Band>
   </div>

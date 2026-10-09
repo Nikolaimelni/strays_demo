@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { z } from 'zod';
 import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
@@ -45,6 +46,13 @@ export const LoginPage = () => {
       error={formError}
       footerTo="/register"
       footerLabel={t('auth.needAccount')}
+      note={
+        <p className="mt-3">
+          <Link to="/forgot-password" className="link-underline text-sm text-muted hover:text-ink">
+            {t('auth.forgotLink')}
+          </Link>
+        </p>
+      }
     >
       <Field label={t('auth.email')} error={errors.email}>
         {(control) => (

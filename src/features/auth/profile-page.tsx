@@ -9,6 +9,7 @@ import { Card, CardTitle } from '../../shared/ui/card.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { PageHeading } from '../../shared/ui/section.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
+import { AccountData } from './account-data.tsx';
 import { useSession } from './session.ts';
 
 export const ProfilePage = () => {
@@ -63,6 +64,8 @@ export const ProfilePage = () => {
             </div>
           )}
         </Card>
+
+        <AccountData />
       </div>
     </div>
   );
