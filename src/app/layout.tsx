@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router';
+import { Link, NavLink, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router';
 import { useLogout } from '../features/auth/mutations.ts';
 import { useSession } from '../features/auth/session.ts';
 import { LanguageSwitcher } from '../shared/i18n/language-switcher.tsx';
@@ -179,9 +179,17 @@ export const Layout = () => {
 
       <footer className="mt-10 overflow-hidden border-t border-rule/15">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-          <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4">
             <p className="max-w-prose text-xs leading-relaxed text-muted">{t('footer.note')}</p>
-            <p className="section-index text-xs text-muted">{new Date().getFullYear()} · Lisboa</p>
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 text-xs">
+              <Link to="/privacy" className="link-underline text-muted hover:text-ink">
+                {t('legal.privacyTitle')}
+              </Link>
+              <Link to="/terms" className="link-underline text-muted hover:text-ink">
+                {t('legal.termsTitle')}
+              </Link>
+              <p className="section-index text-muted">{new Date().getFullYear()} · Lisboa</p>
+            </div>
           </div>
           {/* the wordmark is decoration at a contrast no text should have, so
               it is a graphic and not a paragraph. axe is right about that. */}

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { z } from 'zod';
 import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
@@ -45,6 +46,18 @@ export const RegisterPage = () => {
       error={formError}
       footerTo="/login"
       footerLabel={t('auth.haveAccount')}
+      note={
+        <p className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
+          <span>{t('auth.legalNote')}</span>
+          <Link to="/terms" className="link-underline hover:text-ink">
+            {t('legal.termsTitle')}
+          </Link>
+          <span aria-hidden>·</span>
+          <Link to="/privacy" className="link-underline hover:text-ink">
+            {t('legal.privacyTitle')}
+          </Link>
+        </p>
+      }
     >
       <Field label={t('auth.email')} error={errors.email}>
         {(control) => (

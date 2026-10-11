@@ -1,8 +1,10 @@
 import { createBrowserRouter, Outlet } from 'react-router';
+import { ForgotPasswordPage } from '../features/auth/forgot-password-page.tsx';
 import { LoginPage } from '../features/auth/login-page.tsx';
 import { RedirectSignedIn } from '../features/auth/redirect-signed-in.tsx';
 import { RegisterPage } from '../features/auth/register-page.tsx';
 import { RequireAuth } from '../features/auth/require-auth.tsx';
+import { ResetPasswordPage } from '../features/auth/reset-password-page.tsx';
 import { VerifyEmailPage } from '../features/auth/verify-email-page.tsx';
 import { Layout } from './layout.tsx';
 import { NotFound } from './not-found.tsx';
@@ -38,6 +40,20 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'verify-email', element: <VerifyEmailPage /> },
+      { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
+      {
+        path: 'privacy',
+        lazy: async () => ({
+          Component: (await import('../features/legal/privacy-page.tsx')).PrivacyPage,
+        }),
+      },
+      {
+        path: 'terms',
+        lazy: async () => ({
+          Component: (await import('../features/legal/terms-page.tsx')).TermsPage,
+        }),
+      },
       {
         path: 'register',
         element: (
@@ -91,6 +107,18 @@ export const router = createBrowserRouter([
             path: 'admin',
             lazy: async () => ({
               Component: (await import('../features/admin/moderation-page.tsx')).ModerationPage,
+            }),
+          },
+          {
+            path: 'admin/reports',
+            lazy: async () => ({
+              Component: (await import('../features/admin/reports-page.tsx')).ReportsPage,
+            }),
+          },
+          {
+            path: 'admin/audit',
+            lazy: async () => ({
+              Component: (await import('../features/admin/audit-page.tsx')).AuditPage,
             }),
           },
         ],
