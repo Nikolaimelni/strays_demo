@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { api } from '../../shared/api/client.ts';
 import type { components } from '../../shared/api/schema';
 import { Alert } from '../../shared/ui/alert.tsx';
@@ -95,9 +96,29 @@ export const ModerationPage = () => {
   return (
     <div className="space-y-8">
       <PageMeta title={t('nav.admin')} />
-      <PageHeading index="01" title={t('nav.admin')} />
+      <PageHeading
+        index="01"
+        title={t('nav.admin')}
+        aside={
+          <span className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+            <Link to="/admin/reports" className="link-underline text-muted hover:text-ink">
+              {t('admin.reports')}
+            </Link>
+            <Link to="/admin/audit" className="link-underline text-muted hover:text-ink">
+              {t('admin.audit')}
+            </Link>
+          </span>
+        }
+      />
 
       <div className="space-y-5 sm:pl-[4.625rem]">
+        {/* a lost animal is not always the worst thing in the description. the
+            queue is the only place anybody reads these, so the number lives
+            here rather than in a policy nobody opens. */}
+        <p className="border-l-2 border-rule/25 py-1 pl-3 text-xs leading-relaxed text-muted">
+          {t('admin.distressNote')}
+        </p>
+
         <ChoiceGroup
           legend={t('nav.admin')}
           name="bucket"
@@ -133,7 +154,10 @@ export const ModerationPage = () => {
                   >
                     <img
                       src={listing.photoUrls[0]}
-                      alt=""
+                      alt={t('listing.photoAlt', {
+                        species: t(`species.${listing.species}`),
+                        city: listing.city,
+                      })}
                       className="aspect-[4/3] w-full object-cover"
                     />
                     {listing.photoUrls.length > 1 ? (
