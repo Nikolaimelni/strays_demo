@@ -5,6 +5,7 @@ const PAGES = [
   { name: 'listing', path: '/listings/22222222-2222-2222-2222-222222222222' },
   { name: 'login', path: '/login' },
   { name: 'register', path: '/register' },
+  { name: 'privacy', path: '/privacy' },
   { name: 'not-found', path: '/nope' },
 ];
 
@@ -13,6 +14,8 @@ const AUTHED = [
   { name: 'new', path: '/new' },
   { name: 'mine', path: '/mine' },
   { name: 'admin', path: '/admin' },
+  { name: 'admin-reports', path: '/admin/reports' },
+  { name: 'admin-audit', path: '/admin/audit' },
 ];
 
 const settle = async (page: import('@playwright/test').Page) => {

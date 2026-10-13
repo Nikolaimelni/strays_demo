@@ -71,6 +71,19 @@ test('language, titles and the html lang follow the switcher', async ({ page }) 
   await expect(page.getByRole('link', { name: 'Publicar anúncio' })).toBeVisible();
 });
 
+// pathOptions.className looks like it works in dev, where StrictMode mounts the
+// layer twice and leaves the class behind, and ships a leaflet-blue circle to
+// production. the styling goes through the container's class instead.
+test('the approximate-location circle is brand coloured, not leaflet default', async ({ page }) => {
+  await page.goto('/listings/22222222-2222-2222-2222-222222222222');
+
+  const circle = page.locator('.spot-map path').first();
+  await expect(circle).toBeAttached();
+
+  const fill = await circle.evaluate((node) => getComputedStyle(node).fill);
+  expect(fill).toBe('rgb(180, 71, 42)');
+});
+
 test.describe('dark theme', () => {
   test.use({ colorScheme: 'dark' });
 

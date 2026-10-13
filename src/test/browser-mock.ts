@@ -43,6 +43,25 @@ const listing: components['schemas']['MyListingsResponseDto']['items'][number] =
   createdAt: '2026-08-01T00:00:00.000Z',
 };
 
+// the public routes stopped returning the name, the number and the keys, so the
+// mock has to stop returning them too or e2e passes on data nobody gets
+type Summary = components['schemas']['ListingListResponseDto']['items'][number];
+
+const summaryOf = (row: typeof listing): Summary => ({
+  id: row.id,
+  type: row.type,
+  status: row.status,
+  species: row.species,
+  description: row.description,
+  photoUrls: row.photoUrls,
+  city: row.city,
+  lat: row.lat,
+  lng: row.lng,
+  source: row.source,
+  shelterId: row.shelterId,
+  createdAt: row.createdAt,
+});
+
 const feed: (typeof listing)[] = [
   listing,
   {
@@ -69,6 +88,15 @@ export const startMockApi = async () => {
     http.get(`${API}/users/me`, () =>
       isSignedIn() ? HttpResponse.json({ user }) : unauthorized(),
     ),
+    http.get(`${API}/users/me/export`, () =>
+      isSignedIn()
+        ? HttpResponse.json({ exportedAt: '2026-09-06T00:00:00.000Z', user, listings: [] })
+        : unauthorized(),
+    ),
+    http.delete(`${API}/users/me`, () => {
+      setSignedIn(false);
+      return HttpResponse.json({ ok: true });
+    }),
 
     http.post(`${API}/auth/login`, async ({ request }) => {
       const body = (await request.json()) as { email: string; password: string };
@@ -83,6 +111,10 @@ export const startMockApi = async () => {
     }),
 
     http.post(`${API}/auth/verify-email`, () => HttpResponse.json({ ok: true })),
+    http.post(`${API}/auth/forgot-password`, () =>
+      HttpResponse.json({ ok: true }, { status: 202 }),
+    ),
+    http.post(`${API}/auth/reset-password`, () => HttpResponse.json({ ok: true })),
     http.post(`${API}/auth/verify-email/resend`, () =>
       HttpResponse.json({ ok: true }, { status: 202 }),
     ),
@@ -95,7 +127,7 @@ export const startMockApi = async () => {
 
     http.get(`${API}/listings`, ({ request }) => {
       const type = new URL(request.url).searchParams.get('type');
-      const items = feed.filter((row) => !type || row.type === type);
+      const items = feed.filter((row) => !type || row.type === type).map(summaryOf);
       return HttpResponse.json({ items, total: items.length, page: 1, limit: 20 });
     }),
     http.get(`${API}/listings/pins`, () =>
@@ -131,7 +163,51 @@ export const startMockApi = async () => {
           })
         : unauthorized(),
     ),
-    http.get(`${API}/listings/:id`, () => HttpResponse.json({ item: { ...listing } })),
+    http.get(`${API}/listings/:id`, () => HttpResponse.json({ item: summaryOf(listing) })),
+    http.post(`${API}/listings/:id/report`, () => HttpResponse.json({ ok: true }, { status: 202 })),
+    http.get(`${API}/admin/audit`, () =>
+      HttpResponse.json({
+        items: [
+          {
+            id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+            actorId: user.id,
+            action: 'LISTING_APPROVE',
+            listingId: listing.id,
+            reason: null,
+            createdAt: '2026-08-21T09:15:00.000Z',
+          },
+          {
+            id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+            actorId: user.id,
+            action: 'LISTING_REJECT',
+            listingId: '44444444-4444-4444-4444-444444444444',
+            reason: 'The same animal is already listed.',
+            createdAt: '2026-08-20T17:02:00.000Z',
+          },
+        ],
+        total: 2,
+        page: 1,
+        limit: 20,
+      }),
+    ),
+    http.get(`${API}/admin/reports`, () =>
+      HttpResponse.json({
+        items: [
+          {
+            id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+            listingId: listing.id,
+            listingStatus: 'APPROVED',
+            listingDescription: listing.description,
+            reason: 'WRONG_INFO',
+            note: 'The dog on this one was found last week.',
+            createdAt: '2026-08-20T00:00:00.000Z',
+          },
+        ],
+        total: 1,
+        page: 1,
+        limit: 20,
+      }),
+    ),
     http.get(`${API}/shelters`, () => HttpResponse.json({ items: [] })),
     http.get(`${API}/admin/listings`, () =>
       HttpResponse.json({

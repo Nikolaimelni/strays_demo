@@ -23,9 +23,13 @@ const PUBLIC_PAGES = [
   '/login',
   '/register',
   '/verify-email?token=whatever',
+  '/forgot-password',
+  '/reset-password?token=whatever',
+  '/privacy',
+  '/terms',
   '/nope',
 ];
-const PRIVATE_PAGES = ['/new', '/mine', '/admin', '/profile'];
+const PRIVATE_PAGES = ['/new', '/mine', '/admin', '/admin/reports', '/admin/audit', '/profile'];
 
 for (const scheme of ['light', 'dark'] as const) {
   test.describe(`accessibility, ${scheme}`, () => {

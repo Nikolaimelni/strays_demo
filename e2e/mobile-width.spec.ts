@@ -4,8 +4,8 @@ import { expect, test } from '@playwright/test';
 // sideways there is broken in a way that is invisible on a laptop. this was a
 // real bug: a grid item is min-width:auto, so it refused to shrink below the
 // photo strip inside it and pushed the whole document wide.
-const PUBLIC = ['/', '/login', '/register', '/nope'];
-const PRIVATE = ['/new', '/mine', '/admin', '/profile'];
+const PUBLIC = ['/', '/login', '/register', '/forgot-password', '/privacy', '/terms', '/nope'];
+const PRIVATE = ['/new', '/mine', '/admin', '/admin/reports', '/admin/audit', '/profile'];
 
 const signIn = async (page: import('@playwright/test').Page) => {
   await page.goto('/login');
