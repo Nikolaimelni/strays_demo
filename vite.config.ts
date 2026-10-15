@@ -20,12 +20,19 @@ const pagesArtifacts = (mode: string): Plugin => {
       // loadEnv and not process.env: a flag set in .env reaches the bundle but never
       // process.env, and the worker has to ship whenever the bundle is going to ask for it
       const buildEnv = loadEnv(mode, process.cwd(), '');
-      if (buildEnv.VITE_MOCK_API !== 'true') {
+      const mock = buildEnv.VITE_MOCK_API === 'true';
+      if (!mock) {
         await rm(join(outDir, 'mockServiceWorker.js'), { force: true });
       }
 
       const apiUrl = buildEnv.VITE_API_URL;
       if (!apiUrl) throw new Error('VITE_API_URL is baked into the bundle and is missing');
+
+      // connect-src below names this origin, so in the demo anything the mock misses would go
+      // straight to it. a .invalid host never resolves, and the miss dies at DNS instead
+      if (mock && !new URL(apiUrl).hostname.endsWith('.invalid')) {
+        throw new Error('a mocked build wants VITE_API_URL on a .invalid host, not a real API');
+      }
 
       // no VITE_ prefix: nothing in the app reads it, it only names the bucket
       // host for img-src. a wildcard over *.r2.cloudflarestorage.com would let
@@ -35,9 +42,16 @@ const pagesArtifacts = (mode: string): Plugin => {
 
       // env.ts parses this too, but that runs in somebody's browser, by which point the
       // deploy has happened and the privacy page points at nothing. fail here instead.
-      if (!buildEnv.VITE_CONTACT_EMAIL) {
+      if (!mock && !buildEnv.VITE_CONTACT_EMAIL) {
         throw new Error('VITE_CONTACT_EMAIL is printed on the privacy page and is missing');
       }
+
+      // msw's worker refetches everything it does not answer itself, map tiles included, and
+      // a worker's own fetch is held to connect-src. without the tile host there the demo
+      // map stays grey
+      const tiles = 'https://*.tile.openstreetmap.org';
+      const apiOrigin = new URL(apiUrl).origin;
+      const connect = mock ? `${apiOrigin} ${tiles}` : apiOrigin;
 
       const csp = [
         "default-src 'self'",
@@ -49,8 +63,8 @@ const pagesArtifacts = (mode: string): Plugin => {
         // leaflet writes inline styles on every pane and marker it creates, so
         // there is no version of this without unsafe-inline. scripts are clean.
         "style-src 'self' 'unsafe-inline'",
-        `img-src 'self' data: blob: https://*.tile.openstreetmap.org ${new URL(mediaUrl).origin}`,
-        `connect-src 'self' ${new URL(apiUrl).origin}`,
+        `img-src 'self' data: blob: ${tiles} ${new URL(mediaUrl).origin}`,
+        `connect-src 'self' ${connect}`,
         'upgrade-insecure-requests',
       ].join('; ');
 

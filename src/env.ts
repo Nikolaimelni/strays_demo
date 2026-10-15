@@ -1,11 +1,27 @@
 import { z } from 'zod';
 
-// parse once, fail at boot, and keep every other file out of import.meta.env
-export const env = z
+// `KEY=` left in a .env file is somebody clearing a value, not setting it to an empty one
+const unsetIfEmpty = (value: unknown) => (value === '' ? undefined : value);
+
+export const envSchema = z
   .object({
     VITE_API_URL: z.url(),
-    // the privacy policy tells people to write to it nine times over; a deploy that forgets
-    // it should fail loudly here rather than ship a page pointing at example.com
-    VITE_CONTACT_EMAIL: z.email(),
+    // the public build: msw answers the API in the browser and nothing is collected
+    VITE_MOCK_API: z.preprocess(
+      unsetIfEmpty,
+      z
+        .enum(['true', 'false'])
+        .default('false')
+        .transform((value) => value === 'true'),
+    ),
+    VITE_CONTACT_EMAIL: z.preprocess(unsetIfEmpty, z.email().optional()),
   })
-  .parse(import.meta.env);
+  .refine((parsed) => parsed.VITE_MOCK_API || parsed.VITE_CONTACT_EMAIL !== undefined, {
+    message: 'VITE_CONTACT_EMAIL is required unless the API is mocked',
+    path: ['VITE_CONTACT_EMAIL'],
+  });
+
+// parse once, fail at boot, and keep every other file out of import.meta.env
+export const env = envSchema.parse(import.meta.env);
+
+export const isDemo = env.VITE_MOCK_API;
