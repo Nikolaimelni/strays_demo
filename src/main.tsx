@@ -9,7 +9,7 @@ if (!root) throw new Error('missing #root');
 
 const start = async () => {
   if (import.meta.env.VITE_MOCK_API === 'true') {
-    const { startMockApi } = await import('./test/browser-mock.ts');
+    const { startMockApi } = await import('./features/demo/mock-api.ts');
     await startMockApi();
   }
 

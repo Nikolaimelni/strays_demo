@@ -26,6 +26,9 @@ importers:
       leaflet.markercluster:
         specifier: ^1.5.3
         version: 1.5.3(leaflet@1.9.4)
+      msw:
+        specifier: ^2.15.0
+        version: 2.15.0(@types/node@22.20.1)(typescript@5.9.3)
       openapi-fetch:
         specifier: ^0.17.0
         version: 0.17.0
@@ -96,9 +99,6 @@ importers:
       jsdom:
         specifier: ^25.0.1
         version: 25.0.1
-      msw:
-        specifier: ^2.15.0
-        version: 2.15.0(@types/node@22.20.1)(typescript@5.9.3)
       openapi-typescript:
         specifier: ^7.13.0
         version: 7.13.0(typescript@5.9.3)

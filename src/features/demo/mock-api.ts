@@ -1,7 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { env } from '../env.ts';
-import type { components } from '../shared/api/schema';
+import { env } from '../../env.ts';
+import type { components } from '../../shared/api/schema';
 
 const API = env.VITE_API_URL;
 
