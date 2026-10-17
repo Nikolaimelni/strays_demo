@@ -83,6 +83,49 @@ const feed: (typeof listing)[] = [
 const unauthorized = () =>
   HttpResponse.json({ code: 'UNAUTHORIZED', message: 'not signed in' }, { status: 401 });
 
+const notFound = () =>
+  HttpResponse.json({ code: 'NOT_FOUND', message: 'no such listing' }, { status: 404 });
+
+type Listing = typeof listing;
+type CreateListing = components['schemas']['CreateListingDto'];
+
+// plain module state, unlike the session flag: these carry a contact name somebody typed,
+// which has no business in browser storage, and a reload starting over is fine. without
+// it an approved row comes straight back on the refetch and the queue never empties
+let mine: Listing[] = [
+  listing,
+  {
+    ...listing,
+    id: '33333333-3333-3333-3333-333333333333',
+    status: 'PENDING',
+    description: 'Tabby kitten found by the tram stop, waiting for review.',
+  },
+  {
+    ...listing,
+    id: '44444444-4444-4444-4444-444444444444',
+    status: 'REJECTED',
+    type: 'LOST',
+    description: 'Duplicate of an earlier listing.',
+    rejectionReason: 'The same animal is already listed.',
+  },
+];
+
+let others: Listing[] = [
+  { ...listing, id: '55555555-5555-5555-5555-555555555555', status: 'PENDING' },
+  {
+    ...listing,
+    id: '66666666-6666-6666-6666-666666666666',
+    status: 'PENDING',
+    description: 'Found a dog, write me on telegram, price 50 euro.',
+  },
+];
+
+const change = (id: string, patch: Partial<Listing>) => {
+  mine = mine.map((row) => (row.id === id ? { ...row, ...patch } : row));
+  others = others.map((row) => (row.id === id ? { ...row, ...patch } : row));
+  return [...mine, ...others].find((row) => row.id === id);
+};
+
 export const startMockApi = async () => {
   const worker = setupWorker(
     http.get(`${API}/users/me`, () =>
@@ -96,6 +139,13 @@ export const startMockApi = async () => {
     http.delete(`${API}/users/me`, () => {
       setSignedIn(false);
       return HttpResponse.json({ ok: true });
+    }),
+
+    // the demo signs a new account straight in as the moderator, which is the only way a
+    // reviewer gets to see the moderation queue without a second account
+    http.post(`${API}/auth/register`, () => {
+      setSignedIn(true);
+      return HttpResponse.json({ user }, { status: 201 });
     }),
 
     http.post(`${API}/auth/login`, async ({ request }) => {
@@ -125,6 +175,57 @@ export const startMockApi = async () => {
 
     http.post(`${API}/auth/refresh`, () => unauthorized()),
 
+    http.post(`${API}/listings/photos`, () =>
+      isSignedIn()
+        ? HttpResponse.json({ key: `listings/${crypto.randomUUID()}` }, { status: 201 })
+        : unauthorized(),
+    ),
+
+    http.post(`${API}/listings`, async ({ request }) => {
+      if (!isSignedIn()) return unauthorized();
+      const body = (await request.json()) as CreateListing;
+      const item: Listing = {
+        ...listing,
+        ...body,
+        id: crypto.randomUUID(),
+        status: 'PENDING',
+        createdAt: new Date().toISOString(),
+      };
+      mine = [item, ...mine];
+      return HttpResponse.json({ item }, { status: 201 });
+    }),
+
+    http.patch(`${API}/listings/:id`, async ({ request, params }) => {
+      if (!isSignedIn()) return unauthorized();
+      const body = (await request.json()) as Partial<CreateListing>;
+      const item = change(String(params.id), { ...body, status: 'PENDING' });
+      return item ? HttpResponse.json({ item }) : notFound();
+    }),
+
+    http.delete(`${API}/listings/:id`, ({ params }) => {
+      if (!isSignedIn()) return unauthorized();
+      mine = mine.filter((row) => row.id !== params.id);
+      return HttpResponse.json({ ok: true });
+    }),
+
+    http.post(`${API}/admin/listings/:id/approve`, ({ params }) => {
+      if (!isSignedIn()) return unauthorized();
+      const item = change(String(params.id), { status: 'APPROVED', rejectionReason: null });
+      return item ? HttpResponse.json({ item }) : notFound();
+    }),
+
+    http.post(`${API}/admin/listings/:id/reject`, async ({ request, params }) => {
+      if (!isSignedIn()) return unauthorized();
+      const body = (await request.json()) as { reason?: string };
+      const item = change(String(params.id), {
+        status: 'REJECTED',
+        rejectionReason: body.reason ?? null,
+        photoKeys: [],
+        photoUrls: [],
+      });
+      return item ? HttpResponse.json({ item }) : notFound();
+    }),
+
     http.get(`${API}/listings`, ({ request }) => {
       const type = new URL(request.url).searchParams.get('type');
       const items = feed.filter((row) => !type || row.type === type).map(summaryOf);
@@ -141,27 +242,7 @@ export const startMockApi = async () => {
     // so the parameterised route would otherwise swallow this one and hand
     // back a single listing where the page expects a list
     http.get(`${API}/listings/mine`, () =>
-      isSignedIn()
-        ? HttpResponse.json({
-            items: [
-              { ...listing },
-              {
-                ...listing,
-                id: '33333333-3333-3333-3333-333333333333',
-                status: 'PENDING',
-                description: 'Tabby kitten found by the tram stop, waiting for review.',
-              },
-              {
-                ...listing,
-                id: '44444444-4444-4444-4444-444444444444',
-                status: 'REJECTED',
-                type: 'LOST',
-                description: 'Duplicate of an earlier listing.',
-                rejectionReason: 'The same animal is already listed.',
-              },
-            ],
-          })
-        : unauthorized(),
+      isSignedIn() ? HttpResponse.json({ items: mine }) : unauthorized(),
     ),
     http.get(`${API}/listings/:id`, () => HttpResponse.json({ item: summaryOf(listing) })),
     http.post(`${API}/listings/:id/report`, () => HttpResponse.json({ ok: true }, { status: 202 })),
@@ -209,21 +290,16 @@ export const startMockApi = async () => {
       }),
     ),
     http.get(`${API}/shelters`, () => HttpResponse.json({ items: [] })),
-    http.get(`${API}/admin/listings`, () =>
-      HttpResponse.json({
-        items: [
-          { ...listing, status: 'PENDING' },
-          {
-            ...listing,
-            id: '66666666-6666-6666-6666-666666666666',
-            status: 'PENDING',
-            description: 'Found a dog, write me on telegram, price 50 euro.',
-          },
-        ],
-        total: 2,
-        page: 1,
-        limit: 20,
-      }),
+    http.get(`${API}/admin/listings`, ({ request }) => {
+      const status = new URL(request.url).searchParams.get('status') ?? 'PENDING';
+      const items = [...mine, ...others].filter((row) => row.status === status);
+      return HttpResponse.json({ items, total: items.length, page: 1, limit: 20 });
+    }),
+
+    // last on purpose: a route with no handler above gets an answer here instead of going
+    // out over the network with whatever was typed into the form
+    http.all(`${API}/*`, () =>
+      HttpResponse.json({ code: 'UNKNOWN', message: 'not part of the demo' }, { status: 501 }),
     ),
   );
 
