@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { env } from '../../env.ts';
+import { env, isDemo } from '../../env.ts';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { Band } from '../../shared/ui/section.tsx';
 
 // a policy that names no way to reach a person is not a policy, so this comes from the
-// environment and boot fails without it
+// environment and boot fails without it, outside the demo
 const CONTACT_EMAIL = env.VITE_CONTACT_EMAIL;
 
 interface Section {
@@ -33,6 +33,12 @@ export const LegalPage = ({ title, intro, sections }: LegalPageProps) => {
           <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted">
             {t('legal.updated')}
           </p>
+          {isDemo ? (
+            <p className="mt-7 border-l-2 border-brand/40 pl-4 text-sm text-muted">
+              {t('demo.legal')}
+            </p>
+          ) : null}
+
           <p className="mt-7 text-lead text-muted">{intro}</p>
 
           <div className="mt-12 space-y-9">
@@ -46,11 +52,19 @@ export const LegalPage = ({ title, intro, sections }: LegalPageProps) => {
             ))}
           </div>
 
+          {/* always rendered: the policy sends people to "the address at the bottom of
+              this page", so the bottom of the page has to answer even without one */}
           <p className="mt-12 border-t border-rule/15 pt-5 text-sm text-muted">
-            {t('legal.contact')}{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="link-underline text-brand">
-              {CONTACT_EMAIL}
-            </a>
+            {CONTACT_EMAIL ? (
+              <>
+                {t('legal.contact')}{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="link-underline text-brand">
+                  {CONTACT_EMAIL}
+                </a>
+              </>
+            ) : (
+              t('demo.contact')
+            )}
           </p>
         </div>
       </Band>

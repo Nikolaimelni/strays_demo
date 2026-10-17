@@ -23,6 +23,12 @@
     "CAT": "Cat",
     "OTHER": "Other"
   },
+  "demo": {
+    "banner": "Demo: nothing you type leaves your browser. Use your own photos.",
+    "legal": "This deployment is a demonstration with no server and no database behind it. What follows describes the service as it is built, not as this page runs it: here nothing you type is collected or stored, and none of it leaves your browser. The map tiles still come from OpenStreetMap, as described below.",
+    "contact": "The demonstration has no contact address. Nothing is collected here, so there is nothing to write about.",
+    "noWorker": "This demo answers its own API calls from a service worker, and this browser did not let it start one. A regular, non-private window should work."
+  },
   "errors": {
     "UNKNOWN": "Something went wrong. Try again.",
     "VALIDATION_FAILED": "Check the highlighted fields.",

@@ -48,8 +48,9 @@ test.describe('narrow screens', () => {
 
   test('the header stays one row and the menu opens', async ({ page }) => {
     await page.goto('/');
-    const header = page.getByRole('banner');
-    expect((await header.boundingBox())?.height ?? 0).toBeLessThan(90);
+    // the nav row and not the whole header: the demo build puts its notice above it
+    const row = page.getByRole('banner').locator('nav');
+    expect((await row.boundingBox())?.height ?? 0).toBeLessThan(90);
 
     await page.getByRole('button', { name: 'Menu' }).click();
     await expect(page.locator('#mobile-nav')).toBeVisible();

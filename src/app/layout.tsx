@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router';
+import { isDemo } from '../env.ts';
 import { useLogout } from '../features/auth/mutations.ts';
 import { useSession } from '../features/auth/session.ts';
 import { LanguageSwitcher } from '../shared/i18n/language-switcher.tsx';
@@ -74,6 +75,13 @@ export const Layout = () => {
           z-index above 1000: leaflet puts its own control corners there, and
           the zoom buttons would otherwise slide over the header */}
       <header className="sticky top-0 z-1100 border-b border-rule/15 bg-page/80 backdrop-blur-md">
+        {/* inside the sticky header on purpose: the warning matters most on the forms,
+            which are far enough down the page that a bar at the top would be gone */}
+        {isDemo ? (
+          <p className="border-b border-rule/15 bg-brand/10 px-4 py-2 text-center text-xs text-muted sm:px-6">
+            {t('demo.banner')}
+          </p>
+        ) : null}
         <nav className="mx-auto flex max-w-6xl items-center gap-x-5 px-4 py-3 sm:px-6 sm:py-4">
           <NavLink
             to="/"

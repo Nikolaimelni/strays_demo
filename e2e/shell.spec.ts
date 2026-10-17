@@ -104,3 +104,12 @@ test.describe('dark theme', () => {
     expect(await read('.leaflet-container', 'background-color')).toBe('rgb(38, 35, 30)');
   });
 });
+
+test.describe('a browser that refuses service workers', () => {
+  test.use({ serviceWorkers: 'block' });
+
+  test('gets a sentence about it, not a blank page', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText(/service worker/)).toBeVisible();
+  });
+});

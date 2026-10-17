@@ -23,6 +23,12 @@
     "CAT": "Gato",
     "OTHER": "Outro"
   },
+  "demo": {
+    "banner": "Demonstração: nada do que escrever sai do seu navegador. Use fotografias suas.",
+    "legal": "Esta instalação é uma demonstração, sem servidor e sem base de dados por trás. O que se segue descreve o serviço tal como está construído, e não como esta página funciona: aqui nada do que escrever é recolhido ou guardado, e nada disso sai do seu navegador. Os mapas continuam a vir do OpenStreetMap, como se explica abaixo.",
+    "contact": "A demonstração não tem endereço de contacto. Aqui nada é recolhido, por isso não há nada sobre que escrever.",
+    "noWorker": "Esta demonstração responde às próprias chamadas à API através de um service worker, e este navegador não permitiu iniciá-lo. Uma janela normal, não privada, deve funcionar."
+  },
   "errors": {
     "UNKNOWN": "Algo correu mal. Tente novamente.",
     "VALIDATION_FAILED": "Verifique os campos assinalados.",
