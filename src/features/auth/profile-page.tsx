@@ -10,7 +10,10 @@ import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { PageHeading } from '../../shared/ui/section.tsx';
 import { Skeleton } from '../../shared/ui/skeleton.tsx';
 import { AccountData } from './account-data.tsx';
+import { ChangePassword } from './change-password.tsx';
 import { useSession } from './session.ts';
+import { Sessions } from './sessions.tsx';
+import { TwoFactor } from './two-factor.tsx';
 
 export const ProfilePage = () => {
   const { t } = useTranslation();
@@ -64,6 +67,12 @@ export const ProfilePage = () => {
             </div>
           )}
         </Card>
+
+        <ChangePassword />
+
+        <TwoFactor enabled={user?.mfaEnabled ?? false} isAdmin={user?.role === 'ADMIN'} />
+
+        <Sessions />
 
         <AccountData />
       </div>

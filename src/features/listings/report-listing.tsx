@@ -14,7 +14,7 @@ import { useSession } from '../auth/session.ts';
 
 type Reason = components['schemas']['CreateReportDto']['reason'];
 
-const REASONS: readonly Reason[] = ['SPAM', 'SCAM', 'WRONG_INFO', 'ABUSE', 'OTHER'];
+const REASONS: readonly Reason[] = ['ILLEGAL', 'SPAM', 'SCAM', 'WRONG_INFO', 'ABUSE', 'OTHER'];
 
 interface ReportListingProps {
   listingId: string;

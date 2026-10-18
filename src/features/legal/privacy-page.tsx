@@ -1,16 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { LegalPage } from './legal-page.tsx';
 
+// the same sections, in the same order, as PRIVACY.md in the api repo, plus the one about
+// the browser, which that document leaves to this one
 const SECTIONS = [
   'Who',
   'What',
-  'Public',
-  'Basis',
-  'Third',
+  'Details',
+  'Processors',
   'Keep',
-  'Browser',
-  'Ai',
   'Rights',
+  'Browser',
+  'Children',
+  'Changes',
 ] as const;
 
 export const PrivacyPage = () => {
@@ -19,6 +21,7 @@ export const PrivacyPage = () => {
   return (
     <LegalPage
       title={t('legal.privacyTitle')}
+      updated={t('legal.privacyUpdated')}
       intro={t('legal.privacyIntro')}
       sections={SECTIONS.map((name) => ({
         title: t(`legal.privacy${name}Title`),

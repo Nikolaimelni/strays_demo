@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { z } from 'zod';
 import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
+import { i18next } from '../../shared/i18n/i18n.ts';
+import { Checkbox } from '../../shared/ui/checkbox.tsx';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
 import { AuthPage } from './auth-page.tsx';
 import { useRegister } from './mutations.ts';
@@ -12,6 +14,8 @@ import { useRegister } from './mutations.ts';
 const schema = z.object({
   email: z.email(),
   password: z.string().min(8).max(72),
+  // the server keeps which terms were accepted and when, and answers 400 without this
+  acceptTerms: z.literal(true, { error: () => i18next.t('auth.acceptRequired') }),
 });
 
 type Values = z.infer<typeof schema>;
@@ -46,18 +50,6 @@ export const RegisterPage = () => {
       error={formError}
       footerTo="/login"
       footerLabel={t('auth.haveAccount')}
-      note={
-        <p className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
-          <span>{t('auth.legalNote')}</span>
-          <Link to="/terms" className="link-underline hover:text-ink">
-            {t('legal.termsTitle')}
-          </Link>
-          <span aria-hidden>·</span>
-          <Link to="/privacy" className="link-underline hover:text-ink">
-            {t('legal.privacyTitle')}
-          </Link>
-        </p>
-      }
     >
       <Field label={t('auth.email')} error={errors.email}>
         {(control) => (
@@ -82,6 +74,20 @@ export const RegisterPage = () => {
           />
         )}
       </Field>
+
+      <Checkbox
+        error={errors.acceptTerms}
+        label={
+          <Trans
+            i18nKey="auth.acceptTerms"
+            components={{
+              terms: <Link to="/terms" className="link-underline hover:text-ink" />,
+              privacy: <Link to="/privacy" className="link-underline hover:text-ink" />,
+            }}
+          />
+        }
+        {...register('acceptTerms')}
+      />
     </AuthPage>
   );
 };

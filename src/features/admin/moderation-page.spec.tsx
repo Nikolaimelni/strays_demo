@@ -19,7 +19,7 @@ const row = (id: string, description: string) => ({
   lat: 38.72,
   lng: -9.14,
   source: 'WEB',
-  sourceRef: null,
+  sourceUrl: null,
   shelterId: null,
   createdAt: '2026-08-01T00:00:00.000Z',
   rejectionReason: null,
@@ -64,9 +64,35 @@ describe('moderation queue', () => {
     await screen.findByText('first pending listing');
 
     await userEvent.click(screen.getAllByRole('button', { name: 'Reject' })[0] as HTMLElement);
-    await userEvent.click(await screen.findByRole('button', { name: 'Confirm rejection' }));
+    await userEvent.type(
+      await screen.findByLabelText(/Why is it being rejected/),
+      'The same dog is already listed.',
+    );
+    await userEvent.click(screen.getAllByRole('button', { name: 'Reject' })[0] as HTMLElement);
 
     expect(await screen.findByText('first pending listing')).toBeInTheDocument();
+  });
+
+  // the reason goes to the person who posted it by email, so an empty one never leaves
+  it('will not reject without a reason', async () => {
+    let sent = false;
+    server.use(
+      http.post(`${API}/admin/listings/:id/reject`, () => {
+        sent = true;
+        return HttpResponse.json({});
+      }),
+    );
+
+    renderWithProviders(<ModerationPage />);
+    await screen.findByText('first pending listing');
+
+    await userEvent.click(screen.getAllByRole('button', { name: 'Reject' })[0] as HTMLElement);
+    await userEvent.type(await screen.findByLabelText(/Why is it being rejected/), 'spam');
+    await userEvent.click(screen.getAllByRole('button', { name: 'Reject' })[0] as HTMLElement);
+
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(screen.getByText('first pending listing')).toBeInTheDocument();
+    expect(sent).toBe(false);
   });
 
   it('does not resurrect a decided row when a different decision fails', async () => {

@@ -7,18 +7,37 @@ interface Credentials {
   password: string;
 }
 
+interface SignUp extends Credentials {
+  acceptTerms: true;
+}
+
 export const useLogin = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (body: Credentials) => {
       const { data, error } = await api.POST('/auth/login', { body });
       if (error) throw error;
-      return data.user;
+      return data;
     },
     // write the user we were handed rather than invalidating and awaiting a
     // refetch. the caller redirects as soon as this resolves, and while that
     // refetch was in flight the session still read null, so a guarded
-    // destination bounced straight back to login.
+    // destination bounced straight back to login. with two-step sign in there
+    // is no user yet, only a cookie that waits five minutes for the code.
+    onSuccess: ({ user }) => {
+      if (user) queryClient.setQueryData<SessionUser | null>(sessionKey, user);
+    },
+  });
+};
+
+export const useVerifyMfa = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (code: string) => {
+      const { data, error } = await api.POST('/auth/mfa/verify', { body: { code } });
+      if (error) throw error;
+      return data.user;
+    },
     onSuccess: (user) => queryClient.setQueryData<SessionUser | null>(sessionKey, user),
   });
 };
@@ -26,7 +45,7 @@ export const useLogin = () => {
 export const useRegister = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (body: Credentials) => {
+    mutationFn: async (body: SignUp) => {
       const { data, error } = await api.POST('/auth/register', { body });
       if (error) throw error;
       return data.user;

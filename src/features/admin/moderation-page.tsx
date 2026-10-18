@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import { api } from '../../shared/api/client.ts';
 import type { components } from '../../shared/api/schema';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { Button } from '../../shared/ui/button.tsx';
 import { ChoiceGroup } from '../../shared/ui/choice-group.tsx';
 import { EmptyState } from '../../shared/ui/empty-state.tsx';
-import { inputClass } from '../../shared/ui/field.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
 import { PhotoLightbox } from '../../shared/ui/photo-lightbox.tsx';
 import { PageHeading } from '../../shared/ui/section.tsx';
 import { ListingCardSkeleton } from '../../shared/ui/skeleton.tsx';
 import { Pagination } from '../listings/pagination.tsx';
 import { ShelterBadge, TypeBadge } from '../listings/status-badge.tsx';
+import { AdminNav } from './admin-nav.tsx';
+import { ReasonForm } from './reason-form.tsx';
 
 type Status = 'PENDING' | 'APPROVED' | 'REJECTED';
 type ListingRow = components['schemas']['ListingDetailListResponseDto']['items'][number];
@@ -30,8 +30,7 @@ export const ModerationPage = () => {
   const [status, setStatus] = useState<Status>('PENDING');
   const [page, setPage] = useState(1);
   const [lightbox, setLightbox] = useState<string[] | null>(null);
-  const [rejecting, setRejecting] = useState<string | null>(null);
-  const [reason, setReason] = useState('');
+  const [asking, setAsking] = useState<{ id: string; kind: 'reject' | 'remove' } | null>(null);
   // a set of ids rather than a snapshot of the list: two decisions in a row
   // snapshotted each other, so one failing put the other's row back and undid
   // a removal that had worked
@@ -62,9 +61,17 @@ export const ModerationPage = () => {
       note,
     }: {
       id: string;
-      decision: 'approve' | 'reject';
+      decision: 'approve' | 'reject' | 'remove';
       note?: string;
     }) => {
+      // taking down a live listing is a delete with a reason, which the owner gets by email
+      if (decision === 'remove') {
+        const { error } = await api.DELETE('/listings/{id}', {
+          params: { path: { id }, query: { reason: note ?? '' } },
+        });
+        if (error) throw error;
+        return;
+      }
       if (decision === 'approve') {
         const { error } = await api.POST('/admin/listings/{id}/approve', {
           params: { path: { id } },
@@ -74,7 +81,7 @@ export const ModerationPage = () => {
       }
       const { error } = await api.POST('/admin/listings/{id}/reject', {
         params: { path: { id } },
-        body: note ? { reason: note } : {},
+        body: { reason: note ?? '' },
       });
       if (error) throw error;
     },
@@ -96,20 +103,7 @@ export const ModerationPage = () => {
   return (
     <div className="space-y-8">
       <PageMeta title={t('nav.admin')} />
-      <PageHeading
-        index="01"
-        title={t('nav.admin')}
-        aside={
-          <span className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-            <Link to="/admin/reports" className="link-underline text-muted hover:text-ink">
-              {t('admin.reports')}
-            </Link>
-            <Link to="/admin/audit" className="link-underline text-muted hover:text-ink">
-              {t('admin.audit')}
-            </Link>
-          </span>
-        }
-      />
+      <PageHeading index="01" title={t('nav.admin')} aside={<AdminNav />} />
 
       <div className="space-y-5 sm:pl-[4.625rem]">
         {/* a lost animal is not always the worst thing in the description. the
@@ -190,62 +184,46 @@ export const ModerationPage = () => {
                 </div>
               </div>
 
-              {status === 'PENDING' ? (
-                <div className="mt-3 space-y-2">
-                  {rejecting === listing.id ? (
-                    <div className="space-y-2">
-                      <label className="block text-xs text-muted" htmlFor={`reason-${listing.id}`}>
-                        {t('admin.rejectReason')}
-                      </label>
-                      <input
-                        id={`reason-${listing.id}`}
-                        value={reason}
-                        onChange={(event) => setReason(event.target.value)}
-                        className={inputClass}
-                      />
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            review.mutate({ id: listing.id, decision: 'reject', note: reason });
-                            setRejecting(null);
-                            setReason('');
-                          }}
-                        >
-                          {t('admin.rejectConfirm')}
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => {
-                            setRejecting(null);
-                            setReason('');
-                          }}
-                        >
-                          {t('admin.rejectCancel')}
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        onClick={() => review.mutate({ id: listing.id, decision: 'approve' })}
-                      >
-                        {t('admin.approve')}
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => {
-                          setRejecting(listing.id);
-                          setReason('');
-                        }}
-                      >
-                        {t('admin.reject')}
-                      </Button>
-                    </div>
-                  )}
+              {asking?.id === listing.id ? (
+                <div className="mt-3">
+                  <ReasonForm
+                    min={10}
+                    label={t(
+                      asking.kind === 'reject' ? 'admin.rejectReason' : 'admin.takedownReason',
+                    )}
+                    submitLabel={t(asking.kind === 'reject' ? 'admin.reject' : 'admin.takedown')}
+                    onSubmit={async (note) => {
+                      review.mutate({ id: listing.id, decision: asking.kind, note });
+                      setAsking(null);
+                    }}
+                    onCancel={() => setAsking(null)}
+                  />
+                </div>
+              ) : status === 'PENDING' ? (
+                <div className="mt-3 flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => review.mutate({ id: listing.id, decision: 'approve' })}
+                  >
+                    {t('admin.approve')}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setAsking({ id: listing.id, kind: 'reject' })}
+                  >
+                    {t('admin.reject')}
+                  </Button>
+                </div>
+              ) : status === 'APPROVED' ? (
+                <div className="mt-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAsking({ id: listing.id, kind: 'remove' })}
+                  >
+                    {t('admin.takedown')}
+                  </Button>
                 </div>
               ) : null}
             </li>

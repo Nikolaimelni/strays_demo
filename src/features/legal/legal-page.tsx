@@ -14,6 +14,7 @@ interface Section {
 
 interface LegalPageProps {
   title: string;
+  updated: string;
   intro: string;
   sections: readonly Section[];
 }
@@ -21,7 +22,7 @@ interface LegalPageProps {
 // the bodies carry their own paragraph breaks so a section stays one
 // translation key. thirty keys is already more than anybody wants to keep in
 // step across two languages.
-export const LegalPage = ({ title, intro, sections }: LegalPageProps) => {
+export const LegalPage = ({ title, updated, intro, sections }: LegalPageProps) => {
   const { t } = useTranslation();
 
   return (
@@ -30,9 +31,7 @@ export const LegalPage = ({ title, intro, sections }: LegalPageProps) => {
       <Band index="01">
         <div className="max-w-prose">
           <h1 className="font-display text-title font-semibold text-balance">{title}</h1>
-          <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted">
-            {t('legal.updated')}
-          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted">{updated}</p>
           {isDemo ? (
             <p className="mt-7 border-l-2 border-brand/40 pl-4 text-sm text-muted">
               {t('demo.legal')}
@@ -51,21 +50,14 @@ export const LegalPage = ({ title, intro, sections }: LegalPageProps) => {
               </section>
             ))}
           </div>
-
-          {/* always rendered: the policy sends people to "the address at the bottom of
-              this page", so the bottom of the page has to answer even without one */}
-          <p className="mt-12 border-t border-rule/15 pt-5 text-sm text-muted">
-            {CONTACT_EMAIL ? (
-              <>
-                {t('legal.contact')}{' '}
-                <a href={`mailto:${CONTACT_EMAIL}`} className="link-underline text-brand">
-                  {CONTACT_EMAIL}
-                </a>
-              </>
-            ) : (
-              t('demo.contact')
-            )}
-          </p>
+          {CONTACT_EMAIL ? (
+            <p className="mt-12 border-t border-rule/15 pt-5 text-sm text-muted">
+              {t('legal.contact')}{' '}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="link-underline text-brand">
+                {CONTACT_EMAIL}
+              </a>
+            </p>
+          ) : null}
         </div>
       </Band>
     </div>

@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { api } from '../../shared/api/client.ts';
 import { errorTranslationKey, parseApiError } from '../../shared/api/errors.ts';
+import { saveFile } from '../../shared/save-file.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
-import { buttonClass } from '../../shared/ui/button.tsx';
+import { Button, buttonClass } from '../../shared/ui/button.tsx';
 import { Card, CardTitle } from '../../shared/ui/card.tsx';
-import { ConfirmButton } from '../../shared/ui/confirm-button.tsx';
+import { PasswordPrompt } from './password-prompt.tsx';
 
 // Articles 15 and 17. Both are one request; the work is in saying plainly what the second
 // one takes with it, before somebody presses it.
@@ -16,34 +17,30 @@ export const AccountData = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const download = useMutation({
     mutationFn: async () => {
       const { data, error: failed } = await api.GET('/users/me/export');
       if (failed) throw failed;
-
-      const url = URL.createObjectURL(
-        new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
+      saveFile(
+        `strays-export-${data.exportedAt.slice(0, 10)}.json`,
+        JSON.stringify(data, null, 2),
+        'application/json',
       );
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `strays-export-${data.exportedAt.slice(0, 10)}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
     },
     onError: (failed) => setError(t(errorTranslationKey(parseApiError(failed)))),
   });
 
   const remove = useMutation({
-    mutationFn: async () => {
-      const { error: failed } = await api.DELETE('/users/me');
+    mutationFn: async (password: string) => {
+      const { error: failed } = await api.DELETE('/users/me', { body: { password } });
       if (failed) throw failed;
     },
     onSuccess: async () => {
       queryClient.clear();
       await navigate('/', { replace: true });
     },
-    onError: (failed) => setError(t(errorTranslationKey(parseApiError(failed)))),
   });
 
   return (
@@ -67,14 +64,18 @@ export const AccountData = () => {
 
       <div className="space-y-2 border-t border-rule/15 pt-4">
         <p className="text-sm text-muted">{t('profile.deleteNote')}</p>
-        <ConfirmButton
-          label={t('profile.delete')}
-          disabled={remove.isPending}
-          onConfirm={() => {
-            setError(null);
-            remove.mutate();
-          }}
-        />
+        {deleting ? (
+          <PasswordPrompt
+            danger
+            submitLabel={t('common.confirm')}
+            onSubmit={({ password }) => remove.mutateAsync(password)}
+            onCancel={() => setDeleting(false)}
+          />
+        ) : (
+          <Button variant="ghost" size="sm" onClick={() => setDeleting(true)}>
+            {t('profile.delete')}
+          </Button>
+        )}
       </div>
 
       {error ? <Alert>{error}</Alert> : null}

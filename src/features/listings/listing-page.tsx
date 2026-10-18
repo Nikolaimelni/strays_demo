@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
+import { safeHttpUrl } from '../../shared/safe-http-url.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { Card, CardTitle } from '../../shared/ui/card.tsx';
 import { PageMeta } from '../../shared/ui/page-meta.tsx';
@@ -13,19 +14,6 @@ import { ListingMessage } from './listing-message.tsx';
 import { useListing } from './queries.ts';
 import { ReportListing } from './report-listing.tsx';
 import { ShelterBadge, TypeBadge } from './status-badge.tsx';
-
-// a shelter's sourceUrl is whatever the scraper found on somebody else's site.
-// React 19 puts an href through untouched, so `javascript:` in there runs on
-// click. the CSP blocks it in production; this blocks it everywhere else too.
-const safeHttpUrl = (value: string | null): string | null => {
-  if (!value) return null;
-  try {
-    const url = new URL(value);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : null;
-  } catch {
-    return null;
-  }
-};
 
 export const ListingPage = () => {
   const { t, i18n } = useTranslation();
@@ -55,6 +43,9 @@ export const ListingPage = () => {
   const item = listing.data;
   const shelter = shelters.data?.find((candidate) => candidate.id === item.shelterId);
   const shelterSite = safeHttpUrl(shelter?.sourceUrl ?? null);
+  // a feed listing links back to the animal's own page, which is part of what the shelter
+  // agreed to when it handed over the feed
+  const animalPage = item.source === 'FEED' ? safeHttpUrl(item.sourceUrl) : null;
   const photoAlt = t('listing.photoAlt', {
     species: t(`species.${item.species}`),
     city: item.city,
@@ -120,12 +111,32 @@ export const ListingPage = () => {
           <p className="text-xs text-muted">{t('listing.spotApprox')}</p>
         </div>
 
-        <ReportListing listingId={item.id} />
+        <div className="space-y-2">
+          <ReportListing listingId={item.id} />
+          {/* for somebody without an account, or a listing that is illegal rather than
+              just wrong: the notice form needs neither a sign in nor a reason list */}
+          <Link
+            to={`/notices?listing=${item.id}`}
+            className="link-underline inline-block text-xs text-muted hover:text-ink"
+          >
+            {t('listing.noticeLink')}
+          </Link>
+        </div>
 
         {shelter ? (
           <Card className="pt-4">
             <CardTitle>{t('listing.fromShelter')}</CardTitle>
             <p className="mt-3 text-sm">{shelter.name}</p>
+            {animalPage ? (
+              <a
+                className="link-underline mt-1 block text-sm text-brand"
+                href={animalPage}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t('listing.sourceLink')}
+              </a>
+            ) : null}
             {shelterSite ? (
               <a
                 className="link-underline mt-1 inline-block text-sm text-brand"

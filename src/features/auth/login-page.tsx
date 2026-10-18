@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
 import { Field, inputClass } from '../../shared/ui/field.tsx';
 import { AuthPage } from './auth-page.tsx';
+import { MfaSignIn } from './mfa-sign-in.tsx';
 import { useLogin } from './mutations.ts';
 
 const schema = z.object({
@@ -20,6 +21,7 @@ export const LoginPage = () => {
   const { t } = useTranslation();
   const login = useLogin();
   const [formError, setFormError] = useState<string | null>(null);
+  const [challenged, setChallenged] = useState(false);
 
   const {
     register,
@@ -31,11 +33,23 @@ export const LoginPage = () => {
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null);
     try {
-      await login.mutateAsync(values);
+      const { mfaRequired } = await login.mutateAsync(values);
+      setChallenged(mfaRequired);
     } catch (error) {
       setFormError(t(errorTranslationKey(applyServerErrors(error, setError))));
     }
   });
+
+  if (challenged) {
+    return (
+      <MfaSignIn
+        onRestart={(message) => {
+          setChallenged(false);
+          setFormError(message);
+        }}
+      />
+    );
+  }
 
   return (
     <AuthPage

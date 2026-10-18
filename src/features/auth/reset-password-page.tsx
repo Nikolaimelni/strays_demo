@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { api } from '../../shared/api/client.ts';
 import { applyServerErrors, errorTranslationKey } from '../../shared/api/errors.ts';
@@ -17,10 +17,12 @@ type Values = z.infer<typeof schema>;
 
 export const ResetPasswordPage = () => {
   const { t } = useTranslation();
-  const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // read once into state: the url is cleared below and the token has to survive it
-  const [token] = useState(() => params.get('token') ?? '');
+  // after the #, so the browser never sends it anywhere: not to a server log, not in a
+  // Referer. read once into state, because the hash is cleared below
+  const [token] = useState(() => new URLSearchParams(location.hash.slice(1)).get('token') ?? '');
 
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -32,7 +34,7 @@ export const ResetPasswordPage = () => {
       if (error) throw error;
       // the server ends every session, including this browser's
       queryClient.clear();
-      setParams({}, { replace: true });
+      await navigate(location.pathname, { replace: true });
     },
   });
 

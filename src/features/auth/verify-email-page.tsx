@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { api } from '../../shared/api/client.ts';
 import { Alert } from '../../shared/ui/alert.tsx';
 import { ButtonLink } from '../../shared/ui/button.tsx';
@@ -11,11 +11,12 @@ import { Skeleton } from '../../shared/ui/skeleton.tsx';
 
 export const VerifyEmailPage = () => {
   const { t } = useTranslation();
-  const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // read once into state: the query key is built from it, and the url is about
-  // to be cleared out from under it
-  const [token] = useState(() => params.get('token') ?? '');
+  // the link puts it after the #, which no server ever sees. read once into state: the
+  // query key is built from it, and the hash is about to be cleared out from under it
+  const [token] = useState(() => new URLSearchParams(location.hash.slice(1)).get('token') ?? '');
 
   // a POST behind a query key on purpose: the token arrives in the url and the
   // call has to fire once for it, not again on a retry or a strict-mode
@@ -30,7 +31,7 @@ export const VerifyEmailPage = () => {
       if (error) throw error;
       // spent. leaving it in the address bar only puts it in history and in
       // every screenshot anybody takes of this page.
-      setParams({}, { replace: true });
+      await navigate(location.pathname, { replace: true });
       await queryClient.invalidateQueries({ queryKey: ['session'] });
       return true;
     },

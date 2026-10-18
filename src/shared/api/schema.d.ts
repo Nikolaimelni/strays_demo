@@ -20,6 +20,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuditController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/register": {
         parameters: {
             query?: never;
@@ -52,6 +68,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_verifyMfa"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/refresh": {
         parameters: {
             query?: never;
@@ -78,6 +110,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AuthController_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/change-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_changePassword"];
         delete?: never;
         options?: never;
         head?: never;
@@ -148,6 +196,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/mfa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MfaController_setup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/mfa/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MfaController_enable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/mfa/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MfaController_disable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/mfa/recovery-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MfaController_recoveryCodes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me": {
         parameters: {
             query?: never;
@@ -180,6 +292,214 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/users/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_sessions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/me/sessions/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsersController_endSessions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminUsersController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminUsersController_one"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminUsersController_changeRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminUsersController_block"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}/unblock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminUsersController_unblock"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminUsersController_endSessions"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}/mfa/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminUsersController_resetMfa"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/listings/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReportsController_report"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/notices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NoticesController_notice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reports/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminReportsController_close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/shelters": {
         parameters: {
             query?: never;
@@ -189,7 +509,87 @@ export interface paths {
         };
         get: operations["SheltersController_list"];
         put?: never;
-        post: operations["SheltersController_create"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/shelters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSheltersController_list"];
+        put?: never;
+        post: operations["AdminSheltersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/shelters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminSheltersController_update"];
+        trace?: never;
+    };
+    "/admin/shelters/{id}/consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminSheltersController_recordConsent"];
+        delete: operations["AdminSheltersController_withdrawConsent"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/shelters/{id}/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminSheltersController_importOne"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/shelters/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminSheltersController_importAll"];
         delete?: never;
         options?: never;
         head?: never;
@@ -324,54 +724,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/audit": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AuditController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/listings/{id}/report": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ReportsController_report"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminReportsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/listings/{id}/message": {
         parameters: {
             query?: never;
@@ -395,10 +747,33 @@ export interface components {
         OkResponseDto: {
             ok: boolean;
         };
+        AuditListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                actorId: string;
+                /** @enum {string} */
+                action: "LISTING_APPROVE" | "LISTING_REJECT" | "LISTING_UPDATE" | "LISTING_DELETE" | "REPORT_ACTION" | "REPORT_DISMISS" | "USER_PROMOTE" | "USER_DEMOTE" | "USER_BLOCK" | "USER_UNBLOCK" | "USER_SESSIONS_END" | "USER_MFA_RESET" | "SHELTER_CONSENT_RECORD" | "SHELTER_CONSENT_WITHDRAW" | "SHELTER_IMPORT";
+                /** Format: uuid */
+                listingId: string | null;
+                /** Format: uuid */
+                userId: string | null;
+                /** Format: uuid */
+                shelterId: string | null;
+                reason: string | null;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            total: number;
+            page: number;
+            limit: number;
+        };
         RegisterDto: {
             /** Format: email */
             email: string;
             password: string;
+            acceptTerms: boolean;
         };
         AuthResponseDto: {
             user: {
@@ -409,6 +784,7 @@ export interface components {
                 /** @enum {string} */
                 role: "USER" | "ADMIN";
                 emailVerified: boolean;
+                mfaEnabled: boolean;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -417,6 +793,28 @@ export interface components {
             /** Format: email */
             email: string;
             password: string;
+        };
+        LoginResponseDto: {
+            mfaRequired: boolean;
+            user: {
+                /** Format: uuid */
+                id: string;
+                /** Format: email */
+                email: string;
+                /** @enum {string} */
+                role: "USER" | "ADMIN";
+                emailVerified: boolean;
+                mfaEnabled: boolean;
+                /** Format: date-time */
+                createdAt: string;
+            } | null;
+        };
+        MfaCodeDto: {
+            code: string;
+        };
+        ChangePasswordDto: {
+            currentPassword: string;
+            newPassword: string;
         };
         VerifyEmailDto: {
             token: string;
@@ -429,6 +827,17 @@ export interface components {
             token: string;
             password: string;
         };
+        MfaSetupResponseDto: {
+            secret: string;
+            uri: string;
+        };
+        RecoveryCodesResponseDto: {
+            recoveryCodes: string[];
+        };
+        MfaConfirmDto: {
+            password: string;
+            code: string;
+        };
         UserResponseDto: {
             user: {
                 /** Format: uuid */
@@ -438,6 +847,7 @@ export interface components {
                 /** @enum {string} */
                 role: "USER" | "ADMIN";
                 emailVerified: boolean;
+                mfaEnabled: boolean;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -453,6 +863,7 @@ export interface components {
                 /** @enum {string} */
                 role: "USER" | "ADMIN";
                 emailVerified: boolean;
+                mfaEnabled: boolean;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -470,6 +881,157 @@ export interface components {
                 /** Format: date-time */
                 createdAt: string;
             }[];
+            reports: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                listingId: string;
+                /** @enum {string} */
+                reason: "ILLEGAL" | "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
+                note: string | null;
+                /** @enum {string} */
+                status: "OPEN" | "ACTIONED" | "DISMISSED";
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            sessions: {
+                /** Format: uuid */
+                id: string;
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                lastSeenAt: string;
+            }[];
+            termsVersion: string | null;
+            /** Format: date-time */
+            termsAcceptedAt: string | null;
+            moderation: {
+                /** Format: date-time */
+                blockedAt: string | null;
+                blockReason: string | null;
+                decisions: {
+                    /** @enum {string} */
+                    action: "LISTING_APPROVE" | "LISTING_REJECT" | "LISTING_UPDATE" | "LISTING_DELETE" | "REPORT_ACTION" | "REPORT_DISMISS" | "USER_PROMOTE" | "USER_DEMOTE" | "USER_BLOCK" | "USER_UNBLOCK" | "USER_SESSIONS_END" | "USER_MFA_RESET" | "SHELTER_CONSENT_RECORD" | "SHELTER_CONSENT_WITHDRAW" | "SHELTER_IMPORT";
+                    /** Format: uuid */
+                    listingId: string | null;
+                    reason: string | null;
+                    /** Format: date-time */
+                    createdAt: string;
+                }[];
+            };
+        };
+        SessionListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                lastSeenAt: string;
+                current: boolean;
+            }[];
+        };
+        EndSessionsDto: {
+            password: string;
+            /** Format: uuid */
+            sessionId?: string;
+        };
+        DeleteAccountDto: {
+            password: string;
+        };
+        AdminUserListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: email */
+                email: string;
+                /** @enum {string} */
+                role: "USER" | "ADMIN";
+                emailVerified: boolean;
+                mfaEnabled: boolean;
+                /** Format: date-time */
+                blockedAt: string | null;
+                blockReason: string | null;
+                listings: number;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        AdminUserResponseDto: {
+            item: {
+                /** Format: uuid */
+                id: string;
+                /** Format: email */
+                email: string;
+                /** @enum {string} */
+                role: "USER" | "ADMIN";
+                emailVerified: boolean;
+                mfaEnabled: boolean;
+                /** Format: date-time */
+                blockedAt: string | null;
+                blockReason: string | null;
+                listings: number;
+                /** Format: date-time */
+                createdAt: string;
+            };
+        };
+        ChangeRoleDto: {
+            /** @enum {string} */
+            role: "USER" | "ADMIN";
+        };
+        ReasonDto: {
+            reason: string;
+        };
+        CreateReportDto: {
+            /** @enum {string} */
+            reason: "ILLEGAL" | "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
+            note?: string;
+        };
+        CreateNoticeDto: {
+            /** Format: uuid */
+            listingId: string;
+            explanation: string;
+            name: string;
+            /** Format: email */
+            email: string;
+            goodFaith: boolean;
+        };
+        ReportListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                listingId: string;
+                /** @enum {string} */
+                listingStatus: "PENDING" | "APPROVED" | "REJECTED";
+                listingDescription: string;
+                openReportsOnListing: number;
+                /** Format: uuid */
+                reporterId: string | null;
+                notice: boolean;
+                /** @enum {string} */
+                reason: "ILLEGAL" | "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
+                note: string | null;
+                /** @enum {string} */
+                status: "OPEN" | "ACTIONED" | "DISMISSED";
+                /** Format: date-time */
+                closedAt: string | null;
+                /** Format: uuid */
+                closedById: string | null;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+            total: number;
+            page: number;
+            limit: number;
+        };
+        CloseReportDto: {
+            /** @enum {string} */
+            outcome: "ACTIONED" | "DISMISSED";
+            note?: string;
         };
         ShelterListResponseDto: {
             items: {
@@ -482,13 +1044,44 @@ export interface components {
                 createdAt: string;
             }[];
         };
+        AdminShelterListResponseDto: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                name: string;
+                city: string;
+                sourceUrl: string | null;
+                /** Format: date-time */
+                createdAt: string;
+                feedUrl: string | null;
+                /** Format: date-time */
+                feedConsentAt: string | null;
+                feedConsentNote: string | null;
+                /** Format: date-time */
+                lastImportAt: string | null;
+                lastImport: {
+                    startedAt: string;
+                    finishedAt: string;
+                    created: number;
+                    updated: number;
+                    unchanged: number;
+                    removed: number;
+                    invalid: number;
+                    failed: number;
+                    message: string | null;
+                } | null;
+                importRunning: boolean;
+            }[];
+        };
         CreateShelterDto: {
             name: string;
             city: string;
             /** Format: uri */
             sourceUrl?: string;
+            /** Format: uri */
+            feedUrl?: string;
         };
-        ShelterResponseDto: {
+        AdminShelterResponseDto: {
             item: {
                 /** Format: uuid */
                 id: string;
@@ -497,7 +1090,42 @@ export interface components {
                 sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
+                feedUrl: string | null;
+                /** Format: date-time */
+                feedConsentAt: string | null;
+                feedConsentNote: string | null;
+                /** Format: date-time */
+                lastImportAt: string | null;
+                lastImport: {
+                    startedAt: string;
+                    finishedAt: string;
+                    created: number;
+                    updated: number;
+                    unchanged: number;
+                    removed: number;
+                    invalid: number;
+                    failed: number;
+                    message: string | null;
+                } | null;
+                importRunning: boolean;
             };
+        };
+        UpdateShelterDto: {
+            name?: string;
+            city?: string;
+            /** Format: uri */
+            sourceUrl?: string | null;
+            /** Format: uri */
+            feedUrl?: string | null;
+        };
+        RecordConsentDto: {
+            note: string;
+        };
+        ConsentWithdrawnResponseDto: {
+            removed: number;
+        };
+        ImportStartedResponseDto: {
+            shelters: number;
         };
         ListingListResponseDto: {
             items: {
@@ -515,9 +1143,10 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "WEB" | "MANUAL" | "SCRAPER";
+                source: "WEB" | "MANUAL" | "FEED";
                 /** Format: uuid */
                 shelterId: string | null;
+                sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
             }[];
@@ -553,9 +1182,10 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "WEB" | "MANUAL" | "SCRAPER";
+                source: "WEB" | "MANUAL" | "FEED";
                 /** Format: uuid */
                 shelterId: string | null;
+                sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
                 photoKeys: string[];
@@ -581,9 +1211,10 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "WEB" | "MANUAL" | "SCRAPER";
+                source: "WEB" | "MANUAL" | "FEED";
                 /** Format: uuid */
                 shelterId: string | null;
+                sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
             };
@@ -615,9 +1246,10 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "WEB" | "MANUAL" | "SCRAPER";
+                source: "WEB" | "MANUAL" | "FEED";
                 /** Format: uuid */
                 shelterId: string | null;
+                sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
                 photoKeys: string[];
@@ -651,9 +1283,10 @@ export interface components {
                 lat: number;
                 lng: number;
                 /** @enum {string} */
-                source: "WEB" | "MANUAL" | "SCRAPER";
+                source: "WEB" | "MANUAL" | "FEED";
                 /** Format: uuid */
                 shelterId: string | null;
+                sourceUrl: string | null;
                 /** Format: date-time */
                 createdAt: string;
                 photoKeys: string[];
@@ -678,49 +1311,7 @@ export interface components {
             shelterId?: string;
         };
         RejectListingDto: {
-            reason?: string;
-        };
-        AuditListResponseDto: {
-            items: {
-                /** Format: uuid */
-                id: string;
-                /** Format: uuid */
-                actorId: string;
-                /** @enum {string} */
-                action: "LISTING_APPROVE" | "LISTING_REJECT" | "LISTING_UPDATE" | "LISTING_DELETE";
-                /** Format: uuid */
-                listingId: string;
-                reason: string | null;
-                /** Format: date-time */
-                createdAt: string;
-            }[];
-            total: number;
-            page: number;
-            limit: number;
-        };
-        CreateReportDto: {
-            /** @enum {string} */
-            reason: "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
-            note?: string;
-        };
-        ReportListResponseDto: {
-            items: {
-                /** Format: uuid */
-                id: string;
-                /** Format: uuid */
-                listingId: string;
-                /** @enum {string} */
-                listingStatus: "PENDING" | "APPROVED" | "REJECTED";
-                listingDescription: string;
-                /** @enum {string} */
-                reason: "SPAM" | "SCAM" | "WRONG_INFO" | "ABUSE" | "OTHER";
-                note: string | null;
-                /** Format: date-time */
-                createdAt: string;
-            }[];
-            total: number;
-            page: number;
-            limit: number;
+            reason: string;
         };
         ListingMessageDto: {
             message: string;
@@ -751,6 +1342,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AuditController_list: {
+        parameters: {
+            query?: {
+                listingId?: string;
+                userId?: string;
+                shelterId?: string;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditListResponseDto"];
                 };
             };
         };
@@ -788,6 +1404,29 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["LoginDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_verifyMfa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeDto"];
             };
         };
         responses: {
@@ -835,6 +1474,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_changePassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthResponseDto"];
                 };
             };
         };
@@ -927,6 +1589,94 @@ export interface operations {
             };
         };
     };
+    MfaController_setup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MfaSetupResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_enable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodesResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_disable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaConfirmDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_recoveryCodes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaConfirmDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodesResponseDto"];
+                };
+            };
+        };
+    };
     UsersController_me: {
         parameters: {
             query?: never;
@@ -953,7 +1703,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -984,6 +1738,307 @@ export interface operations {
             };
         };
     };
+    UsersController_sessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionListResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_endSessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EndSessionsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_list: {
+        parameters: {
+            query?: {
+                email?: string;
+                role?: "USER" | "ADMIN";
+                blocked?: "true" | "false";
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserListResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_one: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_changeRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeRoleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_block: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_unblock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_endSessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AdminUsersController_resetMfa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponseDto"];
+                };
+            };
+        };
+    };
+    ReportsController_report: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReportDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    NoticesController_notice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNoticeDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AdminReportsController_list: {
+        parameters: {
+            query?: {
+                status?: "OPEN" | "ACTIONED" | "DISMISSED";
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportListResponseDto"];
+                };
+            };
+        };
+    };
+    AdminReportsController_close: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CloseReportDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
     SheltersController_list: {
         parameters: {
             query?: never;
@@ -1003,7 +2058,26 @@ export interface operations {
             };
         };
     };
-    SheltersController_create: {
+    AdminSheltersController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminShelterListResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -1021,7 +2095,118 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ShelterResponseDto"];
+                    "application/json": components["schemas"]["AdminShelterResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateShelterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminShelterResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_recordConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecordConsentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminShelterResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_withdrawConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConsentWithdrawnResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_importOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
+    AdminSheltersController_importAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportStartedResponseDto"];
                 };
             };
         };
@@ -1032,10 +2217,10 @@ export interface operations {
                 type?: "FOUND" | "LOST" | "ADOPTION";
                 species?: "DOG" | "CAT" | "OTHER";
                 city?: string;
-                minLat?: unknown;
-                minLng?: unknown;
-                maxLat?: unknown;
-                maxLng?: unknown;
+                minLat?: number;
+                minLng?: number;
+                maxLat?: number;
+                maxLng?: number;
                 page?: number;
                 limit?: number;
             };
@@ -1084,10 +2269,10 @@ export interface operations {
                 type?: "FOUND" | "LOST" | "ADOPTION";
                 species?: "DOG" | "CAT" | "OTHER";
                 city?: string;
-                minLat?: unknown;
-                minLng?: unknown;
-                maxLat?: unknown;
-                maxLng?: unknown;
+                minLat?: number;
+                minLng?: number;
+                maxLat?: number;
+                maxLng?: number;
             };
             header?: never;
             path?: never;
@@ -1173,7 +2358,9 @@ export interface operations {
     };
     ListingsController_remove: {
         parameters: {
-            query?: never;
+            query?: {
+                reason?: string;
+            };
             header?: never;
             path: {
                 id: string;
@@ -1223,10 +2410,10 @@ export interface operations {
                 type?: "FOUND" | "LOST" | "ADOPTION";
                 species?: "DOG" | "CAT" | "OTHER";
                 city?: string;
-                minLat?: unknown;
-                minLng?: unknown;
-                maxLat?: unknown;
-                maxLng?: unknown;
+                minLat?: number;
+                minLng?: number;
+                maxLat?: number;
+                maxLng?: number;
                 page?: number;
                 limit?: number;
                 status?: "PENDING" | "APPROVED" | "REJECTED";
@@ -1312,76 +2499,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListingDetailResponseDto"];
-                };
-            };
-        };
-    };
-    AuditController_list: {
-        parameters: {
-            query?: {
-                listingId?: string;
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuditListResponseDto"];
-                };
-            };
-        };
-    };
-    ReportsController_report: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateReportDto"];
-            };
-        };
-        responses: {
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OkResponseDto"];
-                };
-            };
-        };
-    };
-    AdminReportsController_list: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReportListResponseDto"];
                 };
             };
         };

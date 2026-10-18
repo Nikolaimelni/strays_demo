@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -61,5 +61,47 @@ describe('login page', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
 
     expect(await screen.findByRole('alert')).toBeInTheDocument();
+  });
+
+  describe('with two-step sign in', () => {
+    it('asks for the code after a right password, and signs in with it', async () => {
+      let codeSent = '';
+      server.use(
+        http.post(`${API}/auth/login`, () => HttpResponse.json({ mfaRequired: true, user: null })),
+        http.post(`${API}/auth/mfa/verify`, async ({ request }) => {
+          codeSent = ((await request.json()) as { code: string }).code;
+          return HttpResponse.json({ user: { id: 'u1', email: 'someone@example.com' } });
+        }),
+      );
+
+      renderWithProviders(<LoginPage />);
+      await fillAndSubmit();
+
+      await userEvent.type(await screen.findByLabelText(/recovery code/), '123456');
+      await userEvent.click(screen.getByRole('button', { name: 'Continue' }));
+
+      await waitFor(() => expect(codeSent).toBe('123456'));
+    });
+
+    // five minutes or five wrong codes and the challenge is gone; no code can fix that
+    it('goes back to the password when the challenge has expired', async () => {
+      server.use(
+        http.post(`${API}/auth/login`, () => HttpResponse.json({ mfaRequired: true, user: null })),
+        http.post(`${API}/auth/mfa/verify`, () =>
+          HttpResponse.json(
+            { code: 'MFA_CHALLENGE_INVALID', message: 'sign in again' },
+            { status: 401 },
+          ),
+        ),
+      );
+
+      renderWithProviders(<LoginPage />);
+      await fillAndSubmit();
+      await userEvent.type(await screen.findByLabelText(/recovery code/), '123456');
+      await userEvent.click(screen.getByRole('button', { name: 'Continue' }));
+
+      expect(await screen.findByLabelText('Password')).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent('took too long');
+    });
   });
 });
