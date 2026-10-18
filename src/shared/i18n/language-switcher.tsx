@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ChoiceGroup } from '../ui/choice-group.tsx';
+import { rememberLanguage } from './i18n.ts';
 
 export const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
@@ -10,7 +11,10 @@ export const LanguageSwitcher = () => {
       name="lang"
       size="sm"
       value={i18n.resolvedLanguage === 'pt' ? 'pt' : 'en'}
-      onChange={(code) => void i18n.changeLanguage(code)}
+      onChange={(code) => {
+        rememberLanguage(code);
+        void i18n.changeLanguage(code);
+      }}
       choices={[
         { value: 'en', label: 'EN', name: 'English', lang: 'en' },
         { value: 'pt', label: 'PT', name: 'Português', lang: 'pt' },

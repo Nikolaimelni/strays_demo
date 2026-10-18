@@ -31,6 +31,9 @@ export const ListingsMap = ({
       attributionControl={false}
       center={[view.lat, view.lng]}
       zoom={view.z}
+      // markercluster reads the map's maxZoom, which otherwise only arrives with the tile
+      // layer, and the tile layer waits for the visitor to turn the map on
+      maxZoom={19}
       className="h-[360px] w-full rounded-sm border border-rule/15 lg:h-[540px]"
       scrollWheelZoom
     >
