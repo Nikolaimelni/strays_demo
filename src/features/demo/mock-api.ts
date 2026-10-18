@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { env } from '../../env.ts';
 import type { components } from '../../shared/api/schema';
-import { board, SHELTER_ID } from './demo-listings.ts';
+import { board, photos, SHELTER_ID } from './demo-listings.ts';
 
 type Schemas = components['schemas'];
 
@@ -94,6 +94,7 @@ let mine: Listing[] = [
   {
     ...listing,
     id: '30000000-0000-0000-0000-000000000001',
+    ...photos('tuxedo-cat'),
     type: 'FOUND',
     species: 'CAT',
     description: 'Black and white cat sleeping in our stairwell in Alfama for three nights now.',
@@ -101,12 +102,14 @@ let mine: Listing[] = [
   {
     ...listing,
     id: '33333333-3333-3333-3333-333333333333',
+    ...photos('tabby-kitten'),
     status: 'PENDING',
     description: 'Tabby kitten found by the tram stop, waiting for review.',
   },
   {
     ...listing,
     id: '44444444-4444-4444-4444-444444444444',
+    ...photos('brown-dog-ledge'),
     status: 'REJECTED',
     type: 'LOST',
     description: 'Duplicate of an earlier listing.',
@@ -115,10 +118,18 @@ let mine: Listing[] = [
 ];
 
 let others: Listing[] = [
-  { ...listing, id: '55555555-5555-5555-5555-555555555555', status: 'PENDING' },
+  {
+    ...listing,
+    ...photos('road-dog'),
+    id: '55555555-5555-5555-5555-555555555555',
+    status: 'PENDING',
+    description:
+      'Dog walking alone along the Avenida da Índia, limping a little on the left back leg.',
+  },
   {
     ...listing,
     id: '66666666-6666-6666-6666-666666666666',
+    ...photos('puppies'),
     status: 'PENDING',
     description: 'Found a dog, write me on telegram, price 50 euro.',
   },

@@ -21,8 +21,11 @@ const pagesArtifacts = (mode: string): Plugin => {
       // process.env, and the worker has to ship whenever the bundle is going to ask for it
       const buildEnv = loadEnv(mode, process.cwd(), '');
       const mock = buildEnv.VITE_MOCK_API === 'true';
+      // the stock photos in public/demo are the demo's board, and a real deployment has no
+      // business serving three megabytes of somebody else's dogs
       if (!mock) {
         await rm(join(outDir, 'mockServiceWorker.js'), { force: true });
+        await rm(join(outDir, 'demo'), { recursive: true, force: true });
       }
 
       const apiUrl = buildEnv.VITE_API_URL;

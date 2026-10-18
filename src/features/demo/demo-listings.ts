@@ -4,10 +4,15 @@ type Listing = components['schemas']['MyListingsResponseDto']['items'][number];
 
 export const SHELTER_ID = '99999999-9999-9999-9999-999999999999';
 
+// stock photos from Unsplash, cropped to 4:3 and served from public/demo, so a visitor's
+// browser asks nobody else for them. who took each one is in public/demo/CREDITS.md
+export const photos = (...names: string[]) => ({
+  photoKeys: names.map((name) => `demo/${name}`),
+  photoUrls: names.map((name) => `/demo/${name}.webp`),
+});
+
 const base = {
   status: 'APPROVED',
-  photoKeys: [] as string[],
-  photoUrls: [] as string[],
   rejectionReason: null,
   source: 'WEB',
   shelterId: null,
@@ -20,6 +25,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: '22222222-2222-2222-2222-222222222222',
+    ...photos('brown-dog', 'brown-dog-2'),
     type: 'FOUND',
     species: 'DOG',
     city: 'Lisboa',
@@ -32,6 +38,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: '77777777-7777-7777-7777-777777777777',
+    ...photos('grey-cat-collar', 'grey-cat'),
     type: 'LOST',
     species: 'CAT',
     city: 'Lisboa',
@@ -44,6 +51,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: '88888888-8888-8888-8888-888888888888',
+    ...photos('shelter-dog'),
     type: 'ADOPTION',
     species: 'DOG',
     city: 'Lisboa',
@@ -58,6 +66,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000001',
+    ...photos('calico-cat'),
     type: 'FOUND',
     species: 'CAT',
     city: 'Lisboa',
@@ -70,6 +79,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000002',
+    ...photos('small-brown-dog'),
     type: 'LOST',
     species: 'DOG',
     city: 'Almada',
@@ -82,6 +92,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000003',
+    ...photos('black-cat'),
     type: 'ADOPTION',
     species: 'CAT',
     city: 'Lisboa',
@@ -97,6 +108,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000004',
+    ...photos('white-rabbit'),
     type: 'FOUND',
     species: 'OTHER',
     city: 'Oeiras',
@@ -109,6 +121,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000005',
+    ...photos('grey-parrot'),
     type: 'LOST',
     species: 'OTHER',
     city: 'Lisboa',
@@ -121,18 +134,20 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000006',
+    ...photos('black-dog'),
     type: 'FOUND',
     species: 'DOG',
     city: 'Amadora',
     lat: 38.754,
     lng: -9.23,
     description:
-      'Cão preto de porte médio a vaguear junto à estação da Reboleira. Tem coleira azul sem chapa.',
+      'Cão preto de porte médio a vaguear junto à estação da Reboleira. Muito dócil, deixa-se apanhar.',
     createdAt: '2026-10-10T07:50:00.000Z',
   },
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000007',
+    ...photos('orange-tabby'),
     type: 'LOST',
     species: 'CAT',
     city: 'Cascais',
@@ -145,6 +160,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000008',
+    ...photos('old-dog'),
     type: 'ADOPTION',
     species: 'DOG',
     city: 'Lisboa',
@@ -159,6 +175,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000009',
+    ...photos('silver-kitten'),
     type: 'FOUND',
     species: 'CAT',
     city: 'Lisboa',
@@ -171,6 +188,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000010',
+    ...photos('golden-retriever'),
     type: 'LOST',
     species: 'DOG',
     city: 'Sintra',
@@ -183,6 +201,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000011',
+    ...photos('white-terrier'),
     type: 'FOUND',
     species: 'DOG',
     city: 'Lisboa',
@@ -195,6 +214,7 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000012',
+    ...photos('siamese', 'siamese-2'),
     type: 'LOST',
     species: 'CAT',
     city: 'Lisboa',
@@ -207,13 +227,14 @@ export const board: Listing[] = [
   {
     ...base,
     id: 'a0000000-0000-0000-0000-000000000013',
+    ...photos('roof-cat'),
     type: 'FOUND',
     species: 'CAT',
     city: 'Almada',
     lat: 38.664,
     lng: -9.174,
     description:
-      'Gato cinzento muito magro na praia da Costa, aproxima-se de quem tem comida. Já tem abrigo temporário.',
+      'Gato cinzento muito magro nos telhados junto à praia da Costa, aproxima-se de quem tem comida. Já tem abrigo temporário.',
     createdAt: '2026-10-03T11:15:00.000Z',
   },
 ];
