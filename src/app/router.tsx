@@ -43,6 +43,12 @@ export const router = createBrowserRouter([
       { path: 'forgot-password', element: <ForgotPasswordPage /> },
       { path: 'reset-password', element: <ResetPasswordPage /> },
       {
+        path: 'notices',
+        lazy: async () => ({
+          Component: (await import('../features/notices/notices-page.tsx')).NoticesPage,
+        }),
+      },
+      {
         path: 'privacy',
         lazy: async () => ({
           Component: (await import('../features/legal/privacy-page.tsx')).PrivacyPage,
@@ -113,6 +119,18 @@ export const router = createBrowserRouter([
             path: 'admin/reports',
             lazy: async () => ({
               Component: (await import('../features/admin/reports-page.tsx')).ReportsPage,
+            }),
+          },
+          {
+            path: 'admin/users',
+            lazy: async () => ({
+              Component: (await import('../features/admin/users-page.tsx')).UsersPage,
+            }),
+          },
+          {
+            path: 'admin/shelters',
+            lazy: async () => ({
+              Component: (await import('../features/admin/shelters-page.tsx')).SheltersPage,
             }),
           },
           {

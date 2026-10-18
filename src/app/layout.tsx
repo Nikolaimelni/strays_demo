@@ -196,6 +196,9 @@ export const Layout = () => {
               <Link to="/terms" className="link-underline text-muted hover:text-ink">
                 {t('legal.termsTitle')}
               </Link>
+              <Link to="/notices" className="link-underline text-muted hover:text-ink">
+                {t('notices.footer')}
+              </Link>
               <p className="section-index text-muted">{new Date().getFullYear()} · Lisboa</p>
             </div>
           </div>
