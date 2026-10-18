@@ -54,7 +54,11 @@ const signIn = async (page: import('@playwright/test').Page) => {
 
 for (const scheme of ['light', 'dark'] as const) {
   test.describe(`${scheme} theme @shots`, () => {
-    test.use({ colorScheme: scheme, reducedMotion: 'reduce' });
+    test.use({ colorScheme: scheme });
+    // on the page, not through test.use, which never reached it (see a11y.spec.ts)
+    test.beforeEach(async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+    });
 
     test(`public pages, ${scheme}`, async ({ page }) => {
       for (const target of PAGES) {
@@ -76,7 +80,10 @@ for (const scheme of ['light', 'dark'] as const) {
 }
 
 test.describe('mobile @shots', () => {
-  test.use({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  test.use({ viewport: { width: 390, height: 844 } });
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+  });
 
   test('narrow layout', async ({ page }) => {
     for (const target of [PAGES[0], PAGES[1]] as { name: string; path: string }[]) {

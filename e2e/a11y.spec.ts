@@ -43,7 +43,12 @@ const PRIVATE_PAGES = [
 
 for (const scheme of ['light', 'dark'] as const) {
   test.describe(`accessibility, ${scheme}`, () => {
-    test.use({ colorScheme: scheme, reducedMotion: 'reduce' });
+    test.use({ colorScheme: scheme });
+    // set on the page rather than through test.use: the option never reached the page
+    // here (matchMedia said no), so axe was reading entrances halfway through
+    test.beforeEach(async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+    });
 
     test(`public pages have no violations, ${scheme}`, async ({ page }) => {
       for (const path of PUBLIC_PAGES) {
