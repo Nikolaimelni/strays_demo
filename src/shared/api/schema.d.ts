@@ -676,6 +676,22 @@ export interface paths {
         patch: operations["ListingsController_update"];
         trace?: never;
     };
+    "/listings/{id}/message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ListingsController_message"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/listings": {
         parameters: {
             query?: never;
@@ -718,22 +734,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminListingsController_reject"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/listings/{id}/message": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ListingsController_message"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1219,6 +1219,11 @@ export interface components {
                 createdAt: string;
             };
         };
+        ListingMessageDto: {
+            message: string;
+            /** Format: email */
+            email: string;
+        };
         CreateListingDto: {
             /** @enum {string} */
             type: "FOUND" | "LOST" | "ADOPTION";
@@ -1312,11 +1317,6 @@ export interface components {
         };
         RejectListingDto: {
             reason: string;
-        };
-        ListingMessageDto: {
-            message: string;
-            /** Format: email */
-            email: string;
         };
     };
     responses: never;
@@ -2404,6 +2404,31 @@ export interface operations {
             };
         };
     };
+    ListingsController_message: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingMessageDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponseDto"];
+                };
+            };
+        };
+    };
     AdminListingsController_list: {
         parameters: {
             query?: {
@@ -2499,31 +2524,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListingDetailResponseDto"];
-                };
-            };
-        };
-    };
-    ListingsController_message: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ListingMessageDto"];
-            };
-        };
-        responses: {
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OkResponseDto"];
                 };
             };
         };

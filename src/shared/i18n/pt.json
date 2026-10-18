@@ -24,7 +24,7 @@
     "OTHER": "Outro"
   },
   "demo": {
-    "banner": "Demonstração: nada do que escrever sai do seu navegador. Use fotografias suas.",
+    "banner": "Demonstração: nada do que escrever sai do seu navegador, e nenhuma mensagem é enviada. Use fotografias suas.",
     "legal": "Esta instalação é uma demonstração, sem servidor e sem base de dados por trás. O que se segue descreve o serviço tal como está construído, e não como esta página funciona: aqui nada do que escrever é recolhido ou guardado, e nada disso sai do seu navegador. A demonstração guarda um indicador, strays-mock-session, no armazenamento da sessão enquanto tem sessão iniciada nela. O mapa, depois de o ligar, continua a vir do OpenStreetMap, como se explica abaixo.",
     "noWorker": "Esta demonstração responde às próprias chamadas à API através de um service worker, e este navegador não permitiu iniciá-lo. Uma janela normal, não privada, deve funcionar."
   },
@@ -36,7 +36,7 @@
     "REFRESH_TOKEN_INVALID": "A sessão expirou. Inicie sessão novamente.",
     "FORBIDDEN": "Não tem permissão para isso.",
     "NOT_FOUND": "Este anúncio já não existe.",
-    "EMAIL_NOT_VERIFIED": "Confirme o seu email antes de publicar.",
+    "EMAIL_NOT_VERIFIED": "Confirme primeiro o seu endereço de email.",
     "VERIFICATION_FAILED": "Esse código está errado ou expirou.",
     "INTERNAL_ERROR": "Algo correu mal do nosso lado. Tente outra vez.",
     "TOO_MANY_REQUESTS": "Demasiadas tentativas. Espere um pouco e tente outra vez.",
@@ -60,7 +60,8 @@
     "NO_FEED_CONSENT": "Registe o consentimento escrito do abrigo antes de importar o feed.",
     "IMPORT_RUNNING": "Já está a decorrer uma importação deste abrigo.",
     "CONFLICT": "Isso mudou entretanto. Recarregue e tente outra vez.",
-    "REASON_REQUIRED": "Diga porquê. Quem publicou recebe o motivo por email."
+    "REASON_REQUIRED": "Diga porquê. Quem publicou recebe o motivo por email.",
+    "USE_SHELTER_SITE": "Este animal está num abrigo. Contacte-o através do site do próprio abrigo."
   },
   "validation": {
     "required": "Obrigatório.",

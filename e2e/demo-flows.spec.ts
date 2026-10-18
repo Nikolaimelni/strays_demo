@@ -68,3 +68,19 @@ test.describe('a visitor who has not turned the map on', () => {
     await expect(page.locator('.leaflet-tile').first()).toBeAttached();
   });
 });
+
+test('a signed-in visitor writes to the poster, and a shelter animal has no form', async ({
+  page,
+}) => {
+  await signIn(page);
+  await page.goto('/listings/22222222-2222-2222-2222-222222222222');
+
+  await page.getByLabel(/Your message/).fill('I think I saw this dog by the tram stop yesterday.');
+  await expect(page.getByLabel('Where to answer you')).toHaveValue('moderator@example.com');
+  await page.getByRole('button', { name: 'Send' }).click();
+  await expect(page.getByRole('status')).toContainText('Sent');
+
+  await page.goto('/listings/88888888-8888-8888-8888-888888888888');
+  await expect(page.getByRole('link', { name: "This animal on the shelter's site" })).toBeVisible();
+  await expect(page.getByLabel(/Your message/)).toHaveCount(0);
+});

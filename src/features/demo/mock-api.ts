@@ -2,6 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { env } from '../../env.ts';
 import type { components } from '../../shared/api/schema';
+import { board, SHELTER_ID } from './demo-listings.ts';
 
 type Schemas = components['schemas'];
 
@@ -34,23 +35,9 @@ let user: Schemas['UserResponseDto']['user'] = {
   createdAt: '2026-01-01T00:00:00.000Z',
 };
 
-const listing: Schemas['MyListingsResponseDto']['items'][number] = {
-  photoKeys: [],
-  rejectionReason: null,
-  id: '22222222-2222-2222-2222-222222222222',
-  type: 'FOUND',
-  status: 'APPROVED',
-  species: 'DOG',
-  description: 'friendly brown dog near the park',
-  photoUrls: [],
-  city: 'Lisboa',
-  lat: 38.7223,
-  lng: -9.1393,
-  source: 'WEB',
-  shelterId: null,
-  sourceUrl: null,
-  createdAt: '2026-08-01T00:00:00.000Z',
-};
+// the first listing on the board doubles as the fixture the account's own listings are
+// built from
+const listing = board[0] as Schemas['MyListingsResponseDto']['items'][number];
 
 // the public routes stopped returning the name, the number and the keys, so the
 // mock has to stop returning them too or e2e passes on data nobody gets
@@ -72,25 +59,23 @@ const summaryOf = (row: typeof listing): Summary => ({
   createdAt: row.createdAt,
 });
 
-const feed: (typeof listing)[] = [
-  listing,
-  {
-    ...listing,
-    id: '77777777-7777-7777-7777-777777777777',
-    type: 'LOST',
-    species: 'CAT',
-    description: 'Grey cat with a red collar, missing since Friday.',
-  },
-  {
-    ...listing,
-    id: '88888888-8888-8888-8888-888888888888',
-    type: 'ADOPTION',
-    source: 'FEED',
-    shelterId: '99999999-9999-9999-9999-999999999999',
-    sourceUrl: 'https://abrigo.example.pt/animais/tejo',
-    description: 'Mestizo, four years old, house-trained and ready to go home.',
-  },
-];
+// the same filters the real feed takes: type, species, city and the map's bounds
+const onBoard = (query: URLSearchParams) => {
+  const box = ['minLat', 'minLng', 'maxLat', 'maxLng'].map((key) => query.get(key));
+  const [minLat, minLng, maxLat, maxLng] = box.map(Number);
+  return board.filter(
+    (row) =>
+      (!query.get('type') || row.type === query.get('type')) &&
+      (!query.get('species') || row.species === query.get('species')) &&
+      (!query.get('city') ||
+        row.city.toLowerCase().includes(query.get('city')?.toLowerCase() ?? '')) &&
+      (box.some((value) => value === null) ||
+        (row.lat >= (minLat ?? -90) &&
+          row.lat <= (maxLat ?? 90) &&
+          row.lng >= (minLng ?? -180) &&
+          row.lng <= (maxLng ?? 180))),
+  );
+};
 
 const fail = (status: number, code: string, message: string) =>
   HttpResponse.json({ code, message }, { status });
@@ -106,7 +91,13 @@ type CreateListing = Schemas['CreateListingDto'];
 // which has no business in browser storage, and a reload starting over is fine. without
 // it an approved row comes straight back on the refetch and the queue never empties
 let mine: Listing[] = [
-  listing,
+  {
+    ...listing,
+    id: '30000000-0000-0000-0000-000000000001',
+    type: 'FOUND',
+    species: 'CAT',
+    description: 'Black and white cat sleeping in our stairwell in Alfama for three nights now.',
+  },
   {
     ...listing,
     id: '33333333-3333-3333-3333-333333333333',
@@ -200,7 +191,7 @@ const updateAccount = (id: string, patch: Partial<Account>) => {
 type Shelter = Schemas['AdminShelterListResponseDto']['items'][number];
 let shelters: Shelter[] = [
   {
-    id: '99999999-9999-9999-9999-999999999999',
+    id: SHELTER_ID,
     name: 'Abrigo do Tejo',
     city: 'Lisboa',
     sourceUrl: 'https://abrigo.example.pt',
@@ -338,7 +329,7 @@ const audit: AuditEntry[] = [
     action: 'SHELTER_CONSENT_RECORD',
     listingId: null,
     userId: null,
-    shelterId: '99999999-9999-9999-9999-999999999999',
+    shelterId: SHELTER_ID,
     reason: 'Email from the director, 1 September 2026',
     createdAt: '2026-09-01T15:30:00.000Z',
   },
@@ -517,15 +508,28 @@ export const startMockApi = async () => {
     }),
 
     http.get(`${API}/listings`, ({ request }) => {
-      const type = new URL(request.url).searchParams.get('type');
-      const items = feed.filter((row) => !type || row.type === type).map(summaryOf);
-      return HttpResponse.json({ items, total: items.length, page: 1, limit: 20 });
+      const query = new URL(request.url).searchParams;
+      const page = Number(query.get('page') ?? 1);
+      const limit = Number(query.get('limit') ?? 20);
+      const rows = onBoard(query);
+      return HttpResponse.json({
+        items: rows.slice((page - 1) * limit, page * limit).map(summaryOf),
+        total: rows.length,
+        page,
+        limit,
+      });
     }),
-    http.get(`${API}/listings/pins`, () =>
+    http.get(`${API}/listings/pins`, ({ request }) =>
       HttpResponse.json({
-        items: [
-          { id: listing.id, lat: listing.lat, lng: listing.lng, species: 'DOG', type: 'FOUND' },
-        ],
+        items: onBoard(new URL(request.url).searchParams).map(
+          ({ id, lat, lng, species, type }) => ({
+            id,
+            lat,
+            lng,
+            species,
+            type,
+          }),
+        ),
       }),
     ),
     // before /listings/:id on purpose: msw matches in registration order,
@@ -535,8 +539,17 @@ export const startMockApi = async () => {
       isSignedIn() ? HttpResponse.json({ items: mine }) : unauthorized(),
     ),
     http.get(`${API}/listings/:id`, ({ params }) => {
-      const row = feed.find((candidate) => candidate.id === params.id) ?? listing;
-      return HttpResponse.json({ item: summaryOf(row) });
+      const row = [...board, ...mine, ...others].find((candidate) => candidate.id === params.id);
+      return row ? HttpResponse.json({ item: summaryOf(row) }) : notFound();
+    }),
+    // nothing is sent anywhere: the real server mails the owner, the demo only answers
+    http.post(`${API}/listings/:id/message`, ({ params }) => {
+      if (!isSignedIn()) return unauthorized();
+      const row = [...board, ...mine, ...others].find((candidate) => candidate.id === params.id);
+      if (!row) return notFound();
+      if (row.source === 'FEED') return fail(409, 'USE_SHELTER_SITE', 'write to the shelter');
+      if (mine.some((own) => own.id === row.id)) return fail(403, 'FORBIDDEN', 'your own listing');
+      return HttpResponse.json({ ok: true }, { status: 202 });
     }),
     http.post(`${API}/listings/:id/report`, () => HttpResponse.json({ ok: true }, { status: 202 })),
     http.post(`${API}/notices`, () => HttpResponse.json({ ok: true }, { status: 202 })),

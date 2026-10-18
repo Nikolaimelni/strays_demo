@@ -24,7 +24,7 @@
     "OTHER": "Other"
   },
   "demo": {
-    "banner": "Demo: nothing you type leaves your browser. Use your own photos.",
+    "banner": "Demo: nothing you type leaves your browser, and no message goes anywhere. Use your own photos.",
     "legal": "This deployment is a demonstration with no server and no database behind it. What follows describes the service as it is built, not as this page runs it: here nothing you type is collected or stored, and none of it leaves your browser. The demo keeps one flag, strays-mock-session, in session storage while you are signed in to it. The map, once you turn it on, still loads from OpenStreetMap as described below.",
     "noWorker": "This demo answers its own API calls from a service worker, and this browser did not let it start one. A regular, non-private window should work."
   },
@@ -36,7 +36,7 @@
     "REFRESH_TOKEN_INVALID": "Your session expired. Sign in again.",
     "FORBIDDEN": "You can't do that.",
     "NOT_FOUND": "This listing no longer exists.",
-    "EMAIL_NOT_VERIFIED": "Confirm your email address before posting.",
+    "EMAIL_NOT_VERIFIED": "Confirm your email address first.",
     "VERIFICATION_FAILED": "That code is wrong or has expired.",
     "INTERNAL_ERROR": "Something went wrong on our side. Try again.",
     "TOO_MANY_REQUESTS": "Too many tries. Wait a while and do it again.",
@@ -60,7 +60,8 @@
     "NO_FEED_CONSENT": "Record the shelter's written consent before importing its feed.",
     "IMPORT_RUNNING": "An import for this shelter is already running.",
     "CONFLICT": "That changed in the meantime. Reload and try again.",
-    "REASON_REQUIRED": "Say why. The person who posted it gets the reason by email."
+    "REASON_REQUIRED": "Say why. The person who posted it gets the reason by email.",
+    "USE_SHELTER_SITE": "This animal is with a shelter. Write to it through the shelter's own site."
   },
   "validation": {
     "required": "Required.",

@@ -104,7 +104,8 @@ export const ListingPage = () => {
       </Reveal>
 
       <aside className="min-w-0 space-y-7 lg:sticky lg:top-24 lg:self-start">
-        <ListingMessage listingId={item.id} />
+        {/* a shelter's animals are reached through the shelter, linked further down */}
+        {item.source === 'FEED' ? null : <ListingMessage listingId={item.id} />}
 
         <div className="space-y-2">
           <SinglePinMap lat={item.lat} lng={item.lng} />
