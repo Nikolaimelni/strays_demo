@@ -1,5 +1,7 @@
 # strays
 
+https://strays-demo.nikolai-melnichenko-fe.workers.dev
+
 **This is a demo.** The backend is still in development, so for now msw answers every API
 call from a service worker inside your browser, and nothing you type is sent or stored. A
 banner on every page says the same.
