@@ -6,7 +6,7 @@ type ListingType = 'FOUND' | 'LOST' | 'ADOPTION';
 const STATUS_STYLES: Record<Status, string> = {
   PENDING: 'bg-lost-soft text-lost',
   APPROVED: 'bg-found-soft text-found',
-  REJECTED: 'bg-neutral-soft text-muted',
+  REJECTED: 'bg-neutral-soft text-ink',
 };
 
 const STATUS_KEYS: Record<Status, string> = {

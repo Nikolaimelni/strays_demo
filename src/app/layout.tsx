@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet, ScrollRestoration, useLocation, useNavigate } fr
 import { isDemo } from '../env.ts';
 import { useLogout } from '../features/auth/mutations.ts';
 import { useSession } from '../features/auth/session.ts';
+import { DemoBanner } from '../features/demo/demo-banner.tsx';
 import { LanguageSwitcher } from '../shared/i18n/language-switcher.tsx';
 import { useDocumentLanguage } from '../shared/i18n/use-document-language.ts';
 import { Button, ButtonLink } from '../shared/ui/button.tsx';
@@ -71,17 +72,13 @@ export const Layout = () => {
       {/* without this a route change keeps the scroll position, so the map
           link from a scrolled page lands you in the footer */}
       <ScrollRestoration />
+      {/* above the sticky header, so it scrolls away; the badge next to the wordmark is what
+          stays in view on the forms further down */}
+      {isDemo ? <DemoBanner /> : null}
       {/* sticky because the map is tall and the nav is the only way out of it.
           z-index above 1000: leaflet puts its own control corners there, and
           the zoom buttons would otherwise slide over the header */}
       <header className="sticky top-0 z-1100 border-b border-rule/15 bg-page/80 backdrop-blur-md">
-        {/* inside the sticky header on purpose: the warning matters most on the forms,
-            which are far enough down the page that a bar at the top would be gone */}
-        {isDemo ? (
-          <p className="border-b border-rule/15 bg-brand/10 px-4 py-2 text-center text-xs text-muted sm:px-6">
-            {t('demo.banner')}
-          </p>
-        ) : null}
         <nav className="mx-auto flex max-w-6xl items-center gap-x-5 px-4 py-3 sm:px-6 sm:py-4">
           <NavLink
             to="/"
@@ -101,6 +98,11 @@ export const Layout = () => {
             </span>
             strays
           </NavLink>
+          {isDemo ? (
+            <span className="rounded-full border border-brand px-2 py-0.5 text-xs font-medium uppercase tracking-[0.12em] text-ink">
+              {t('demo.badge')}
+            </span>
+          ) : null}
 
           <div className="ml-6 hidden items-center gap-x-5 md:flex">{links(navLink)}</div>
 

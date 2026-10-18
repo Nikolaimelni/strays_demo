@@ -278,6 +278,13 @@
       animation-delay: 0s;
     }
 
+    /* time-based again: see Reveal's immediate. a banner above the hero once left its
+       lead text at an eighth of its opacity until the visitor scrolled */
+    .reveal.reveal-now {
+      animation-timeline: auto;
+      animation-range: normal;
+    }
+
     .drift {
       animation: drift linear both;
       animation-timeline: view();

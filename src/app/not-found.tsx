@@ -11,7 +11,7 @@ export const NotFound = () => {
     <div className="border-t border-rule/15 pt-5 sm:pt-7">
       <PageMeta title={t('notFound.title')} />
       <Band index="404">
-        <Reveal className="max-w-prose">
+        <Reveal immediate className="max-w-prose">
           <h1 className="font-display text-display font-semibold text-balance">
             {t('notFound.title')}
           </h1>

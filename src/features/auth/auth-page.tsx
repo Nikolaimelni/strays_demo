@@ -36,7 +36,7 @@ export const AuthPage = ({
   <div className="border-t border-rule/15 pt-5 sm:pt-7">
     <PageMeta title={title} />
     <Band index="01">
-      <Reveal className="max-w-sm">
+      <Reveal immediate className="max-w-sm">
         <h1 className="font-display text-title font-semibold">{title}</h1>
 
         {done ? (

@@ -35,7 +35,7 @@ export const Section = ({ index, title, aside, children }: HeadProps) => (
 export const PageHeading = ({ index, title, lead, aside }: HeadProps) => (
   <header className="border-t border-rule/15 pt-5 sm:pt-7">
     <Band index={index}>
-      <Reveal>
+      <Reveal immediate>
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <h1 className="font-display text-title font-semibold text-balance">{title}</h1>
           {aside}

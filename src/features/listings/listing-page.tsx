@@ -60,7 +60,7 @@ export const ListingPage = () => {
         title={`${t(`species.${item.species}`)} · ${item.city}`}
         description={item.description.slice(0, 150)}
       />
-      <Reveal className="min-w-0 space-y-6">
+      <Reveal immediate className="min-w-0 space-y-6">
         <header className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
             <TypeBadge type={item.type} />

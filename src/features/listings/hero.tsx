@@ -36,7 +36,7 @@ export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
   return (
     <header className="border-t border-rule/15 pt-5 sm:pt-7">
       <Band index="01">
-        <Reveal>
+        <Reveal immediate>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-brand">
             <span aria-hidden className="inline-block size-1.5 rounded-full bg-brand" />
             {t('hero.eyebrow')}
@@ -52,7 +52,7 @@ export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
         </h1>
 
         <div className="mt-7 grid gap-7 sm:mt-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end lg:gap-8">
-          <Reveal delay={140} className="max-w-prose">
+          <Reveal immediate delay={140} className="max-w-prose">
             <p className="text-lead text-muted">{t('hero.lead')}</p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
@@ -81,7 +81,7 @@ export const Hero = ({ total, found, lost, adoption }: HeroProps) => {
             </dl>
           </Reveal>
 
-          <Reveal delay={220}>
+          <Reveal immediate delay={220}>
             <figure>
               <div className="overflow-hidden rounded-sm">
                 <img

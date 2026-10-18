@@ -24,9 +24,12 @@
     "OTHER": "Other"
   },
   "demo": {
-    "banner": "Demo: nothing you type leaves your browser, and no message goes anywhere. Use your own photos.",
     "legal": "This deployment is a demonstration with no server and no database behind it. What follows describes the service as it is built, not as this page runs it: here nothing you type is collected or stored, and none of it leaves your browser. The demo keeps one flag, strays-mock-session, in session storage while you are signed in to it. The map, once you turn it on, still loads from OpenStreetMap as described below.",
-    "noWorker": "This demo answers its own API calls from a service worker, and this browser did not let it start one. A regular, non-private window should work."
+    "noWorker": "This demo answers its own API calls from a service worker, and this browser did not let it start one. A regular, non-private window should work.",
+    "label": "About this demo",
+    "badge": "Demo",
+    "bannerTitle": "This is a demo: a pet project with no real backend",
+    "bannerBody": "strays is a portfolio project. Everything here is made up and lives only in your browser: the listings, the accounts, the moderation queue and every message. Nothing you type is sent or stored. Sign in with any email and the password demo, or create an account, which makes you a moderator."
   },
   "errors": {
     "UNKNOWN": "Something went wrong. Try again.",
